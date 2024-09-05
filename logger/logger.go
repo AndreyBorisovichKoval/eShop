@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 var (
