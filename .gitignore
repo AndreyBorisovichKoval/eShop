@@ -4,4 +4,4 @@ logs
 *.log
 configs/configs.json
 # db/security.go
-
+temp/
