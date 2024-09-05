@@ -11,13 +11,13 @@ import (
 )
 
 func SignUp(c *gin.Context) {
-	var user models.User
-	if err := c.BindJSON(&user); err != nil {
+	var seller models.Seller
+	if err := c.BindJSON(&seller); err != nil {
 		handleError(c, err)
 		return
 	}
 
-	err := service.CreateUser(user)
+	err := service.CreateUser(seller)
 	if err != nil {
 		handleError(c, err)
 		return
