@@ -1,0 +1,55 @@
+========================================================
+
+# Инициализация нового модуля Go
+go mod init eShop
+
+# Очистка и обновление файла go.mod и go.sum
+go mod tidy
+
+# Если вам нужно установить или обновить зависимости, то используйте команду:
+go mod download
+
+# Установка и получение зависимостей
+go get github.com/lib/pq                 # Драйвер PostgreSQL для Go
+go install github.com/lib/pq            # Установка драйвера PostgreSQL
+
+# Установка GORM и драйвера PostgreSQL для GORM
+go get gorm.io/gorm                      # Основной пакет GORM
+go get gorm.io/driver/postgres          # Драйвер PostgreSQL для GORM
+
+# Установка и обновление Gin
+go get github.com/gin-gonic/gin         # Установка Gin
+go get -u github.com/gin-gonic/gin      # Обновление Gin до последней версии
+
+# Установка пакета для логирования
+go get gopkg.in/natefinch/lumberjack.v2 # Установка пакета lumberjack для ротации логов
+# go get gopkg.in/natefinch/lumberjack.v3 # Включите эту строку, если хотите использовать версию 3
+
+# Установка пула соединений
+go get github.com/jackc/puddle/v2@v2.2.1 # Пул соединений для PostgreSQL
+
+# Установка пакета для работы с переменными окружения
+go get github.com/joho/godotenv          # Пакет для работы с .env файлами
+
+# Установка пакетов для работы с JWT
+go get github.com/golang-jwt/jwt         # Пакет для работы с JWT
+go get github.com/dgrijalva/jwt-go       # Альтернативная библиотека для JWT
+
+========================================================
+
+go mod init eShop
+go mod tidy
+go get github.com/lib/pq                 # Драйвер PostgreSQL для Go
+go install github.com/lib/pq            # Установка драйвера PostgreSQL
+go get gorm.io/gorm                      # Основной пакет GORM
+go get gorm.io/driver/postgres          # Драйвер PostgreSQL для GORM
+go get github.com/gin-gonic/gin         # Установка Gin
+go get -u github.com/gin-gonic/gin      # Обновление Gin до последней версии
+go get gopkg.in/natefinch/lumberjack.v2 # Установка пакета lumberjack для ротации логов
+# go get gopkg.in/natefinch/lumberjack.v3 # Включите эту строку, если хотите использовать версию 3
+go get github.com/jackc/puddle/v2@v2.2.1 # Пул соединений для PostgreSQL
+go get github.com/joho/godotenv          # Пакет для работы с .env файлами
+go get github.com/golang-jwt/jwt         # Пакет для работы с JWT
+go get github.com/dgrijalva/jwt-go       # Альтернативная библиотека для JWT
+
+========================================================
