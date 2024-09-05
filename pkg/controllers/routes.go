@@ -3,14 +3,16 @@
 package controllers
 
 import (
+	"eShop/configs"
 	"eShop/logger"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func PingPong(c *gin.Context) {
-	logger.Info.Println("PingPong route called")
+	logger.Info.Println("PingPong route called...")
 	c.JSON(http.StatusOK, gin.H{
 		"message": "pong",
 	})
@@ -18,27 +20,35 @@ func PingPong(c *gin.Context) {
 
 func RunRoutes() error {
 	router := gin.Default()
-	//gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(configs.AppSettings.AppParams.GinMode)
 
 	router.GET("/ping", PingPong)
 
-	noteG := router.Group("/notes")
+	// authG := router.Group("/auth")
+	auth := router.Group("/auth")
 	{
-		noteG.GET("", GetAllNotes)
-		noteG.GET("/:id", GetNoteByID)
-		noteG.POST("", CreateNote)
-		noteG.PUT("/:id", UpdateNoteByID)
-		noteG.PATCH("/:id", PatchNoteByID)
-		noteG.DELETE("/harddelete/:id", HardDeleteNoteByID)
-		noteG.DELETE("/softdelete/:id", SoftDeleteNoteByID)
-		noteG.PUT("/restore/:id", RestoreNoteByID)
+		auth.POST("/sign-up", SignUp)
+		auth.POST("/sign-in", SignIn)
 	}
 
-	err := router.Run(":8585")
+	sellerG := router.Group("/sellers")
+	{
+		sellerG.GET("", GetAllSellers)
+		// sellerG.GET("/:id", GetNoteByID)
+		// sellerG.POST("", CreateNote)
+		// sellerG.PUT("/:id", UpdateNoteByID)
+		// sellerG.PATCH("/:id", PatchNoteByID)
+		// sellerG.DELETE("/harddelete/:id", HardDeleteNoteByID)
+		// sellerG.DELETE("/softdelete/:id", SoftDeleteNoteByID)
+		// sellerG.PUT("/restore/:id", RestoreNoteByID)
+	}
+
+	err := router.Run(fmt.Sprintf("%s:%s", configs.AppSettings.AppParams.ServerURL, configs.AppSettings.AppParams.PortRun))
 	if err != nil {
 		logger.Error.Printf("Server failed to start: %v", err)
 		return err
 	}
-	logger.Info.Println("Server started on port 8585.")
+
+	logger.Info.Printf("Server started on port: %s...\n", configs.AppSettings.AppParams.PortRun)
 	return nil
 }

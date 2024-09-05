@@ -13,28 +13,29 @@ import (
 func SignUp(c *gin.Context) {
 	var user models.User
 	if err := c.BindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		handleError(c, err)
 		return
 	}
 
 	err := service.CreateUser(user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		handleError(c, err)
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "user created successfully"})
+	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully!!!"})
 }
 
 func SignIn(c *gin.Context) {
-	var user models.User
+	var user models.Seller
 	if err := c.BindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		handleError(c, err)
 		return
 	}
 
-	accessToken, err := service.SignIn(user.Username, user.Password)
+	accessToken, err := service.SignIn(user.UserName, user.Password)
 	if err != nil {
+		handleError(c, err)
 		return
 	}
 

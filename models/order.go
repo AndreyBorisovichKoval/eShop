@@ -15,7 +15,7 @@ type Order struct {
 	IsDeleted     bool       `gorm:"default:false" json:"is_deleted"`
 
 	// Связи
-	User       User        `gorm:"foreignKey:SellerID" json:"seller"`
+	Seller     Seller      `gorm:"foreignKey:SellerID" json:"seller"`
 	OrderItems []OrderItem `json:"order_items"`
 }
 

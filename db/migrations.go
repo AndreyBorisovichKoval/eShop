@@ -19,7 +19,7 @@ func MigrateDB() error {
 		models.ReturnsProduct{},
 		models.Supplier{},
 		models.Taxes{},
-		models.User{},
+		models.Seller{},
 	)
 	if err != nil {
 		logger.Error.Printf("Migration failed: %v", err)

@@ -4,9 +4,10 @@ package models
 
 import "time"
 
-type User struct {
+type Seller struct {
 	ID        uint       `gorm:"primaryKey" json:"id"`                          // Уникальный идентификатор продавца.
-	Name      string     `gorm:"size:255;not null" json:"name"`                 // Имя продавца.
+	FullName  string     `gorm:"size:255;not null" json:"full_name"`            // Полное имя продавца.
+	UserName  string     `gorm:"size:255;not null" json:"user_name"`            // Логин продавца.
 	Email     string     `gorm:"size:255;not null;unique" json:"email"`         // Email продавца.
 	Password  string     `gorm:"size:255;not null" json:"password"`             // Пароль продавца.
 	Role      string     `gorm:"size:50;not null;default:'seller'" json:"role"` // Роль продавца (например: 'admin', 'seller').
@@ -20,6 +21,6 @@ type User struct {
 	Orders []Order `json:"orders"` // Связь с таблицей заказов, связанными с продавцом.
 }
 
-func (User) TableName() string {
+func (Seller) TableName() string {
 	return "users"
 }
