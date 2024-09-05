@@ -1,3 +1,5 @@
+// C:\GoProject\src\eShop\server\server.go
+
 package server
 
 import (
