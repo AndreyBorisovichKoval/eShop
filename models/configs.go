@@ -13,7 +13,7 @@ type LogParams struct {
 	LogDirectory     string `json:"log_directory"`
 	LogInfo          string `json:"log_info"`
 	LogError         string `json:"log_error"`
-	LogWarn          string `json:"log_warn"`
+	LogWarning       string `json:"log_warning"`
 	LogDebug         string `json:"log_debug"`
 	MaxSizeMegabytes int    `json:"max_size_megabytes"`
 	MaxBackups       int    `json:"max_backups"`

@@ -5,20 +5,20 @@ package controllers
 import (
 	"eShop/configs"
 	"eShop/logger"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
+// PingPong handles the ping request and responds with a pong message...
 func PingPong(c *gin.Context) {
-	logger.Info.Println("PingPong route called...")
+	logger.Info.Printf("Route '%s' called with method '%s'", c.FullPath(), c.Request.Method)
 	c.JSON(http.StatusOK, gin.H{
 		"message": "pong",
 	})
 }
 
-func RunRoutes() error {
+func InitRoutes() *gin.Engine {
 	router := gin.Default()
 	gin.SetMode(configs.AppSettings.AppParams.GinMode)
 
@@ -34,21 +34,23 @@ func RunRoutes() error {
 	sellerG := router.Group("/sellers")
 	{
 		sellerG.GET("", GetAllSellers)
-		// sellerG.GET("/:id", GetNoteByID)
-		// sellerG.POST("", CreateNote)
-		// sellerG.PUT("/:id", UpdateNoteByID)
-		// sellerG.PATCH("/:id", PatchNoteByID)
+		// sellerG.GET("/:id", GetSellerByID)
+		// sellerG.POST("", CreateSellers)
+		// sellerG.PUT("/:id", UpdateSellerByID)
+		// sellerG.PATCH("/:id", PatchSellerByID)
 		// sellerG.DELETE("/harddelete/:id", HardDeleteNoteByID)
 		// sellerG.DELETE("/softdelete/:id", SoftDeleteNoteByID)
 		// sellerG.PUT("/restore/:id", RestoreNoteByID)
 	}
 
-	err := router.Run(fmt.Sprintf("%s:%s", configs.AppSettings.AppParams.ServerURL, configs.AppSettings.AppParams.PortRun))
-	if err != nil {
-		logger.Error.Printf("Server failed to start: %v", err)
-		return err
-	}
+	// err := router.Run(fmt.Sprintf("%s:%s", configs.AppSettings.AppParams.ServerURL, configs.AppSettings.AppParams.PortRun))
+	// if err != nil {
+	// 	logger.Error.Printf("Server failed to start: %v", err)
+	// 	return err
+	// }
 
-	logger.Info.Printf("Server started on port: %s...\n", configs.AppSettings.AppParams.PortRun)
-	return nil
+	// logger.Info.Printf("Server started on port: %s...\n", configs.AppSettings.AppParams.PortRun)
+	// return nil
+
+	return router
 }

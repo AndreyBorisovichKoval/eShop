@@ -3,57 +3,78 @@
 package app
 
 import (
+	"context"
 	"eShop/configs"
 	"eShop/db"
 	"eShop/logger"
 	"eShop/pkg/controllers"
-	"errors"
+	"eShop/server"
 	"fmt"
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/joho/godotenv"
 )
 
 func RunApp() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		panic(errors.New(fmt.Sprintf("Error loading .env file. Errors is %s.", err)))
-		// log.Fatalf("Error loading .env file. Errors is %s.", err)
+	if err := godotenv.Load(".env"); err != nil {
+		log.Fatalf("Error loading .env file. Errors is %s...", err)
 	}
+	fmt.Println("Environment variables loaded successfully!!!")
 
-	err = configs.ReadSettings()
-	if err != nil {
-		panic(err)
+	if err := configs.ReadSettings(); err != nil {
+		log.Fatalf("Error loading configuration. Errors is %s...", err)
 	}
 	fmt.Println("Settings loaded successfully!!!")
 
-	err = logger.Init()
-	if err != nil {
-		panic(err)
+	if err := logger.Init(); err != nil {
+		log.Fatalf("Error initializing logger. Errors is %s...", err)
 	}
 	fmt.Println("Logger initialized!!!")
 
-	err = db.ConnectToDB()
-	if err != nil {
-		panic(err)
+	// Connect to the database...
+	var err error
+	if err = db.ConnectToDB(); err != nil {
+		log.Fatalf("Error connecting to database. Errors is %s...", err)
 	}
 	fmt.Println("Connected to the database Successfully!!!")
 
-	defer func() {
-		if err := db.CloseDB(); err != nil {
-			fmt.Printf("Error closing database: %v\n", err)
+	if err = db.MigrateDB(); err != nil {
+		log.Fatalf("Error migrating database. Errors is %s...", err)
+	}
+	fmt.Println("Database migration Successful!!!")
+
+	fmt.Printf("Server is Listening on port %v\n", configs.AppSettings.AppParams.PortRun)
+
+	mainServer := new(server.Server)
+	go func() {
+		if err = mainServer.Run(configs.AppSettings.AppParams.PortRun, controllers.InitRoutes()); err != nil {
+			log.Fatalf("HTTP Server failed to start: %v", err)
 		}
 	}()
 
-	err = db.MigrateDB()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Database migration Successful!!!")
-	// fmt.Println("Server is Listening on port 8585...")
-	fmt.Printf("Server is Listening on port %v\n", configs.AppSettings.AppParams.PortRun)
+	// Ожидание сигнала завершения работы...
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
 
-	err = controllers.RunRoutes()
-	if err != nil {
-		panic(err)
+	fmt.Printf("\nStarting to shut down the server...\n")
+
+	// Закрытие соединения с БД, если необходимо...
+	if sqlDB, err := db.GetDBconn().DB(); err == nil {
+		if err := sqlDB.Close(); err != nil {
+			log.Fatalf("Error closing connection to DB: %s...", err)
+		}
+	} else {
+		log.Fatalf("Error getting *sql.DB connection from GORM: %s...", err)
 	}
+	fmt.Println("The connection to the database was closed successfully!!!")
+
+	if err = mainServer.Shutdown(context.Background()); err != nil {
+		log.Fatalf("HTTP Server shutdown failed: %v", err)
+	}
+	fmt.Println("Server shut down Gracefully...")
+	fmt.Println("Goodbye and good luck!!!")
 }
