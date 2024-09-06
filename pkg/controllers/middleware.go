@@ -48,7 +48,7 @@ func checkUserAuthentication(c *gin.Context) {
 		return
 	}
 
-	// Логирование claims для отладки
+	// Логирование claims для отладки...
 	logger.Info.Printf("Claims: %+v", claims)
 
 	c.Set(sellerIDCtx, claims.sellerID)
