@@ -17,7 +17,7 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	err := service.CreateUser(seller)
+	err := service.CreateSeller(seller)
 	if err != nil {
 		handleError(c, err)
 		return
@@ -27,13 +27,13 @@ func SignUp(c *gin.Context) {
 }
 
 func SignIn(c *gin.Context) {
-	var user models.Seller
-	if err := c.BindJSON(&user); err != nil {
+	var seller models.Seller
+	if err := c.BindJSON(&seller); err != nil {
 		handleError(c, err)
 		return
 	}
 
-	accessToken, err := service.SignIn(user.UserName, user.Password)
+	accessToken, err := service.SignIn(seller.SellerName, seller.Password)
 	if err != nil {
 		handleError(c, err)
 		return
