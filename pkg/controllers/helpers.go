@@ -1,9 +1,7 @@
-// C:\GoProject\src\eShop\pkg\controllers\helpers.go
-
 package controllers
 
 import (
-	"coinkeeper/errs"
+	"eShop/errs"
 	"errors"
 	"net/http"
 

@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"coinkeeper/pkg/service"
+	"eShop/pkg/service"
 	"fmt"
 	"net/http"
 	"strings"

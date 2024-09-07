@@ -33,7 +33,7 @@ func InitRoutes() *gin.Engine {
 
 	sellerG := router.Group("/sellers")
 	{
-		sellerG.GET("", GetAllSellers)
+		sellerG.GET("", GetAllUsers)
 		// sellerG.GET("/:id", GetSellerByID)
 		// sellerG.POST("", CreateSellers)
 		// sellerG.PUT("/:id", UpdateSellerByID)

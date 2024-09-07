@@ -1,10 +1,10 @@
-// C:\GoProject\src\eShop\errs\errs.go
-
 package errs
 
 import "errors"
 
 var (
+	ErrPermissionDenied            = errors.New("ErrPermissionDenied")
+	ErrValidationFailed            = errors.New("ErrValidationFailed")
 	ErrUsernameUniquenessFailed    = errors.New("ErrUsernameUniquenessFailed")
 	ErrOperationNotFound           = errors.New("ErrOperationNotFound")
 	ErrIncorrectUsernameOrPassword = errors.New("ErrIncorrectUsernameOrPassword")

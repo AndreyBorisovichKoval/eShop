@@ -1,9 +1,8 @@
-// C:\GoProject\src\eShop\pkg\controllers\auth.go
-
 package controllers
 
 import (
 	"eShop/models"
+	"eShop/pkg/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -32,7 +31,7 @@ func SignIn(c *gin.Context) {
 		return
 	}
 
-	accessToken, err := service.SignIn(user.Username, user.Password)
+	accessToken, err := service.SignIn(user.UserName, user.Password)
 	if err != nil {
 		handleError(c, err)
 		return

@@ -50,6 +50,6 @@ func CloseDBConn() error {
 	return nil
 }
 
-func GetDBconn() *gorm.DB {
+func GetDBConn() *gorm.DB {
 	return dbConn
 }
