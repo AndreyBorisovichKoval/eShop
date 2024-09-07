@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"eShop/db"
 	"eShop/logger"
 	"eShop/models"
 )
