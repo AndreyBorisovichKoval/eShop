@@ -67,7 +67,9 @@ func RunApp() {
 	fmt.Println("The connection to the database was closed successfully!!!")
 
 	if err = mainServer.Shutdown(context.Background()); err != nil {
-		log.Fatalf("HTTP Server shutdown failed: %v", err)
+		fmt.Println("Here")
+		// fmt.Println(err.Error())
+		// log.Fatalf("HTTP Server shutdown failed: %v...", err)
 	}
 	fmt.Println("Server shut down Gracefully...")
 	fmt.Println("Goodbye and good luck!!!")
