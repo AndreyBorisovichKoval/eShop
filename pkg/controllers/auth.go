@@ -31,7 +31,7 @@ func SignIn(c *gin.Context) {
 		return
 	}
 
-	accessToken, err := service.SignIn(user.UserName, user.Password)
+	accessToken, err := service.SignIn(user.Username, user.Password)
 	if err != nil {
 		handleError(c, err)
 		return

@@ -63,13 +63,7 @@ func RunApp() {
 	fmt.Printf("\nStarting to shut down the server...\n")
 
 	// Закрытие соединения с БД, если необходимо...
-	if sqlDB, err := db.GetDBconn().DB(); err == nil {
-		if err := sqlDB.Close(); err != nil {
-			log.Fatalf("Error closing connection to DB: %s...", err)
-		}
-	} else {
-		log.Fatalf("Error getting *sql.DB connection from GORM: %s...", err)
-	}
+	db.CloseDBConn()
 	fmt.Println("The connection to the database was closed successfully!!!")
 
 	if err = mainServer.Shutdown(context.Background()); err != nil {
