@@ -28,9 +28,9 @@ type ProductHistory struct {
 	IsDeleted          bool       `gorm:"default:false" json:"is_deleted"`             // Флаг удаления товара.
 
 	// Связи
-	Supplier Supplier    `gorm:"foreignKey:SupplierID" json:"supplier"` // Связь с таблицей поставщиков.
-	Category Category    `gorm:"foreignKey:CategoryID" json:"category"` // Связь с таблицей категорий.
-	Orders   []OrderItem `json:"orders"`                                // Связь с таблицей заказов.
+	Supplier Supplier `gorm:"foreignKey:SupplierID" json:"supplier"` // Связь с таблицей поставщиков.
+	Category Category `gorm:"foreignKey:CategoryID" json:"category"` // Связь с таблицей категорий.
+	// Orders   []OrderItem `json:"orders"`                                // Связь с таблицей заказов.
 }
 
 func (ProductHistory) TableName() string {

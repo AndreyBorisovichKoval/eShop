@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"eShop/pkg/service"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -47,7 +46,7 @@ func checkUserAuthentication(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
-	fmt.Println(claims)
+	// fmt.Println(claims)
 
 	c.Set(userIDCtx, claims.UserID)
 	c.Set(userRoleCtx, claims.Role)

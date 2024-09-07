@@ -24,16 +24,15 @@ func InitRoutes() *gin.Engine {
 
 	router.GET("/ping", PingPong)
 
-	// authG := router.Group("/auth")
-	auth := router.Group("/auth")
+	authG := router.Group("/auth")
 	{
-		auth.POST("/sign-up", SignUp)
-		auth.POST("/sign-in", SignIn)
+		authG.POST("/sign-up", SignUp)
+		authG.POST("/sign-in", SignIn)
 	}
 
-	sellerG := router.Group("/sellers")
+	userG := router.Group("/users")
 	{
-		sellerG.GET("", GetAllUsers)
+		userG.GET("", GetAllUsers)
 		// sellerG.GET("/:id", GetSellerByID)
 		// sellerG.POST("", CreateSellers)
 		// sellerG.PUT("/:id", UpdateSellerByID)
