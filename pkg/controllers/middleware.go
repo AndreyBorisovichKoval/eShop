@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"eShop/logger"
-	"eShop/pkg/service"
+	"coinkeeper/pkg/service"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -11,8 +11,8 @@ import (
 
 const (
 	authorizationHeader = "Authorization"
-	sellerIDCtx         = "sellerID"
-	sellerRoleCtx       = "sellerRole"
+	userIDCtx           = "userID"
+	userRoleCtx         = "userRole"
 )
 
 func checkUserAuthentication(c *gin.Context) {
@@ -33,25 +33,23 @@ func checkUserAuthentication(c *gin.Context) {
 		return
 	}
 
-	accessToken := headerParts[1]
-
-	if accessToken == "" {
+	if len(headerParts[1]) == 0 {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"error": "token is empty",
 		})
 		return
 	}
 
+	accessToken := headerParts[1]
+
 	claims, err := service.ParseToken(accessToken)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
+	fmt.Println(claims)
 
-	// Логирование claims для отладки...
-	logger.Info.Printf("Claims: %+v", claims)
-
-	c.Set(sellerIDCtx, claims.sellerID)
-	c.Set(sellerRoleCtx, claims.Role)
+	c.Set(userIDCtx, claims.UserID)
+	c.Set(userRoleCtx, claims.Role)
 	c.Next()
 }

@@ -36,17 +36,17 @@ func ConnectToDB() error {
 }
 
 func CloseDBConn() error {
-	// sqlDB, err := dbConn.DB()
-	// if err != nil {
-	// 	logger.Error.Printf("Failed to retrieve SQL DB from gorm.DB: %v", err)
-	// 	return err
-	// }
-	// err = sqlDB.Close()
-	// if err != nil {
-	// 	logger.Error.Printf("Failed to close database connection: %v", err)
-	// 	return err
-	// }
-	// logger.Info.Println("Database connection closed successfully...")
+	sqlDB, err := dbConn.DB()
+	if err != nil {
+		logger.Error.Printf("Failed to retrieve SQL DB from gorm.DB: %v", err)
+		return err
+	}
+	err = sqlDB.Close()
+	if err != nil {
+		logger.Error.Printf("Failed to close database connection: %v", err)
+		return err
+	}
+	logger.Info.Println("Database connection closed successfully...")
 	return nil
 }
 

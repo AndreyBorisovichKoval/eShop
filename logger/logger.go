@@ -35,8 +35,8 @@ func Init() error {
 		Filename:   fmt.Sprintf("%s/%s", logParams.LogDirectory, logParams.LogInfo),
 		MaxSize:    logParams.MaxSizeMegabytes, // megabytes
 		MaxBackups: logParams.MaxBackups,
-		MaxAge:     logParams.MaxAge,   // days
-		Compress:   logParams.Compress, // disabled by default
+		MaxAge:     logParams.MaxAge,   // Days.
+		Compress:   logParams.Compress, // Disabled by default.
 		LocalTime:  logParams.LocalTime,
 	}
 
@@ -67,18 +67,13 @@ func Init() error {
 		LocalTime:  logParams.LocalTime,
 	}
 
+	gin.DefaultWriter = io.MultiWriter(os.Stdout, lumberLogInfo)
+
 	// Инициализация глобальных логгеров...
 	Info = log.New(gin.DefaultWriter, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 	Error = log.New(lumberLogError, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
 	Warning = log.New(lumberLogWarning, "WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
 	Debug = log.New(lumberLogDebug, "DEBUG: ", log.Ldate|log.Ltime|log.Lshortfile)
-
-	gin.DefaultWriter = io.MultiWriter(os.Stdout, lumberLogInfo)
-
-	// Info.SetOutput(gin.DefaultWriter)
-	// Error.SetOutput(lumberLogError)
-	// Warning.SetOutput(lumberLogWarning)
-	// Debug.SetOutput(lumberLogDebug)
 
 	return nil
 }
