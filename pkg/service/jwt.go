@@ -1,7 +1,7 @@
 package service
 
 import (
-	"coinkeeper/configs"
+	"eShop/configs"
 	"fmt"
 	"os"
 	"time"

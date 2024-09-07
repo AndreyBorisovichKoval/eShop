@@ -28,7 +28,7 @@ func GetUserByID(id uint) (user models.User, err error) {
 
 func CreateUser(user models.User) error {
 	// 1. Check username uniqueness
-	userFromDB, err := repository.GetUserByUsername(user.UserName)
+	userFromDB, err := repository.GetUserByUsername(user.Username)
 	if err != nil && !errors.Is(err, errs.ErrRecordNotFound) {
 		return err
 	}
