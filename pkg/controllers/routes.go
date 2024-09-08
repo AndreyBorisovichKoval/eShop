@@ -36,7 +36,8 @@ func InitRoutes() *gin.Engine {
 		// userG.POST("/create", SignUp)
 		userG.POST("/create", SignUp, checkUserAuthentication)
 		userG.GET("", GetAllUsers)
-		// sellerG.GET("/:id", GetSellerByID)
+		userG.GET("/:id", GetUserByID)
+
 		// sellerG.POST("", CreateSellers)
 		// sellerG.PUT("/:id", UpdateSellerByID)
 		// sellerG.PATCH("/:id", PatchSellerByID)
