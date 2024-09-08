@@ -1,5 +1,6 @@
 .env
 .idea
+.vscode
 logs
 *.log
 configs/configs.json
