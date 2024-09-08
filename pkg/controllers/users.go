@@ -1,3 +1,5 @@
+// C:\GoProject\src\eShop\pkg\controllers\users.go
+
 package controllers
 
 import (
@@ -68,9 +70,8 @@ func CreateUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
-		"message": "user created successfully",
+		"message": "User created successfully!!!",
 	})
-
 }
 
 func UpdateUser(c *gin.Context) {

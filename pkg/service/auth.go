@@ -1,3 +1,5 @@
+// C:\GoProject\src\eShop\pkg\service\auth.go
+
 package service
 
 import (

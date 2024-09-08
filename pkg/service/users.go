@@ -1,3 +1,5 @@
+// C:\GoProject\src\eShop\pkg\service\users.go
+
 package service
 
 import (
@@ -37,7 +39,7 @@ func CreateUser(user models.User) error {
 		return errs.ErrUsernameUniquenessFailed
 	}
 
-	user.Role = "user"
+	// user.Role = "user"
 
 	// 2. Generate password hash
 	user.Password = utils.GenerateHash(user.Password)

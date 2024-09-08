@@ -1,3 +1,5 @@
+// C:\GoProject\src\eShop\pkg\controllers\auth.go
+
 package controllers
 
 import (
@@ -9,19 +11,27 @@ import (
 )
 
 func SignUp(c *gin.Context) {
+	// Получаем роль текущего пользователя из контекста
+	userRole, exists := c.Get(userRoleCtx)
+
+	// fmt.Println("userRole: ", userRole)
+	// fmt.Println("exists: ", exists)
+
+	if !exists || userRole != "Admin" {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Permission denied. Only Admin can create users..."})
+		return
+	}
+
 	var user models.User
 	if err := c.BindJSON(&user); err != nil {
-		handleError(c, err)
+		handleError(c, err) // Используем handleError для обработки ошибки
 		return
 	}
-
-	err := service.CreateUser(user)
-	if err != nil {
-		handleError(c, err)
+	if err := service.CreateUser(user); err != nil {
+		handleError(c, err) // Используем handleError для обработки ошибки
 		return
 	}
-
-	c.JSON(http.StatusCreated, gin.H{"message": "user created successfully"})
+	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully!!!"})
 }
 
 func SignIn(c *gin.Context) {

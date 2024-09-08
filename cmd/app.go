@@ -46,7 +46,7 @@ func RunApp() {
 	}
 	fmt.Println("Database migration Successful!!!")
 
-	fmt.Printf("Server is Listening on port %v\n", configs.AppSettings.AppParams.PortRun)
+	fmt.Printf("Server is Listening on port %v...\n", configs.AppSettings.AppParams.PortRun)
 
 	mainServer := new(server.Server)
 	go func() {

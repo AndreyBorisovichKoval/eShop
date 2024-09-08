@@ -1,3 +1,5 @@
+// C:\GoProject\src\eShop\errs\errs.go
+
 package errs
 
 import "errors"
