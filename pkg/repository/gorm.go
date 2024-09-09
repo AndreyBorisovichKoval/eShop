@@ -10,14 +10,15 @@ import (
 	"gorm.io/gorm"
 )
 
+// Переводим ошибки Go (конвертируем) в кастомные ошибки...
 func translateError(err error) error {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		logger.Warning.Printf("Record not found error: %v", err)
+		logger.Warning.Printf("Record not found error: %v...", err)
 		return errs.ErrRecordNotFound
 	}
 
-	// Добавить логирование для других ошибок по мере необходимости
-	logger.Error.Printf("Unhandled error: %v", err)
+	// Добавить логирование для других ошибок по мере необходимости...
+	logger.Error.Printf("Unhandled error: %v...", err)
 
 	return err
 }

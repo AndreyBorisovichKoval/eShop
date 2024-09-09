@@ -22,6 +22,7 @@ func GetUserByID(id uint) (user models.User, err error) {
 	err = db.GetDBConn().Where("id = ?", id).First(&user).Error
 	if err != nil {
 		logger.Error.Printf("[repository.GetUserByID] error getting user by id: %v\n", err)
+		// return models.User{}, translateError(err) // Возвращаем пустого пользователя при ошибке
 		return user, translateError(err)
 	}
 	return user, nil

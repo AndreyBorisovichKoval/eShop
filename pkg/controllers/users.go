@@ -3,6 +3,7 @@
 package controllers
 
 import (
+	"eShop/errs"
 	"eShop/logger"
 	"eShop/models"
 	"eShop/pkg/service"
@@ -32,17 +33,13 @@ func GetUserByID(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		logger.Error.Printf("[controllers.GetUserByID] invalid user_id path parameter: %s\n", c.Param("id"))
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "invalid id",
-		})
+		handleError(c, errs.ErrValidationFailed)
 		return
 	}
 
 	user, err := service.GetUserByID(uint(id))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		handleError(c, err)
 		return
 	}
 

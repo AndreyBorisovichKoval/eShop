@@ -14,6 +14,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/joho/godotenv"
 )
@@ -45,6 +46,8 @@ func RunApp() {
 		log.Fatalf("Error migrating database. Errors is %s...", err)
 	}
 	fmt.Println("Database migration Successful!!!")
+
+	log.Printf("Starting server %s: %s!!!\n", configs.AppSettings.AppParams.ServerName, time.Now().Format("2006-01-02 15:04:05"))
 
 	fmt.Printf("Server is Listening on port %v...\n", configs.AppSettings.AppParams.PortRun)
 

@@ -22,6 +22,9 @@ func GetAllUsers() (users []models.User, err error) {
 func GetUserByID(id uint) (user models.User, err error) {
 	user, err = repository.GetUserByID(id)
 	if err != nil {
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			return user, errs.ErrUserNotFound
+		}
 		return user, err
 	}
 

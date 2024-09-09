@@ -10,6 +10,7 @@ import (
 )
 
 // handleError обрабатывает все ошибки, возникающие в процессе выполнения
+// Добавляет статус код к ним и сразу возвращает клиенту...
 func handleError(c *gin.Context, err error) {
 	switch {
 	case errors.Is(err, errs.ErrUsernameUniquenessFailed),
@@ -24,6 +25,10 @@ func handleError(c *gin.Context, err error) {
 	case errors.Is(err, errs.ErrPermissionDenied):
 		// Ошибка "Доступ запрещен"
 		c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+
+	case errors.Is(err, errs.ErrUserNotFound):
+		// Ошибка "User not found"...
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 
 	default:
 		// Здесь просто возвращаем внутреннюю ошибку клиенту
