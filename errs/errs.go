@@ -12,5 +12,6 @@ var (
 	ErrIncorrectUsernameOrPassword = errors.New("ErrIncorrectUsernameOrPassword")
 	ErrRecordNotFound              = errors.New("ErrRecordNotFound")
 	ErrUserNotFound                = errors.New("ErrUserNotFound")
+	ErrUsersNotFound               = errors.New("ErrUsersNotFound")
 	ErrSomethingWentWrong          = errors.New("ErrSomethingWentWrong")
 )

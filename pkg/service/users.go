@@ -13,9 +13,11 @@ import (
 func GetAllUsers() (users []models.User, err error) {
 	users, err = repository.GetAllUsers()
 	if err != nil {
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			return nil, errs.ErrUsersNotFound
+		}
 		return nil, err
 	}
-
 	return users, nil
 }
 

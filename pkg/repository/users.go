@@ -11,10 +11,9 @@ import (
 func GetAllUsers() (users []models.User, err error) {
 	err = db.GetDBConn().Find(&users).Error
 	if err != nil {
-		logger.Error.Printf("[repository.GetAllUsers] error getting all users: %s\n", err.Error())
-		return nil, translateError(err)
+		logger.Error.Printf("[repository.GetAllUsers] error getting all users: %v\n", err)
+		return nil, translateError(err) // Пропускаем ошибку через translateError
 	}
-
 	return users, nil
 }
 

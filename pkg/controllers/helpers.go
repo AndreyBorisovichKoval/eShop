@@ -30,6 +30,10 @@ func handleError(c *gin.Context, err error) {
 		// Ошибка "User not found"...
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 
+	case errors.Is(err, errs.ErrUsersNotFound):
+		// Ошибка "Users not found"...
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+
 	default:
 		// Здесь просто возвращаем внутреннюю ошибку клиенту
 		c.JSON(http.StatusInternalServerError, gin.H{"error": errs.ErrSomethingWentWrong.Error()})

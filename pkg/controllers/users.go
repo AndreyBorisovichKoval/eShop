@@ -14,28 +14,28 @@ import (
 )
 
 func GetAllUsers(c *gin.Context) {
-	logger.Info.Printf("Client with ip: [%s] requested list of users\n", c.ClientIP())
+	logger.Info.Printf("IP: [%s] requested list of all users\n", c.ClientIP()) // Логируем IP при запросе всех пользователей...
+
 	users, err := service.GetAllUsers()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		logger.Error.Printf("[controllers.GetAllUsers] error getting all users: %v\n", err)
+		handleError(c, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"users": users,
-	})
-	logger.Info.Printf("Client with ip: [%s] got list of users\n", c.ClientIP())
+	logger.Info.Printf("IP: [%s] got list of all users\n", c.ClientIP()) // Логируем IP при успешной выдаче списка...
+	c.JSON(http.StatusOK, users)
 }
 
 func GetUserByID(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		logger.Error.Printf("[controllers.GetUserByID] invalid user_id path parameter: %s\n", c.Param("id"))
+		logger.Error.Printf("[controllers.GetUserByID] invalid user_id path parameter: %s, IP: [%s]\n", c.Param("id"), c.ClientIP())
 		handleError(c, errs.ErrValidationFailed)
 		return
 	}
+
+	logger.Info.Printf("IP: [%s] requested user with ID: %d\n", c.ClientIP(), id) // Логируем IP и запрашиваемый ID пользователя
 
 	user, err := service.GetUserByID(uint(id))
 	if err != nil {
@@ -43,8 +43,8 @@ func GetUserByID(c *gin.Context) {
 		return
 	}
 
+	logger.Info.Printf("IP: [%s] got user with ID: %d\n", c.ClientIP(), id) // Логируем IP и успешное получение пользователя
 	c.JSON(http.StatusOK, user)
-
 }
 
 func CreateUser(c *gin.Context) {
