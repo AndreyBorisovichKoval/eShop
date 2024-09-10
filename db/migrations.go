@@ -25,6 +25,6 @@ func MigrateDB() error {
 		logger.Error.Printf("Migration failed: %v", err)
 		return err
 	}
-	logger.Info.Println("Database migration completed successfully!!!")
+	logger.Info.Println("Database migration completed successfully!")
 	return nil
 }

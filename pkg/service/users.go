@@ -15,10 +15,10 @@ func GetAllUsers() (users []models.User, err error) {
 	// Получаем всех пользователей из репозитория...
 	users, err = repository.GetAllUsers()
 	if err != nil {
-		// Если не найдено ни одного пользователя, возвращаем кастомную ошибку...
-		if errors.Is(err, errs.ErrRecordNotFound) {
-			return nil, errs.ErrUsersNotFound
-		}
+		// // Если не найдено ни одного пользователя, возвращаем кастомную ошибку...
+		// if errors.Is(err, errs.ErrRecordNotFound) {
+		// 	return nil, errs.ErrUsersNotFound
+		// }
 		// Возвращаем любую другую ошибку, если она возникла...
 		return nil, err
 	}

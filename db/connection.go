@@ -30,7 +30,7 @@ func ConnectToDB() error {
 		logger.Error.Printf("Failed to connect to database: %v", err)
 		return err
 	}
-	logger.Info.Println("Successfully connected to database!!!")
+	logger.Info.Println("Successfully connected to database!")
 	dbConn = db
 	return nil
 }
@@ -46,7 +46,7 @@ func CloseDBConn() error {
 		logger.Error.Printf("Failed to close database connection: %v", err)
 		return err
 	}
-	logger.Info.Println("Database connection closed successfully...")
+	logger.Info.Println("Database connection closed successfully!")
 	return nil
 }
 
