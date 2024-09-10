@@ -4,6 +4,7 @@ package service
 
 import (
 	"eShop/errs"
+	"eShop/logger"
 	"eShop/models"
 	"eShop/pkg/repository"
 	"eShop/utils"
@@ -15,13 +16,14 @@ func GetAllUsers() (users []models.User, err error) {
 	// Получаем всех пользователей из репозитория...
 	users, err = repository.GetAllUsers()
 	if err != nil {
-		// // Если не найдено ни одного пользователя, возвращаем кастомную ошибку...
-		// if errors.Is(err, errs.ErrRecordNotFound) {
-		// 	return nil, errs.ErrUsersNotFound
-		// }
-		// Возвращаем любую другую ошибку, если она возникла...
 		return nil, err
 	}
+
+	// Если пользователей нет, логируем предупреждение и возвращаем пустой массив...
+	if len(users) == 0 {
+		logger.Warning.Printf("[repository.GetAllUsers] no users found")
+	}
+
 	// Возвращаем список пользователей...
 	return users, nil
 }
@@ -43,19 +45,52 @@ func GetUserByID(id uint) (user models.User, err error) {
 	return user, nil
 }
 
-// UpdateUserByID обновляет данные пользователя по его ID, проверяя его существование...
+// UpdateUserByID обновляет данные пользователя по его ID через репозиторий...
 func UpdateUserByID(id uint, updatedUser models.User) (user models.User, err error) {
 	// Получаем пользователя из репозитория по ID...
-	user, err = repository.UpdateUserByID(id, updatedUser)
+	user, err = repository.GetUserByID(id)
 	if err != nil {
-		// Если пользователь не найден, возвращаем ошибку, что пользователь не существует...
+		// Если пользователь не найден, возвращаем кастомную ошибку...
 		if errors.Is(err, errs.ErrRecordNotFound) {
+			logger.Warning.Printf("[service.UpdateUserByID] no user found with id: %v", id)
 			return user, errs.ErrUserNotFound
 		}
-		// Возвращаем любую другую ошибку, если она возникла...
+		// Логируем как ошибку и возвращаем любую другую ошибку...
+		logger.Error.Printf("[service.UpdateUserByID] error getting user by id: %v\n", err)
 		return user, err
 	}
-	// Возвращаем обновлённые данные пользователя...
+
+	// Обновляем только переданные поля...
+	if updatedUser.FullName != "" {
+		user.FullName = updatedUser.FullName
+	}
+	if updatedUser.Email != "" {
+		user.Email = updatedUser.Email
+	}
+	if updatedUser.Username != "" {
+		user.Username = updatedUser.Username
+	}
+	if updatedUser.Password != "" {
+		// Генерируем хеш пароля только если новый пароль передан...
+		user.Password = utils.GenerateHash(updatedUser.Password)
+	}
+	if updatedUser.Role != "" {
+		user.Role = updatedUser.Role
+	}
+
+	// Обновляем флаг блокировки и удаления...
+	user.IsBlocked = updatedUser.IsBlocked
+	user.IsDeleted = updatedUser.IsDeleted
+
+	// Сохраняем обновлённые данные через репозиторий...
+	err = repository.UpdateUserByID(user)
+	if err != nil {
+		// Логируем ошибку при сохранении данных...
+		logger.Error.Printf("[service.UpdateUserByID] error saving updated user with id: %v\n", id)
+		return user, err
+	}
+
+	// Возвращаем обновлённого пользователя...
 	return user, nil
 }
 

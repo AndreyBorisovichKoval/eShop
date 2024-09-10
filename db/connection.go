@@ -7,6 +7,7 @@ import (
 	"eShop/logger"
 	"fmt"
 	"os"
+	"time"
 
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"gorm.io/driver/postgres"
@@ -15,22 +16,33 @@ import (
 
 var dbConn *gorm.DB
 
+// ConnectToDB устанавливает соединение с базой данных PostgreSQL и учитывает временную зону...
 func ConnectToDB() error {
-	connStr := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s",
+	// Формируем строку подключения с указанием временной зоны Asia/Tashkent, так как для Душанбе в Windows временная зона отсутствует...
+	connStr := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s TimeZone=Asia/Dushanbe",
 		configs.AppSettings.PostgresParams.Host,
 		configs.AppSettings.PostgresParams.Port,
 		configs.AppSettings.PostgresParams.User,
 		configs.AppSettings.PostgresParams.Database,
 		os.Getenv("DB_PASSWORD"))
 
+	// Логируем попытку подключения к базе данных...
 	logger.Info.Println("Connecting to database...")
 
-	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{})
+	// Открываем соединение с базой данных с использованием GORM...
+	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{NowFunc: func() time.Time {
+		return time.Now().Local()
+	}})
 	if err != nil {
+		// Логируем ошибку, если не удалось подключиться к базе данных...
 		logger.Error.Printf("Failed to connect to database: %v", err)
 		return err
 	}
+
+	// Логируем успешное подключение к базе данных...
 	logger.Info.Println("Successfully connected to database!")
+
+	// Сохраняем подключение для дальнейшего использования...
 	dbConn = db
 	return nil
 }
