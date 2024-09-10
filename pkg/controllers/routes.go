@@ -38,23 +38,14 @@ func InitRoutes() *gin.Engine {
 		userG.POST("", SignUp)
 		userG.GET("", GetAllUsers)
 		userG.GET("/:id", GetUserByID)
+		userG.PUT("/:id", UpdateUserByID)
 
 		// sellerG.POST("", CreateSellers)
-		// sellerG.PUT("/:id", UpdateSellerByID)
 		// sellerG.PATCH("/:id", PatchSellerByID)
 		// sellerG.DELETE("/harddelete/:id", HardDeleteNoteByID)
 		// sellerG.DELETE("/softdelete/:id", SoftDeleteNoteByID)
 		// sellerG.PUT("/restore/:id", RestoreNoteByID)
 	}
-
-	// err := router.Run(fmt.Sprintf("%s:%s", configs.AppSettings.AppParams.ServerURL, configs.AppSettings.AppParams.PortRun))
-	// if err != nil {
-	// 	logger.Error.Printf("Server failed to start: %v", err)
-	// 	return err
-	// }
-
-	// logger.Info.Printf("Server started on port: %s...\n", configs.AppSettings.AppParams.PortRun)
-	// return nil
 
 	return router
 }
