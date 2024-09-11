@@ -13,6 +13,35 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// CreateUser создаёт нового пользователя...
+func CreateUser(c *gin.Context) {
+	var user models.User
+
+	// Привязываем JSON тело запроса к модели пользователя...
+	if err := c.BindJSON(&user); err != nil {
+		// Возвращаем клиенту ошибку 400, если данные в запросе некорректные...
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// Вызываем сервис для создания пользователя...
+	err := service.CreateUser(user)
+	if err != nil {
+		// Возвращаем ошибку 500, если возникли проблемы на уровне сервиса...
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// Возвращаем успешный ответ с кодом 201 при успешном создании пользователя...
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "User created successfully!!!",
+	})
+}
+
 // GetAllUsers получает список всех пользователей...
 func GetAllUsers(c *gin.Context) {
 	// Логируем IP клиента при запросе списка всех пользователей...
@@ -112,31 +141,80 @@ func UpdateUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-// CreateUser создаёт нового пользователя...
-func CreateUser(c *gin.Context) {
-	var user models.User
-
-	// Привязываем JSON тело запроса к модели пользователя...
-	if err := c.BindJSON(&user); err != nil {
-		// Возвращаем клиенту ошибку 400, если данные в запросе некорректные...
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+// SoftDeleteUserByID помечает пользователя как удалённого...
+func SoftDeleteUserByID(c *gin.Context) {
+	// Получаем роль пользователя из контекста. Если она не задана, возвращаем ошибку валидации...
+	userRole := c.GetString(userRoleCtx)
+	if userRole == "" {
+		handleError(c, errs.ErrValidationFailed)
 		return
 	}
 
-	// Вызываем сервис для создания пользователя...
-	err := service.CreateUser(user)
+	// Проверяем, является ли пользователь администратором. Если нет, возвращаем ошибку "Доступ запрещен"...
+	if userRole != "Admin" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
+	// Извлекаем ID пользователя...
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		// Возвращаем ошибку 500, если возникли проблемы на уровне сервиса...
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		handleError(c, errs.ErrValidationFailed)
 		return
 	}
 
-	// Возвращаем успешный ответ с кодом 201 при успешном создании пользователя...
-	c.JSON(http.StatusCreated, gin.H{
-		"message": "User created successfully!!!",
-	})
+	// Логируем запрос...
+	logger.Info.Printf("IP: [%s] requested to soft delete user with ID: %d\n", c.ClientIP(), id)
+
+	// Вызываем сервис для софт удаления пользователя...
+	err = service.SoftDeleteUserByID(uint(id))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	// Логируем успешное удаление...
+	logger.Info.Printf("IP: [%s] successfully soft deleted user with ID: %d\n", c.ClientIP(), id)
+
+	// Отправляем клиенту ответ...
+	c.JSON(http.StatusOK, gin.H{"message": "User soft deleted successfully!"})
+}
+
+// RestoreUserByID восстанавливает пользователя...
+func RestoreUserByID(c *gin.Context) {
+	// Получаем роль пользователя из контекста. Если она не задана, возвращаем ошибку валидации...
+	userRole := c.GetString(userRoleCtx)
+	if userRole == "" {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	// Проверяем, является ли пользователь администратором. Если нет, возвращаем ошибку "Доступ запрещен"...
+	if userRole != "Admin" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
+	// Извлекаем ID пользователя...
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	// Логируем запрос...
+	logger.Info.Printf("IP: [%s] requested to restore user with ID: %d\n", c.ClientIP(), id)
+
+	// Вызываем сервис для восстановления пользователя...
+	err = service.RestoreUserByID(uint(id))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	// Логируем успешное восстановление...
+	logger.Info.Printf("IP: [%s] successfully restored user with ID: %d\n", c.ClientIP(), id)
+
+	// Отправляем клиенту ответ...
+	c.JSON(http.StatusOK, gin.H{"message": "User restored successfully!"})
 }

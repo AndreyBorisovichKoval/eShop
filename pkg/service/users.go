@@ -9,6 +9,7 @@ import (
 	"eShop/pkg/repository"
 	"eShop/utils"
 	"errors"
+	"time"
 )
 
 // GetAllUsers получает список всех пользователей...
@@ -26,6 +27,32 @@ func GetAllUsers() (users []models.User, err error) {
 
 	// Возвращаем список пользователей...
 	return users, nil
+}
+
+// CreateUser проверяет уникальность пользователя, генерирует хеш пароля и сохраняет пользователя...
+func CreateUser(user models.User) error {
+	// 1. Проверяем уникальность имени пользователя...
+	userFromDB, err := repository.GetUserByUsername(user.Username)
+	if err != nil && !errors.Is(err, errs.ErrRecordNotFound) {
+		// Если возникает ошибка, отличная от "запись не найдена", возвращаем её...
+		return err
+	}
+
+	// Если пользователь с таким именем уже существует, возвращаем ошибку уникальности...
+	if userFromDB.ID > 0 {
+		return errs.ErrUsernameUniquenessFailed
+	}
+
+	// 2. Генерируем хеш пароля пользователя...
+	user.Password = utils.GenerateHash(user.Password)
+
+	// 3. Сохраняем пользователя через репозиторий...
+	err = repository.CreateUser(user)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // GetUserByID получает данные пользователя по его ID...
@@ -94,26 +121,71 @@ func UpdateUserByID(id uint, updatedUser models.User) (user models.User, err err
 	return user, nil
 }
 
-// CreateUser проверяет уникальность пользователя, генерирует хеш пароля и сохраняет пользователя...
-func CreateUser(user models.User) error {
-	// 1. Проверяем уникальность имени пользователя...
-	userFromDB, err := repository.GetUserByUsername(user.Username)
-	if err != nil && !errors.Is(err, errs.ErrRecordNotFound) {
-		// Если возникает ошибка, отличная от "запись не найдена", возвращаем её...
+// SoftDeleteUserByID помечает пользователя как удалённого...
+func SoftDeleteUserByID(id uint) (err error) {
+	// Получаем пользователя по ID...
+	user, err := repository.GetUserByID(id)
+	if err != nil {
+		// Проверяем, если это ошибка записи не найдена и возвращаем кастомную ошибку...
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			logger.Warning.Printf("[service.UpdateUserByID] no user found with id: %v", id)
+			return errs.ErrUserNotFound
+		}
+		// Логируем и возвращаем другие ошибки...
+		logger.Error.Printf("[service.UpdateUserByID] error getting user by id: %v\n", err)
 		return err
 	}
 
-	// Если пользователь с таким именем уже существует, возвращаем ошибку уникальности...
-	if userFromDB.ID > 0 {
-		return errs.ErrUsernameUniquenessFailed
+	// Проверяем, был ли пользователь уже удалён...
+	if user.IsDeleted {
+		// Возвращаем ошибку, если пользователь уже удалён...
+		return errs.ErrUserAlreadyDeleted
 	}
 
-	// 2. Генерируем хеш пароля пользователя...
-	user.Password = utils.GenerateHash(user.Password)
+	// Помечаем как удалённого...
+	user.IsDeleted = true
+	currentTime := time.Now()
+	user.DeletedAt = &currentTime
 
-	// 3. Сохраняем пользователя через репозиторий...
-	err = repository.CreateUser(user)
+	// Используем существующую функцию обновления...
+	err = repository.UpdateUserByID(user)
 	if err != nil {
+		logger.Error.Printf("[service.UpdateUserByID] error saving updated user with id: %v\n", id)
+		return err
+	}
+
+	return nil
+}
+
+// RestoreUserByID восстанавливает пользователя...
+func RestoreUserByID(id uint) (err error) {
+	// Получаем пользователя по ID...
+	user, err := repository.GetUserByID(id)
+	if err != nil {
+		// Если пользователь не найден, возвращаем кастомную ошибку...
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			logger.Warning.Printf("[service.RestoreUserByID] no user found with id: %v", id)
+			return errs.ErrUserNotFound
+		}
+		// Логируем и возвращаем другие ошибки...
+		logger.Error.Printf("[service.RestoreUserByID] error getting user by id: %v\n", err)
+		return err
+	}
+
+	// Проверяем, был ли пользователь не удалён...
+	if !user.IsDeleted {
+		// Возвращаем ошибку, если пользователь не был удалён...
+		return errs.ErrUserNotDeleted
+	}
+
+	// Восстанавливаем пользователя...
+	user.IsDeleted = false
+	user.DeletedAt = nil
+
+	// Используем существующую функцию обновления...
+	err = repository.UpdateUserByID(user)
+	if err != nil {
+		logger.Error.Printf("[service.RestoreUserByID] error saving updated user with id: %v\n", id)
 		return err
 	}
 

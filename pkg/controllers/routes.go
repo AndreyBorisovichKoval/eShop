@@ -39,6 +39,8 @@ func InitRoutes() *gin.Engine {
 		userG.GET("", GetAllUsers)
 		userG.GET("/:id", GetUserByID)
 		userG.PUT("/:id", UpdateUserByID)
+		userG.DELETE("/:id", SoftDeleteUserByID)
+		userG.PUT("/:id/restore", RestoreUserByID)
 
 		// sellerG.POST("", CreateSellers)
 		// sellerG.PATCH("/:id", PatchSellerByID)
