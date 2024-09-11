@@ -160,7 +160,7 @@ func SoftDeleteUserByID(id uint) (err error) {
 // RestoreUserByID восстанавливает пользователя...
 func RestoreUserByID(id uint) (err error) {
 	// Получаем пользователя по ID...
-	user, err := repository.GetUserByID(id)
+	user, err := repository.GetUserIncludingSoftDeleted(id)
 	if err != nil {
 		// Если пользователь не найден, возвращаем кастомную ошибку...
 		if errors.Is(err, errs.ErrRecordNotFound) {
@@ -189,5 +189,28 @@ func RestoreUserByID(id uint) (err error) {
 		return err
 	}
 
+	return nil
+}
+
+// GetDeletedUsers возвращает список всех удалённых пользователей...
+func GetAllDeletedUsers() (users []models.User, err error) {
+	users, err = repository.GetAllDeletedUsers()
+	if err != nil {
+		return nil, err
+	}
+
+	// Возвращаем список удалённых пользователей...
+	return users, nil
+}
+
+// HardDeleteUserByID удаляет пользователя из базы данных...
+func HardDeleteUserByID(id uint) error {
+	// Вызываем репозиторий для выполнения жёсткого удаления...
+	err := repository.HardDeleteUserByID(id)
+	if err != nil {
+		// Логируем и возвращаем ошибку, если что-то пошло не так...
+		logger.Error.Printf("[service.HardDeleteUserByID] error hard deleting user with id: %v\n", id)
+		return err
+	}
 	return nil
 }

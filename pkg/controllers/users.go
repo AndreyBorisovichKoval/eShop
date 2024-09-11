@@ -218,3 +218,60 @@ func RestoreUserByID(c *gin.Context) {
 	// Отправляем клиенту ответ...
 	c.JSON(http.StatusOK, gin.H{"message": "User restored successfully!"})
 }
+
+// GetDeletedUsers получает список всех удалённых пользователей...
+func GetAllDeletedUsers(c *gin.Context) {
+	userRole := c.GetString(userRoleCtx)
+	if userRole == "" || userRole != "Admin" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
+	// Логируем запрос...
+	logger.Info.Printf("IP: [%s] requested list of all deleted users\n", c.ClientIP())
+
+	// Вызываем сервис для получения списка удалённых пользователей...
+	users, err := service.GetAllDeletedUsers()
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	// Логируем успешное получение списка...
+	logger.Info.Printf("IP: [%s] successfully retrieved list of deleted users\n", c.ClientIP())
+
+	// Возвращаем список удалённых пользователей клиенту...
+	c.JSON(http.StatusOK, users)
+}
+
+// HardDeleteUserByID удаляет пользователя из базы данных полностью...
+func HardDeleteUserByID(c *gin.Context) {
+	userRole := c.GetString(userRoleCtx)
+	if userRole == "" || userRole != "Admin" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
+	// Извлекаем ID пользователя...
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	// Логируем запрос...
+	logger.Info.Printf("IP: [%s] requested to hard delete user with ID: %d\n", c.ClientIP(), id)
+
+	// Вызываем сервис для реального удаления пользователя...
+	err = service.HardDeleteUserByID(uint(id))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	// Логируем успешное удаление...
+	logger.Info.Printf("IP: [%s] successfully hard deleted user with ID: %d\n", c.ClientIP(), id)
+
+	// Отправляем клиенту ответ...
+	c.JSON(http.StatusOK, gin.H{"message": "User hard deleted successfully!"})
+}

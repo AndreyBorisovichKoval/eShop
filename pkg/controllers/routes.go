@@ -41,12 +41,8 @@ func InitRoutes() *gin.Engine {
 		userG.PUT("/:id", UpdateUserByID)
 		userG.DELETE("/:id", SoftDeleteUserByID)
 		userG.PUT("/:id/restore", RestoreUserByID)
-
-		// sellerG.POST("", CreateSellers)
-		// sellerG.PATCH("/:id", PatchSellerByID)
-		// sellerG.DELETE("/harddelete/:id", HardDeleteNoteByID)
-		// sellerG.DELETE("/softdelete/:id", SoftDeleteNoteByID)
-		// sellerG.PUT("/restore/:id", RestoreNoteByID)
+		userG.GET("/deleted", GetAllDeletedUsers)
+		userG.DELETE("/:id/harddelete", HardDeleteUserByID)
 	}
 
 	return router

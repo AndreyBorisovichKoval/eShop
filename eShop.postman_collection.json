@@ -298,7 +298,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1LCJyb2xlIjoiU2VsbGVyIiwidXNlcm5hbWUiOiJNYXgiLCJleHAiOjE3MjU4MTIyMTcsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.M04Binem_8MsgxX105wKe7FObxtHjaHgIB-3_UiMUVM",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjYwODExMzgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.op2KNu6101ohPdcZ8-U4hfrloBCsZUq7g0hDzsPESw0",
 									"type": "string"
 								}
 							]
@@ -327,7 +327,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1LCJyb2xlIjoiU2VsbGVyIiwidXNlcm5hbWUiOiJNYXgiLCJleHAiOjE3MjU4MTIyMTcsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.M04Binem_8MsgxX105wKe7FObxtHjaHgIB-3_UiMUVM",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjYwODExMzgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.op2KNu6101ohPdcZ8-U4hfrloBCsZUq7g0hDzsPESw0",
 									"type": "string"
 								}
 							]
@@ -335,7 +335,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8585/users/3",
+							"raw": "http://localhost:8585/users/6",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -343,7 +343,7 @@
 							"port": "8585",
 							"path": [
 								"users",
-								"3"
+								"6"
 							]
 						}
 					},
@@ -462,6 +462,76 @@
 								"users",
 								"6",
 								"restore"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AllDeletedUsers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjYwODExMzgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.op2KNu6101ohPdcZ8-U4hfrloBCsZUq7g0hDzsPESw0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/users/deleted",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"users",
+								"deleted"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HardDeleteByID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjYwODExMzgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.op2KNu6101ohPdcZ8-U4hfrloBCsZUq7g0hDzsPESw0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"full_name\": \"Test Test3\",\r\n  \"username\": \"Test3\",\r\n  \"email\": \"test.test3@example.com\",\r\n  \"is_blocked\": false\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/users/19/harddelete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"users",
+								"19",
+								"harddelete"
 							]
 						}
 					},
