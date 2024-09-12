@@ -95,10 +95,10 @@ func GetUserByID(c *gin.Context) {
 func UpdateUserByID(c *gin.Context) {
 	// Получаем роль пользователя из контекста. Если она не задана, возвращаем ошибку валидации...
 	userRole := c.GetString(userRoleCtx)
-	if userRole == "" {
-		handleError(c, errs.ErrValidationFailed)
-		return
-	}
+	// if userRole == "" {
+	// 	handleError(c, errs.ErrValidationFailed)
+	// 	return
+	// }
 
 	// Проверяем, является ли пользователь администратором. Если нет, возвращаем ошибку "Доступ запрещен"...
 	if userRole != "Admin" {
@@ -145,10 +145,10 @@ func UpdateUserByID(c *gin.Context) {
 func SoftDeleteUserByID(c *gin.Context) {
 	// Получаем роль пользователя из контекста. Если она не задана, возвращаем ошибку валидации...
 	userRole := c.GetString(userRoleCtx)
-	if userRole == "" {
-		handleError(c, errs.ErrValidationFailed)
-		return
-	}
+	// if userRole == "" {
+	// 	handleError(c, errs.ErrValidationFailed)
+	// 	return
+	// }
 
 	// Проверяем, является ли пользователь администратором. Если нет, возвращаем ошибку "Доступ запрещен"...
 	if userRole != "Admin" {
@@ -184,10 +184,10 @@ func SoftDeleteUserByID(c *gin.Context) {
 func RestoreUserByID(c *gin.Context) {
 	// Получаем роль пользователя из контекста. Если она не задана, возвращаем ошибку валидации...
 	userRole := c.GetString(userRoleCtx)
-	if userRole == "" {
-		handleError(c, errs.ErrValidationFailed)
-		return
-	}
+	// if userRole == "" {
+	// 	handleError(c, errs.ErrValidationFailed)
+	// 	return
+	// }
 
 	// Проверяем, является ли пользователь администратором. Если нет, возвращаем ошибку "Доступ запрещен"...
 	if userRole != "Admin" {
@@ -221,8 +221,15 @@ func RestoreUserByID(c *gin.Context) {
 
 // GetDeletedUsers получает список всех удалённых пользователей...
 func GetAllDeletedUsers(c *gin.Context) {
+	// Получаем роль пользователя из контекста...
 	userRole := c.GetString(userRoleCtx)
-	if userRole == "" || userRole != "Admin" {
+	// if userRole == "" {
+	// 	handleError(c, errs.ErrValidationFailed)
+	// 	return
+	// }
+
+	// Проверяем, является ли пользователь администратором...
+	if userRole != "Admin" {
 		handleError(c, errs.ErrPermissionDenied)
 		return
 	}
@@ -246,8 +253,15 @@ func GetAllDeletedUsers(c *gin.Context) {
 
 // HardDeleteUserByID удаляет пользователя из базы данных полностью...
 func HardDeleteUserByID(c *gin.Context) {
+	// Получаем роль пользователя из контекста...
 	userRole := c.GetString(userRoleCtx)
-	if userRole == "" || userRole != "Admin" {
+	// if userRole == "" {
+	// 	handleError(c, errs.ErrValidationFailed)
+	// 	return
+	// }
+
+	// Проверяем, является ли пользователь администратором...
+	if userRole != "Admin" {
 		handleError(c, errs.ErrPermissionDenied)
 		return
 	}
@@ -274,4 +288,137 @@ func HardDeleteUserByID(c *gin.Context) {
 
 	// Отправляем клиенту ответ...
 	c.JSON(http.StatusOK, gin.H{"message": "User hard deleted successfully!"})
+}
+
+// BlockUserByID блокирует пользователя по его ID...
+func BlockUserByID(c *gin.Context) {
+	// Получаем роль пользователя из контекста...
+	userRole := c.GetString(userRoleCtx)
+	// if userRole == "" {
+	// 	handleError(c, errs.ErrValidationFailed)
+	// 	return
+	// }
+
+	// Проверяем, является ли пользователь администратором...
+	if userRole != "Admin" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
+	// Извлекаем ID пользователя из параметра запроса...
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	// Логируем попытку блокировки...
+	logger.Info.Printf("IP: [%s] requested to block user with ID: %d\n", c.ClientIP(), id)
+
+	// Вызываем сервис для блокировки пользователя...
+	err = service.BlockUserByID(uint(id))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	// Логируем успешную блокировку...
+	logger.Info.Printf("IP: [%s] successfully blocked user with ID: %d\n", c.ClientIP(), id)
+
+	// Отправляем клиенту ответ...
+	c.JSON(http.StatusOK, gin.H{"message": "User blocked successfully!"})
+}
+
+// UnblockUserByID разблокирует пользователя по его ID...
+func UnblockUserByID(c *gin.Context) {
+	// Получаем роль пользователя из контекста...
+	userRole := c.GetString(userRoleCtx)
+	// if userRole == "" {
+	// 	handleError(c, errs.ErrValidationFailed)
+	// 	return
+	// }
+
+	// Проверяем, является ли пользователь администратором...
+	if userRole != "Admin" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
+	// Извлекаем ID пользователя...
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	// Логируем запрос на разблокировку пользователя...
+	logger.Info.Printf("IP: [%s] requested to unblock user with ID: %d\n", c.ClientIP(), id)
+
+	// Вызываем сервис для разблокировки пользователя...
+	err = service.UnblockUserByID(uint(id))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	// Логируем успешную разблокировку...
+	logger.Info.Printf("IP: [%s] successfully unblocked user with ID: %d\n", c.ClientIP(), id)
+
+	// Отправляем клиенту ответ...
+	c.JSON(http.StatusOK, gin.H{"message": "User unblocked successfully!"})
+}
+
+// ResetPassword сбрасывает пароль пользователя (доступно только администратору)...
+func ResetPassword(c *gin.Context) {
+	userRole := c.GetString(userRoleCtx)
+	if userRole != "Admin" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	var passwordData struct {
+		NewPassword string `json:"new_password"`
+	}
+
+	if err := c.BindJSON(&passwordData); err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	err = service.ResetPassword(uint(id), passwordData.NewPassword)
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Password reset successfully!"})
+}
+
+// ChangeOwnPassword позволяет пользователю изменить свой пароль...
+func ChangeOwnPassword(c *gin.Context) {
+	userID := c.GetUint(userIDCtx)
+
+	var passwordData struct {
+		OldPassword string `json:"old_password"`
+		NewPassword string `json:"new_password"`
+	}
+
+	if err := c.BindJSON(&passwordData); err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	err := service.ChangeOwnPassword(userID, passwordData.OldPassword, passwordData.NewPassword)
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Password changed successfully!"})
 }

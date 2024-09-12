@@ -12,23 +12,6 @@ import (
 	"time"
 )
 
-// GetAllUsers получает список всех пользователей...
-func GetAllUsers() (users []models.User, err error) {
-	// Получаем всех пользователей из репозитория...
-	users, err = repository.GetAllUsers()
-	if err != nil {
-		return nil, err
-	}
-
-	// Если пользователей нет, логируем предупреждение и возвращаем пустой массив...
-	if len(users) == 0 {
-		logger.Warning.Printf("[repository.GetAllUsers] no users found")
-	}
-
-	// Возвращаем список пользователей...
-	return users, nil
-}
-
 // CreateUser проверяет уникальность пользователя, генерирует хеш пароля и сохраняет пользователя...
 func CreateUser(user models.User) error {
 	// 1. Проверяем уникальность имени пользователя...
@@ -53,6 +36,23 @@ func CreateUser(user models.User) error {
 	}
 
 	return nil
+}
+
+// GetAllUsers получает список всех пользователей...
+func GetAllUsers() (users []models.User, err error) {
+	// Получаем всех пользователей из репозитория...
+	users, err = repository.GetAllUsers()
+	if err != nil {
+		return nil, err
+	}
+
+	// Если пользователей нет, логируем предупреждение и возвращаем пустой массив...
+	if len(users) == 0 {
+		logger.Warning.Printf("[repository.GetAllUsers] no users found")
+	}
+
+	// Возвращаем список пользователей...
+	return users, nil
 }
 
 // GetUserByID получает данные пользователя по его ID...
@@ -213,4 +213,107 @@ func HardDeleteUserByID(id uint) error {
 		return err
 	}
 	return nil
+}
+
+// BlockUserByID блокирует пользователя по его ID...
+func BlockUserByID(id uint) (err error) {
+	// Получаем пользователя из репозитория...
+	user, err := repository.GetUserByID(id)
+	if err != nil {
+		// Проверяем, если запись не найдена...
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			logger.Warning.Printf("[service.BlockUserByID] no user found with id: %v", id)
+			return errs.ErrUserNotFound
+		}
+		// Логируем и возвращаем ошибку...
+		logger.Error.Printf("[service.BlockUserByID] error getting user by id: %v\n", err)
+		return err
+	}
+
+	// Проверяем, заблокирован ли пользователь...
+	if user.IsBlocked {
+		return errs.ErrUserAlreadyBlocked
+	}
+
+	// Помечаем пользователя как заблокированного и сохраняем время блокировки...
+	user.IsBlocked = true
+	currentTime := time.Now()
+	user.BlockedAt = &currentTime
+
+	// Сохраняем изменения в репозитории...
+	err = repository.UpdateUserByID(user)
+	if err != nil {
+		logger.Error.Printf("[service.BlockUserByID] error updating user with id: %v\n", id)
+		return err
+	}
+
+	return nil
+}
+
+// UnblockUserByID разблокирует пользователя...
+func UnblockUserByID(id uint) (err error) {
+	// Получаем пользователя по ID...
+	user, err := repository.GetUserByID(id)
+	if err != nil {
+		if errors.Is(err, errs.ErrUserNotFound) {
+			logger.Warning.Printf("[service.UnblockUserByID] no user found with id: %v", id)
+			return errs.ErrUserNotFound
+		}
+		logger.Error.Printf("[service.UnblockUserByID] error getting user by id: %v\n", err)
+		return err
+	}
+
+	// Проверяем, заблокирован ли пользователь...
+	if !user.IsBlocked {
+		return errs.ErrUserNotBlocked
+	}
+
+	// Разблокируем пользователя...
+	user.IsBlocked = false
+	user.BlockedAt = nil
+
+	// Обновляем данные пользователя...
+	err = repository.UpdateUserByID(user)
+	if err != nil {
+		logger.Error.Printf("[service.UnblockUserByID] error saving updated user with id: %v\n", id)
+		return err
+	}
+
+	return nil
+}
+
+// ResetPassword сбрасывает пароль пользователя (доступно только администратору)...
+func ResetPassword(userID uint, newPassword string) error {
+	user, err := repository.GetUserByID(userID)
+	if err != nil {
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			return errs.ErrUserNotFound
+		}
+		return err
+	}
+
+	// Хешируем новый пароль...
+	user.Password = utils.GenerateHash(newPassword)
+
+	return repository.UpdateUserByID(user)
+}
+
+// ChangeOwnPassword позволяет пользователю изменить свой пароль...
+func ChangeOwnPassword(userID uint, oldPassword, newPassword string) error {
+	user, err := repository.GetUserByID(userID)
+	if err != nil {
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			return errs.ErrUserNotFound
+		}
+		return err
+	}
+
+	// Проверяем старый пароль...
+	if !utils.CheckPasswordHash(oldPassword, user.Password) {
+		return errs.ErrIncorrectPassword
+	}
+
+	// Хешируем новый пароль и сохраняем его...
+	user.Password = utils.GenerateHash(newPassword)
+	return repository.UpdateUserByID(user)
 }

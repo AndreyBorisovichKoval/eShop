@@ -3,8 +3,8 @@
 package controllers
 
 import (
+	"eShop/errs"
 	"eShop/pkg/service"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -17,6 +17,7 @@ const (
 	userRoleCtx         = "userRole"
 )
 
+// Middleware для проверки аутентификации и наличия роли...
 func checkUserAuthentication(c *gin.Context) {
 	header := c.GetHeader(authorizationHeader)
 
@@ -35,13 +36,6 @@ func checkUserAuthentication(c *gin.Context) {
 		return
 	}
 
-	if len(headerParts[1]) == 0 {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": "token is empty",
-		})
-		return
-	}
-
 	accessToken := headerParts[1]
 
 	claims, err := service.ParseToken(accessToken)
@@ -50,10 +44,17 @@ func checkUserAuthentication(c *gin.Context) {
 		return
 	}
 
-	// Логирование для отладки
-	fmt.Printf("Claims: %+v...\n", claims)
+	// Проверяем наличие роли, если её нет, возвращаем ошибку валидации...
+	// Проверяем наличие роли, если её нет, возвращаем ошибку валидации...
+	// Проверяем наличие роли, если её нет, возвращаем ошибку валидации...
+	if claims.Role == "" {
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": errs.ErrPermissionDenied.Error()})
+		return
+	}
 
+	// Устанавливаем идентификатор пользователя и роль в контекст...
 	c.Set(userIDCtx, claims.UserID)
 	c.Set(userRoleCtx, claims.Role)
+
 	c.Next()
 }

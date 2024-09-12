@@ -67,6 +67,17 @@ func GetAllUsers() (users []models.User, err error) {
 	return users, nil
 }
 
+// GetDeletedUsers получает всех удалённых пользователей из базы данных...
+func GetAllDeletedUsers() (users []models.User, err error) {
+	err = db.GetDBConn().Where("is_deleted = ?", true).Find(&users).Error
+	if err != nil {
+		logger.Error.Printf("[repository.GetDeletedUsers] error getting deleted users: %v\n", err)
+		return nil, translateError(err)
+	}
+
+	return users, nil
+}
+
 // GetUserByID получает пользователя из базы данных по его ID...
 func GetUserByID(id uint) (user models.User, err error) {
 	// Выполняем запрос к базе данных для поиска пользователя по ID...
@@ -105,29 +116,6 @@ func UpdateUserByID(user models.User) (err error) {
 	// Возвращаем nil при успешном обновлении...
 	return nil
 }
-
-// GetDeletedUsers получает всех удалённых пользователей из базы данных...
-func GetAllDeletedUsers() (users []models.User, err error) {
-	err = db.GetDBConn().Where("is_deleted = ?", true).Find(&users).Error
-	if err != nil {
-		logger.Error.Printf("[repository.GetDeletedUsers] error getting deleted users: %v\n", err)
-		return nil, translateError(err)
-	}
-
-	return users, nil
-}
-
-// // HardDeleteUserByID полностью удаляет пользователя из базы данных...
-// func HardDeleteUserByID(user models.User) (err error) {
-// 	// Выполняем реальное удаление записи из базы данных...
-// 	err = db.GetDBConn().Unscoped().Delete(&user).Error
-// 	if err != nil {
-// 		logger.Error.Printf("[repository.HardDeleteUserByID] error hard deleting user with id: %v, error: %v\n", user.ID, err)
-// 		return translateError(err)
-// 	}
-
-// 	return nil
-// }
 
 // HardDeleteUserByID удаляет пользователя из базы данных...
 func HardDeleteUserByID(id uint) error {

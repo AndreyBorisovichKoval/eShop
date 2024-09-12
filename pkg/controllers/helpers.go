@@ -42,6 +42,22 @@ func handleError(c *gin.Context, err error) {
 		// Ошибка "Пользователь не был удалён"...
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 
+	case errors.Is(err, errs.ErrUserAlreadyBlocked):
+		// Ошибка "Пользователь уже заблокирован"...
+		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+
+	case errors.Is(err, errs.ErrUserNotBlocked):
+		// Ошибка "Пользователь не был заблокирован"...
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+	case errors.Is(err, errs.ErrUnauthorizedPasswordChange):
+		// Ошибка "Попытка смены пароля без прав"...
+		c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+
+	case errors.Is(err, errs.ErrIncorrectPassword):
+		// Ошибка "Неверный старый пароль"...
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
 	default:
 		// Внутренняя ошибка сервера...
 		c.JSON(http.StatusInternalServerError, gin.H{"error": errs.ErrSomethingWentWrong.Error()})

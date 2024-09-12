@@ -1,3 +1,5 @@
+// C:\GoProject\src\eShop\utils\console.go
+
 package utils
 
 import (
