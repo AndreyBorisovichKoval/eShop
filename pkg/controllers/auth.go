@@ -12,18 +12,18 @@ import (
 
 // SignUp
 // @Summary Регистрация пользователя
-// @Tags auth, users
-// @Description Создаёт новый аккаунт пользователя. Только администратор имеет право выполнять эту операцию.
+// @Tags users
+// @Description Create User
 // @ID create-account
 // @Accept json
 // @Produce json
-// @Param input body models.SwagUser true "Информация о пользователе"
+// @Param input body models.SwagUser true "User Information"
 // @Success 201 {string} string "User created successfully!!!"
 // @Failure 400 {object} ErrorResponse "Invalid input"
 // @Failure 403 {object} ErrorResponse "Permission denied. Only Admin can create users..."
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Failure default {object} ErrorResponse
-// @Router /auth/sign-up [post]
+// @Router /users [post]
 // @Security ApiKeyAuth
 func SignUp(c *gin.Context) {
 	// Получаем роль текущего пользователя из контекста
@@ -56,7 +56,7 @@ func SignUp(c *gin.Context) {
 // @ID sign-in
 // @Accept json
 // @Produce json
-// @Param input body models.SwagUser true "Данные для входа (логин и пароль)"
+// @Param input body models.SwagUser true "Data for login and password"
 // @Success 200 {object} map[string]string "access_token"
 // @Failure 400 {object} ErrorResponse "Invalid input"
 // @Failure 401 {object} ErrorResponse "Unauthorized"

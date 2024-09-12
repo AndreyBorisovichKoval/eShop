@@ -43,9 +43,9 @@ func CreateUser(c *gin.Context) {
 }
 
 // GetAllUsers
-// @Summary Получить всех пользователей
+// @Summary GetAllUsers
 // @Tags users
-// @Description Возвращает список всех активных пользователей
+// @Description GetAllUsers
 // @ID get-all-users
 // @Produce json
 // @Success 200 {array} models.User "Список пользователей"
