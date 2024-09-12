@@ -19,10 +19,10 @@ import (
 // @Produce json
 // @Param input body models.SwagUser true "User Information"
 // @Success 201 {string} string "User created successfully!!!"
-// @Failure 400 {object} ErrorResponse "Invalid input"
-// @Failure 403 {object} ErrorResponse "Permission denied. Only Admin can create users..."
-// @Failure 500 {object} ErrorResponse "Server error"
-// @Failure default {object} ErrorResponse
+// @Failure 400 {object} models.ErrorResponse "Invalid input"
+// @Failure 403 {object} models.ErrorResponse "Permission denied. Only Admin can create users..."
+// @Failure 500 {object} models.ErrorResponse "Server error"
+// @Failure default {object} models.ErrorResponse
 // @Router /users [post]
 // @Security ApiKeyAuth
 func SignUp(c *gin.Context) {
@@ -57,10 +57,10 @@ func SignUp(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param input body models.SwagUser true "Data for login and password"
-// @Success 200 {object} map[string]string "access_token"
-// @Failure 400 {object} ErrorResponse "Invalid input"
-// @Failure 401 {object} ErrorResponse "Unauthorized"
-// @Failure 500 {object} ErrorResponse "Server error"
+// @Success 200 {object} models.TokenResponse "access_token"
+// @Failure 400 {object} models.ErrorResponse "Invalid input"
+// @Failure 401 {object} models.ErrorResponse "Unauthorized"
+// @Failure 500 {object} models.ErrorResponse "Server error"
 // @Router /auth/sign-in [post]
 func SignIn(c *gin.Context) {
 	var user models.User

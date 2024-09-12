@@ -28,3 +28,19 @@ type User struct {
 func (User) TableName() string {
 	return "users"
 }
+
+type SwagUser struct {
+	FullName string `json:"full_name"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
+// TokenResponse represents the response with access token and user ID
+type TokenResponse struct {
+	AccessToken string `json:"access_token"`
+}

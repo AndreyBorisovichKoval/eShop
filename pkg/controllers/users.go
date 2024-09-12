@@ -49,7 +49,7 @@ func CreateUser(c *gin.Context) {
 // @ID get-all-users
 // @Produce json
 // @Success 200 {array} models.User "Список пользователей"
-// @Failure 500 {object} ErrorResponse "Server error"
+// @Failure 500 {object} models.ErrorResponse "Server error"
 // @Router /users [get]
 func GetAllUsers(c *gin.Context) {
 	// Логируем IP клиента при запросе списка всех пользователей...
