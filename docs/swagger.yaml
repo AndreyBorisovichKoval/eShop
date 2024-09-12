@@ -1,0 +1,14 @@
+basePath: /
+host: localhost:8585
+info:
+  contact: {}
+  description: API Server for eShop Application
+  title: eShop API
+  version: "0.0001"
+paths: {}
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

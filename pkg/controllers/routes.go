@@ -4,11 +4,17 @@ package controllers
 
 import (
 	"eShop/configs"
+	_ "eShop/docs"
 	"eShop/logger"
+
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+// localhost:8585/swagger/index.html
 
 // PingPong handles the ping request and responds with a pong message...
 func PingPong(c *gin.Context) {
@@ -22,6 +28,7 @@ func InitRoutes() *gin.Engine {
 	router := gin.Default()
 	gin.SetMode(configs.AppSettings.AppParams.GinMode)
 
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.GET("/ping", PingPong)
 
 	authG := router.Group("/auth")

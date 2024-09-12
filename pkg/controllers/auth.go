@@ -10,6 +10,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// SignUp
+// @Summary Регистрация пользователя
+// @Tags auth, users
+// @Description Создаёт новый аккаунт пользователя. Только администратор имеет право выполнять эту операцию.
+// @ID create-account
+// @Accept json
+// @Produce json
+// @Param input body models.SwagUser true "Информация о пользователе"
+// @Success 201 {string} string "User created successfully!!!"
+// @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 403 {object} ErrorResponse "Permission denied. Only Admin can create users..."
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Failure default {object} ErrorResponse
+// @Router /auth/sign-up [post]
+// @Security ApiKeyAuth
 func SignUp(c *gin.Context) {
 	// Получаем роль текущего пользователя из контекста
 	userRole, exists := c.Get(userRoleCtx)
@@ -34,6 +49,19 @@ func SignUp(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully!!!"})
 }
 
+// SignIn
+// @Summary Вход в систему
+// @Tags auth
+// @Description Аутентификация пользователя и получение токена доступа
+// @ID sign-in
+// @Accept json
+// @Produce json
+// @Param input body models.SwagUser true "Данные для входа (логин и пароль)"
+// @Success 200 {object} map[string]string "access_token"
+// @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 401 {object} ErrorResponse "Unauthorized"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /auth/sign-in [post]
 func SignIn(c *gin.Context) {
 	var user models.User
 	if err := c.BindJSON(&user); err != nil {

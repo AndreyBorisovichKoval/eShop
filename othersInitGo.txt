@@ -52,6 +52,12 @@ go get github.com/joho/godotenv          # Пакет для работы с .en
 go get github.com/golang-jwt/jwt         # Пакет для работы с JWT
 go get github.com/dgrijalva/jwt-go       # Альтернативная библиотека для JWT
 
+go get -u github.com/swaggo/swag/cmd/swag
+go get -u github.com/swaggo/gin-swagger
+go get -u github.com/swaggo/files
+
+go install github.com/swaggo/swag/cmd/swag@latest
+
 ========================================================
 
 go mod init eShop
@@ -69,6 +75,12 @@ go get github.com/joho/godotenv          # Пакет для работы с .en
 go get github.com/golang-jwt/jwt         # Пакет для работы с JWT
 go get github.com/dgrijalva/jwt-go       # Альтернативная библиотека для JWT
 
+go get -u github.com/swaggo/swag/cmd/swag
+go get -u github.com/swaggo/gin-swagger
+go get -u github.com/swaggo/files
+
+go install github.com/swaggo/swag/cmd/swag@latest
+
 ========================================================
 
 echo "# eShop" >> README.md
@@ -82,3 +94,4 @@ git push -u origin main
 git remote add origin https://github.com/AndreyBorisovichKoval/eShop.git
 git branch -M main
 git push -u origin main
+

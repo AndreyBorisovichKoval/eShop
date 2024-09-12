@@ -42,7 +42,15 @@ func CreateUser(c *gin.Context) {
 	})
 }
 
-// GetAllUsers получает список всех пользователей...
+// GetAllUsers
+// @Summary Получить всех пользователей
+// @Tags users
+// @Description Возвращает список всех активных пользователей
+// @ID get-all-users
+// @Produce json
+// @Success 200 {array} models.User "Список пользователей"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users [get]
 func GetAllUsers(c *gin.Context) {
 	// Логируем IP клиента при запросе списка всех пользователей...
 	logger.Info.Printf("IP: [%s] requested list of all users\n", c.ClientIP())
