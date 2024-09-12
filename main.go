@@ -17,13 +17,12 @@ import (
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
-
-// swag init -g cmd\app.go
-// go build -o swag.exe cmd/app.go
-
 func main() {
 	// Очищаем консоль от старых сообщений...
 	utils.ClearConsole()
 
 	app.RunApp()
 }
+
+// swag init -g cmd\app.go
+// go build -o swag.exe cmd/app.go
