@@ -58,7 +58,7 @@ func CloseDBConn() error {
 		logger.Error.Printf("Failed to close database connection: %v", err)
 		return err
 	}
-	logger.Info.Println("Database connection closed successfully!")
+	logger.Info.Println("\nDatabase connection closed successfully!")
 	return nil
 }
 

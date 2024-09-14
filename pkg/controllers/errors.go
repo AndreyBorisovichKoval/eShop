@@ -63,3 +63,14 @@ func handleError(c *gin.Context, err error) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": errs.ErrSomethingWentWrong.Error()})
 	}
 }
+
+// ErrorResponse представляет структуру для обработки сообщений об ошибках...
+type ErrorResponse struct {
+	Error string `json:"error"` // Описание возникшей ошибки...
+}
+
+func newErrorResponse(message string) ErrorResponse {
+	return ErrorResponse{
+		Error: message,
+	}
+}

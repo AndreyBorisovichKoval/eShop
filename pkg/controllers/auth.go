@@ -11,7 +11,7 @@ import (
 )
 
 // SignUp
-// @Summary Регистрация пользователя
+// @Summary Create User
 // @Tags users
 // @Description Create User
 // @ID create-account
@@ -19,10 +19,10 @@ import (
 // @Produce json
 // @Param input body models.SwagUser true "User Information"
 // @Success 201 {string} string "User created successfully!!!"
-// @Failure 400 {object} models.ErrorResponse "Invalid input"
-// @Failure 403 {object} models.ErrorResponse "Permission denied. Only Admin can create users..."
-// @Failure 500 {object} models.ErrorResponse "Server error"
-// @Failure default {object} models.ErrorResponse
+// @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 403 {object} ErrorResponse "Permission denied. Only Admin can create users..."
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Failure default {object} ErrorResponse
 // @Router /users [post]
 // @Security ApiKeyAuth
 func CreateUser(c *gin.Context) {
