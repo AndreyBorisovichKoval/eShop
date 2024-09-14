@@ -30,7 +30,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.SwagUser"
+                            "$ref": "#/definitions/models.SignInInput"
                         }
                     }
                 ],
@@ -64,6 +64,11 @@
         },
         "/users": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "GetAllUsers",
                 "produces": [
                     "application/json"
@@ -404,6 +409,17 @@
                 },
                 "updated_at": {
                     "description": "Время последнего обновления записи.",
+                    "type": "string"
+                }
+            }
+        },
+        "models.SignInInput": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

@@ -53,7 +53,7 @@ func CreateUser(c *gin.Context) {
 // @ID sign-in
 // @Accept json
 // @Produce json
-// @Param input body models.SwagUser true "Data for login and password"
+// @Param input body models.SignInInput true "Data for login and password"
 // @Success 200 {object} accessTokenResponse "access_token"
 // @Failure 400 {object} ErrorResponse "Invalid input"
 // @Failure 401 {object} ErrorResponse "Unauthorized"

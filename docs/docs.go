@@ -36,7 +36,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.SwagUser"
+                            "$ref": "#/definitions/models.SignInInput"
                         }
                     }
                 ],
@@ -70,6 +70,11 @@ const docTemplate = `{
         },
         "/users": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "GetAllUsers",
                 "produces": [
                     "application/json"
@@ -410,6 +415,17 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "description": "Время последнего обновления записи.",
+                    "type": "string"
+                }
+            }
+        },
+        "models.SignInInput": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

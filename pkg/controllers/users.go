@@ -45,6 +45,7 @@ import (
 // GetAllUsers
 // @Summary GetAllUsers
 // @Tags users
+// @Security ApiKeyAuth
 // @Description GetAllUsers
 // @ID get-all-users
 // @Produce json
