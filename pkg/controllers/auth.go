@@ -25,7 +25,7 @@ import (
 // @Failure default {object} models.ErrorResponse
 // @Router /users [post]
 // @Security ApiKeyAuth
-func SignUp(c *gin.Context) {
+func CreateUser(c *gin.Context) {
 	// Получаем роль текущего пользователя из контекста
 	userRole, exists := c.Get(userRoleCtx)
 
