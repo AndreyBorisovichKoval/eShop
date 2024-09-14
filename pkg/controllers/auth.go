@@ -47,17 +47,17 @@ func CreateUser(c *gin.Context) {
 }
 
 // SignIn
-// @Summary Вход в систему
+// @Summary Enter to System
 // @Tags auth
-// @Description Аутентификация пользователя и получение токена доступа
+// @Description Autentifications user and get token...
 // @ID sign-in
 // @Accept json
 // @Produce json
 // @Param input body models.SwagUser true "Data for login and password"
-// @Success 200 {object} models.TokenResponse "access_token"
-// @Failure 400 {object} models.ErrorResponse "Invalid input"
-// @Failure 401 {object} models.ErrorResponse "Unauthorized"
-// @Failure 500 {object} models.ErrorResponse "Server error"
+// @Success 200 {object} accessTokenResponse "access_token"
+// @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 401 {object} ErrorResponse "Unauthorized"
+// @Failure 500 {object} ErrorResponse "Server error"
 // @Router /auth/sign-in [post]
 func SignIn(c *gin.Context) {
 	var user models.User

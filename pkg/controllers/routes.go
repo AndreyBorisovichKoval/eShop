@@ -33,7 +33,6 @@ func InitRoutes() *gin.Engine {
 
 	authG := router.Group("/auth")
 	{
-		// authG.POST("/sign-up", SignUp)
 		authG.POST("/sign-in", SignIn)
 	}
 
