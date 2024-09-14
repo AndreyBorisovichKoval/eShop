@@ -22,6 +22,7 @@ type Product struct {
 	Discount           float64    `gorm:"default:0" json:"discount"`                   // Размер скидки на товар.
 	DiscountDetails    string     `gorm:"size:255" json:"discount_details"`            // Детали скидки.
 	Unit               string     `gorm:"size:50;not null" json:"unit"`                // Единица измерения товара.
+	StorageLocation    string     `gorm:"size:255" json:"storage_location"`            // Место хранения на складе.
 	CreatedAt          time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"` // Время создания записи.
 	UpdatedAt          *time.Time `json:"updated_at"`                                  // Время последнего обновления записи.
 	DeletedAt          *time.Time `json:"deleted_at"`                                  // Время удаления записи.

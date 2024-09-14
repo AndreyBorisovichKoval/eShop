@@ -294,6 +294,8 @@ func ResetPassword(userID uint, newPassword string) error {
 
 	// Хешируем новый пароль...
 	user.Password = utils.GenerateHash(newPassword)
+	// Устанавливаем флаг смены пароля...
+	user.PasswordResetRequired = true
 
 	return repository.UpdateUserByID(user)
 }
@@ -315,5 +317,7 @@ func ChangeOwnPassword(userID uint, oldPassword, newPassword string) error {
 
 	// Хешируем новый пароль и сохраняем его...
 	user.Password = utils.GenerateHash(newPassword)
+	// Сбрасываем флаг смены пароля...
+	user.PasswordResetRequired = false
 	return repository.UpdateUserByID(user)
 }

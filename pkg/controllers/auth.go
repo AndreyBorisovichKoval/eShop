@@ -75,5 +75,11 @@ func SignIn(c *gin.Context) {
 		return
 	}
 
+	// Проверяем, нужно ли сбросить пароль...
+	if user.PasswordResetRequired {
+		c.JSON(http.StatusOK, gin.H{"message": "Password reset required", "reset_password": true})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"access_token": accessToken})
 }
