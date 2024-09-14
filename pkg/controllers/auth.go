@@ -29,9 +29,6 @@ func CreateUser(c *gin.Context) {
 	// Получаем роль текущего пользователя из контекста
 	userRole, exists := c.Get(userRoleCtx)
 
-	// fmt.Println("userRole: ", userRole)
-	// fmt.Println("exists: ", exists)
-
 	if !exists || userRole != "Admin" {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Permission denied. Only Admin can create users..."})
 		return
