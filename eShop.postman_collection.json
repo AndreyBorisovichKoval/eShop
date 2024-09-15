@@ -185,7 +185,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"full_name\": \"John Doe\",\r\n  \"username\": \"Fred5757\",\r\n  \"email\": \"john.doe57@example.com\",\r\n  \"password\": \"Fred_123\",\r\n  \"role\": \"Admin\"\r\n}\r\n",
+							"raw": "{\r\n  \"full_name\": \"Fred Doe\",\r\n  \"username\": \"Fred\",\r\n  \"email\": \"fred.doe@example.com\",\r\n  \"password\": \"Fred_123\",\r\n  \"role\": \"Admin\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -261,7 +261,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"full_name\": \"Max Dekker\",\r\n  \"username\": \"Max2\",\r\n  \"email\": \"max.dekker2@example.com\",\r\n  \"password\": \"Fred_123\",\r\n  \"role\": \"Seller\"\r\n}\r\n",
+							"raw": "{\r\n  \"full_name\": \"Max Dekker\",\r\n  \"username\": \"Max\",\r\n  \"email\": \"max.dekker@example.com\",\r\n  \"password\": \"Fred_123\",\r\n  \"role\": \"Seller\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
