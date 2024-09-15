@@ -178,23 +178,23 @@ func RestoreSupplierByID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Supplier restored successfully!"})
 }
 
-// /
-
 // HardDeleteSupplierByID
-// @Summary Hard delete supplier by ID
+// @Summary Permanently delete supplier by ID
 // @Tags suppliers
-// @Description Permanently delete supplier by ID
+// @Description Permanently delete supplier by ID (Admin/Manager only)
 // @ID hard-delete-supplier-by-id
 // @Param id path int true "Supplier ID"
-// @Success 200 {string} string "Supplier hard deleted successfully!"
+// @Success 200 {string} string "Supplier permanently deleted successfully!"
 // @Failure 400 {object} ErrorResponse "Invalid ID"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "Supplier not found"
+// @Failure 409 {object} ErrorResponse "Supplier already deleted"
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /suppliers/{id}/hard [delete]
+// @Security ApiKeyAuth
 func HardDeleteSupplierByID(c *gin.Context) {
-	// Получаем роль пользователя из контекста...
 	userRole := c.GetString(userRoleCtx)
 
-	// Проверяем доступ (только Admin или Manager)...
 	if userRole != "Admin" && userRole != "Manager" {
 		handleError(c, errs.ErrPermissionDenied)
 		return
@@ -206,48 +206,52 @@ func HardDeleteSupplierByID(c *gin.Context) {
 		return
 	}
 
-	// Логируем запрос на удаление поставщика...
-	logger.Info.Printf("IP: [%s] requested hard delete for supplier with ID: %d\n", c.ClientIP(), id)
+	logger.Info.Printf("IP: [%s] requested to hard delete supplier with ID: %d\n", c.ClientIP(), id)
 
 	if err := service.HardDeleteSupplierByID(uint(id)); err != nil {
 		handleError(c, err)
 		return
 	}
 
-	// Логируем успешное удаление...
 	logger.Info.Printf("IP: [%s] successfully hard deleted supplier with ID: %d\n", c.ClientIP(), id)
-	c.JSON(http.StatusOK, gin.H{"message": "Supplier hard deleted successfully!"})
+	c.JSON(http.StatusOK, gin.H{"message": "Supplier permanently deleted successfully!"})
 }
 
 // GetAllSuppliers
-// @Summary Retrieve all suppliers
+// @Summary Retrieve all active suppliers
 // @Tags suppliers
-// @Description Get a list of all registered suppliers
+// @Description Get a list of all active suppliers (Admin/Manager only)
 // @ID get-all-suppliers
 // @Produce json
-// @Success 200 {array} models.Supplier "List of suppliers"
+// @Success 200 {array} models.Supplier "List of active suppliers"
+// @Failure 403 {object} ErrorResponse "Permission denied"
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /suppliers [get]
+// @Security ApiKeyAuth
 func GetAllSuppliers(c *gin.Context) {
-	// Логируем запрос на получение списка всех поставщиков...
-	logger.Info.Printf("IP: [%s] requested list of all suppliers\n", c.ClientIP())
+	userRole := c.GetString(userRoleCtx)
 
-	// Получаем список поставщиков через сервис...
+	if userRole != "Admin" && userRole != "Manager" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
+	logger.Info.Printf("IP: [%s] requested list of all active suppliers\n", c.ClientIP())
+
 	suppliers, err := service.GetAllSuppliers()
 	if err != nil {
 		handleError(c, err)
 		return
 	}
 
-	// Логируем успешный ответ...
-	logger.Info.Printf("IP: [%s] successfully retrieved list of suppliers\n", c.ClientIP())
+	logger.Info.Printf("IP: [%s] successfully retrieved list of active suppliers\n", c.ClientIP())
 	c.JSON(http.StatusOK, suppliers)
 }
 
 // GetAllDeletedSuppliers
 // @Summary Retrieve all deleted suppliers
 // @Tags suppliers
-// @Description Get a list of all soft deleted suppliers (Admin only)
+// @Description Get a list of all soft deleted suppliers (Admin/Manager only)
 // @ID get-all-deleted-suppliers
 // @Produce json
 // @Success 200 {array} models.Supplier "List of deleted suppliers"
@@ -256,64 +260,60 @@ func GetAllSuppliers(c *gin.Context) {
 // @Router /suppliers/deleted [get]
 // @Security ApiKeyAuth
 func GetAllDeletedSuppliers(c *gin.Context) {
-	// Получаем роль пользователя из контекста
 	userRole := c.GetString(userRoleCtx)
 
-	// Проверяем доступ (только Admin или Manager)
 	if userRole != "Admin" && userRole != "Manager" {
 		handleError(c, errs.ErrPermissionDenied)
 		return
 	}
 
-	// Логируем запрос...
 	logger.Info.Printf("IP: [%s] requested list of all deleted suppliers\n", c.ClientIP())
 
-	// Вызываем сервис для получения списка удалённых поставщиков...
 	suppliers, err := service.GetAllDeletedSuppliers()
 	if err != nil {
 		handleError(c, err)
 		return
 	}
 
-	// Логируем успешное получение списка...
 	logger.Info.Printf("IP: [%s] successfully retrieved list of deleted suppliers\n", c.ClientIP())
-
-	// Возвращаем список удалённых поставщиков клиенту...
 	c.JSON(http.StatusOK, suppliers)
 }
 
 // GetSupplierByID
 // @Summary Retrieve supplier by ID
 // @Tags suppliers
-// @Description Get supplier information by ID
+// @Description Get supplier information by ID (Admin/Manager only)
 // @ID get-supplier-by-id
 // @Produce json
 // @Param id path int true "Supplier ID"
 // @Success 200 {object} models.Supplier "Supplier information"
-// @Failure 400 {object} ErrorResponse "Invalid ID"
+// @Failure 403 {object} ErrorResponse "Permission denied"
 // @Failure 404 {object} ErrorResponse "Supplier not found"
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /suppliers/{id} [get]
+// @Security ApiKeyAuth
 func GetSupplierByID(c *gin.Context) {
+	userRole := c.GetString(userRoleCtx)
+
+	if userRole != "Admin" && userRole != "Manager" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		// Логируем ошибку в случае некорректного ID...
-		logger.Error.Printf("IP: [%s] invalid supplier_id: %s\n", c.ClientIP(), c.Param("id"))
 		handleError(c, errs.ErrValidationFailed)
 		return
 	}
 
-	// Логируем запрос на получение поставщика по ID...
 	logger.Info.Printf("IP: [%s] requested supplier with ID: %d\n", c.ClientIP(), id)
 
-	// Получаем поставщика через сервис...
 	supplier, err := service.GetSupplierByID(uint(id))
 	if err != nil {
 		handleError(c, err)
 		return
 	}
 
-	// Логируем успешный ответ...
 	logger.Info.Printf("IP: [%s] successfully retrieved supplier with ID: %d\n", c.ClientIP(), id)
 	c.JSON(http.StatusOK, supplier)
 }

@@ -121,45 +121,72 @@ func RestoreSupplierByID(id uint) error {
 	return nil
 }
 
-// /
-
-// HardDeleteSupplierByID удаляет поставщика...
+// HardDeleteSupplierByID выполняет жёсткое удаление поставщика
 func HardDeleteSupplierByID(id uint) error {
-	return repository.HardDeleteSupplierByID(id)
+	// Используем существующую функцию, которая включает мягко удалённых
+	supplier, err := repository.GetSupplierIncludingSoftDeleted(id)
+	if err != nil {
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			logger.Warning.Printf("[service.HardDeleteSupplierByID] supplier with ID: %v not found", id)
+			return errs.ErrSupplierNotFound
+		}
+		return err
+	}
+
+	// Проверяем, был ли поставщик уже удалён
+	if supplier.IsDeleted {
+		logger.Warning.Printf("[service.HardDeleteSupplierByID] supplier with ID: %v is already deleted", id)
+		return errs.ErrSupplierAlreadyDeleted
+	}
+
+	// Выполняем жёсткое удаление
+	if err := repository.HardDeleteSupplierByID(supplier.ID); err != nil {
+		return err
+	}
+
+	return nil
 }
 
-// GetAllSuppliers возвращает список всех поставщиков...
+// GetAllSuppliers получает всех активных поставщиков
 func GetAllSuppliers() (suppliers []models.Supplier, err error) {
-	suppliers, err = repository.GetAllSuppliers()
+	suppliers, err = repository.GetAllActiveSuppliers()
 	if err != nil {
-		logger.Error.Printf("[service.GetAllSuppliers] error: %v\n", err)
 		return nil, err
 	}
+
+	// Если поставщиков нет, возвращаем пустой массив
 	if len(suppliers) == 0 {
 		logger.Warning.Printf("[service.GetAllSuppliers] no suppliers found")
 	}
+
 	return suppliers, nil
 }
 
-// GetAllDeletedSuppliers получает список всех удалённых поставщиков...
+// GetAllDeletedSuppliers получает всех мягко удалённых поставщиков
 func GetAllDeletedSuppliers() (suppliers []models.Supplier, err error) {
-	// Получаем всех удалённых поставщиков из репозитория...
 	suppliers, err = repository.GetAllDeletedSuppliers()
 	if err != nil {
 		return nil, err
 	}
 
-	// Возвращаем список удалённых поставщиков...
+	// Если удалённых поставщиков нет, возвращаем пустой массив
+	if len(suppliers) == 0 {
+		logger.Warning.Printf("[service.GetAllDeletedSuppliers] no deleted suppliers found")
+	}
+
 	return suppliers, nil
 }
 
-// GetSupplierByID возвращает данные поставщика по ID...
+// GetSupplierByID получает поставщика по его ID
 func GetSupplierByID(id uint) (supplier models.Supplier, err error) {
+	// Получаем поставщика через репозиторий
 	supplier, err = repository.GetSupplierByID(id)
 	if err != nil {
 		if errors.Is(err, errs.ErrRecordNotFound) {
+			logger.Warning.Printf("[service.GetSupplierByID] supplier with ID %d not found", id)
 			return supplier, errs.ErrSupplierNotFound
 		}
+		logger.Error.Printf("[service.GetSupplierByID] error getting supplier by ID: %v\n", err)
 		return supplier, err
 	}
 	return supplier, nil
