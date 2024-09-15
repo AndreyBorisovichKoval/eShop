@@ -14,7 +14,547 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
+<<<<<<< HEAD
     "paths": {},
+=======
+    "paths": {
+        "/auth/sign-in": {
+            "post": {
+                "description": "Autentifications user and get token...",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Enter to System",
+                "operationId": "sign-in",
+                "parameters": [
+                    {
+                        "description": "Data for login and password",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SignInInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "access_token",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.accessTokenResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "GetAllUsers",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "GetAllUsers",
+                "operationId": "get-all-users",
+                "responses": {
+                    "200": {
+                        "description": "Список пользователей",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.User"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Create User",
+                "operationId": "create-account",
+                "parameters": [
+                    {
+                        "description": "User Information",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SwagUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User created successfully!!!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied. Only Admin can create users...",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "controllers.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "description": "Описание возникшей ошибки...",
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.accessTokenResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "description": "JWT токен для аутентификации пользователя...",
+                    "type": "string"
+                }
+            }
+        },
+        "models.Category": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Уникальный идентификатор категории товара.",
+                    "type": "integer"
+                },
+                "is_deleted": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "description": "Название категории товара.",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Order": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_deleted": {
+                    "type": "boolean"
+                },
+                "order_items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.OrderItem"
+                    }
+                },
+                "payment_status": {
+                    "description": "Статус оплаты.",
+                    "type": "string"
+                },
+                "total_amount": {
+                    "description": "Общая сумма заказа.",
+                    "type": "number"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user": {
+                    "description": "Связи",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    ]
+                },
+                "user_id": {
+                    "description": "Внешний ключ на продавца.",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.OrderItem": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_deleted": {
+                    "type": "boolean"
+                },
+                "order": {
+                    "description": "Связи",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.Order"
+                        }
+                    ]
+                },
+                "order_id": {
+                    "description": "Внешний ключ на заказ.",
+                    "type": "integer"
+                },
+                "price": {
+                    "description": "Цена товара в момент продажи.",
+                    "type": "number"
+                },
+                "product": {
+                    "$ref": "#/definitions/models.Product"
+                },
+                "product_id": {
+                    "description": "Внешний ключ на продукт.",
+                    "type": "integer"
+                },
+                "quantity": {
+                    "description": "Количество товара в заказе.",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Product": {
+            "type": "object",
+            "properties": {
+                "barcode": {
+                    "description": "Штрих-код товара.",
+                    "type": "string"
+                },
+                "category": {
+                    "description": "Связь с таблицей категорий.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.Category"
+                        }
+                    ]
+                },
+                "category_id": {
+                    "description": "Внешний ключ на категорию товара.",
+                    "type": "integer"
+                },
+                "created_at": {
+                    "description": "Время создания записи.",
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "description": "Время удаления записи.",
+                    "type": "string"
+                },
+                "discount": {
+                    "description": "Размер скидки на товар.",
+                    "type": "number"
+                },
+                "discount_details": {
+                    "description": "Детали скидки.",
+                    "type": "string"
+                },
+                "expiration_date": {
+                    "description": "Дата истечения срока годности.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Уникальный идентификатор товара.",
+                    "type": "integer"
+                },
+                "is_deleted": {
+                    "description": "Флаг удаления товара.",
+                    "type": "boolean"
+                },
+                "is_excise_applicable": {
+                    "description": "Применяется ли акциз.",
+                    "type": "boolean"
+                },
+                "is_paid_to_supplier": {
+                    "description": "Оплачен ли товар поставщику.",
+                    "type": "boolean"
+                },
+                "is_vat_applicable": {
+                    "description": "Применяется ли НДС.",
+                    "type": "boolean"
+                },
+                "orders": {
+                    "description": "Связь с таблицей заказов.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.OrderItem"
+                    }
+                },
+                "quantity": {
+                    "description": "Общее количество товара.",
+                    "type": "number"
+                },
+                "retail_price": {
+                    "description": "Розничная цена товара.",
+                    "type": "number"
+                },
+                "stock": {
+                    "description": "Остаток товара на складе.",
+                    "type": "number"
+                },
+                "storage_location": {
+                    "description": "Место хранения на складе.",
+                    "type": "string"
+                },
+                "supplier": {
+                    "description": "Связи",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.Supplier"
+                        }
+                    ]
+                },
+                "supplier_id": {
+                    "description": "Внешний ключ на поставщика.",
+                    "type": "integer"
+                },
+                "supplier_price": {
+                    "description": "Цена товара у поставщика.",
+                    "type": "number"
+                },
+                "title": {
+                    "description": "Название товара.",
+                    "type": "string"
+                },
+                "total_price": {
+                    "description": "Общая цена товара.",
+                    "type": "number"
+                },
+                "unit": {
+                    "description": "Единица измерения товара.",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "Время последнего обновления записи.",
+                    "type": "string"
+                }
+            }
+        },
+        "models.SignInInput": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Supplier": {
+            "type": "object",
+            "properties": {
+                "contact_info": {
+                    "description": "Контактная информация.",
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_deleted": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "description": "Название или имя поставщика.",
+                    "type": "string"
+                },
+                "products": {
+                    "description": "Связи",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Product"
+                    }
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SwagUser": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "Адрес электронной почты пользователя...",
+                    "type": "string"
+                },
+                "full_name": {
+                    "description": "Полное имя пользователя...",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "Пароль для аутентификации...",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "Логин для входа в систему...",
+                    "type": "string"
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "blocked_at": {
+                    "description": "Время блокировки продавца...",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "Время создания записи...",
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "description": "Время удаления записи...",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Email продавца...",
+                    "type": "string"
+                },
+                "full_name": {
+                    "description": "Полное имя продавца...",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Уникальный идентификатор продавца...",
+                    "type": "integer"
+                },
+                "is_blocked": {
+                    "description": "Заблокирован ли продавец...",
+                    "type": "boolean"
+                },
+                "is_deleted": {
+                    "description": "Флаг удаления записи...",
+                    "type": "boolean"
+                },
+                "orders": {
+                    "description": "Связи",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Order"
+                    }
+                },
+                "password": {
+                    "description": "Пароль продавца...",
+                    "type": "string"
+                },
+                "password_reset_required": {
+                    "description": "Флаг обязательной смены пароля после сброса...",
+                    "type": "boolean"
+                },
+                "role": {
+                    "description": "Роль продавца (например: 'admin', 'manager', 'seller')...",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "Время последнего обновления записи...",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "Логин продавца...",
+                    "type": "string"
+                }
+            }
+        }
+    },
+>>>>>>> main
     "securityDefinitions": {
         "ApiKeyAuth": {
             "type": "apiKey",
@@ -26,7 +566,7 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "0.0001",
+	Version:          "0.0002",
 	Host:             "localhost:8585",
 	BasePath:         "/",
 	Schemes:          []string{},

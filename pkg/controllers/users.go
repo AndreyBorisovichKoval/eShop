@@ -13,43 +13,44 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// CreateUser создаёт нового пользователя...
-func CreateUser(c *gin.Context) {
-	var user models.User
+// // CreateUser создаёт нового пользователя...
+// func CreateUser(c *gin.Context) {
+// 	var user models.User
 
-	// Привязываем JSON тело запроса к модели пользователя...
-	if err := c.BindJSON(&user); err != nil {
-		// Возвращаем клиенту ошибку 400, если данные в запросе некорректные...
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
+// 	// Привязываем JSON тело запроса к модели пользователя...
+// 	if err := c.BindJSON(&user); err != nil {
+// 		// Возвращаем клиенту ошибку 400, если данные в запросе некорректные...
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		return
+// 	}
 
-	// Вызываем сервис для создания пользователя...
-	err := service.CreateUser(user)
-	if err != nil {
-		// Возвращаем ошибку 500, если возникли проблемы на уровне сервиса...
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
+// 	// Вызываем сервис для создания пользователя...
+// 	err := service.CreateUser(user)
+// 	if err != nil {
+// 		// Возвращаем ошибку 500, если возникли проблемы на уровне сервиса...
+// 		c.JSON(http.StatusInternalServerError, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		return
+// 	}
 
-	// Возвращаем успешный ответ с кодом 201 при успешном создании пользователя...
-	c.JSON(http.StatusCreated, gin.H{
-		"message": "User created successfully!!!",
-	})
-}
+// 	// Возвращаем успешный ответ с кодом 201 при успешном создании пользователя...
+// 	c.JSON(http.StatusCreated, gin.H{
+// 		"message": "User created successfully!!!",
+// 	})
+// }
 
 // GetAllUsers
 // @Summary GetAllUsers
 // @Tags users
+// @Security ApiKeyAuth
 // @Description GetAllUsers
 // @ID get-all-users
 // @Produce json
 // @Success 200 {array} models.User "Список пользователей"
-// @Failure 500 {object} models.ErrorResponse "Server error"
+// @Failure 500 {object} ErrorResponse "Server error"
 // @Router /users [get]
 func GetAllUsers(c *gin.Context) {
 	// Логируем IP клиента при запросе списка всех пользователей...

@@ -33,16 +33,12 @@ func InitRoutes() *gin.Engine {
 
 	authG := router.Group("/auth")
 	{
-		// authG.POST("/sign-up", SignUp)
 		authG.POST("/sign-in", SignIn)
 	}
 
 	userG := router.Group("/users", checkUserAuthentication)
-	// userG := router.Group("/users")
 	{
-		// userG.POST("/create", SignUp)
-		// userG.POST("/create", SignUp, checkUserAuthentication)
-		userG.POST("", SignUp)                            // Регистрация нового пользователя...
+		userG.POST("", CreateUser)                        // Регистрация нового пользователя...
 		userG.GET("", GetAllUsers)                        // Получение списка всех активных пользователей...
 		userG.GET("/deleted", GetAllDeletedUsers)         // Получение списка всех удалённых пользователей...
 		userG.GET("/:id", GetUserByID)                    // Получение данных пользователя по его ID...

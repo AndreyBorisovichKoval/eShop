@@ -11,7 +11,7 @@ import (
 )
 
 // SignUp
-// @Summary Регистрация пользователя
+// @Summary Create User
 // @Tags users
 // @Description Create User
 // @ID create-account
@@ -19,18 +19,15 @@ import (
 // @Produce json
 // @Param input body models.SwagUser true "User Information"
 // @Success 201 {string} string "User created successfully!!!"
-// @Failure 400 {object} models.ErrorResponse "Invalid input"
-// @Failure 403 {object} models.ErrorResponse "Permission denied. Only Admin can create users..."
-// @Failure 500 {object} models.ErrorResponse "Server error"
-// @Failure default {object} models.ErrorResponse
+// @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 403 {object} ErrorResponse "Permission denied. Only Admin can create users..."
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Failure default {object} ErrorResponse
 // @Router /users [post]
 // @Security ApiKeyAuth
-func SignUp(c *gin.Context) {
+func CreateUser(c *gin.Context) {
 	// Получаем роль текущего пользователя из контекста
 	userRole, exists := c.Get(userRoleCtx)
-
-	// fmt.Println("userRole: ", userRole)
-	// fmt.Println("exists: ", exists)
 
 	if !exists || userRole != "Admin" {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Permission denied. Only Admin can create users..."})
@@ -50,17 +47,17 @@ func SignUp(c *gin.Context) {
 }
 
 // SignIn
-// @Summary Вход в систему
+// @Summary Enter to System
 // @Tags auth
-// @Description Аутентификация пользователя и получение токена доступа
+// @Description Autentifications user and get token...
 // @ID sign-in
 // @Accept json
 // @Produce json
-// @Param input body models.SwagUser true "Data for login and password"
-// @Success 200 {object} models.TokenResponse "access_token"
-// @Failure 400 {object} models.ErrorResponse "Invalid input"
-// @Failure 401 {object} models.ErrorResponse "Unauthorized"
-// @Failure 500 {object} models.ErrorResponse "Server error"
+// @Param input body models.SignInInput true "Data for login and password"
+// @Success 200 {object} accessTokenResponse "access_token"
+// @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 401 {object} ErrorResponse "Unauthorized"
+// @Failure 500 {object} ErrorResponse "Server error"
 // @Router /auth/sign-in [post]
 func SignIn(c *gin.Context) {
 	var user models.User
