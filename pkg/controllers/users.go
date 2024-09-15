@@ -41,6 +41,10 @@ func CreateUser(c *gin.Context) {
 		handleError(c, err) // Используем handleError для обработки ошибки
 		return
 	}
+
+	// Логируем запрос на создание пользователя...
+	logger.Info.Printf("IP: [%s] attempting to create user: %s\n", c.ClientIP(), user.Username)
+
 	if err := service.CreateUser(user); err != nil {
 		handleError(c, err) // Используем handleError для обработки ошибки
 		return
