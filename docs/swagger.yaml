@@ -279,10 +279,10 @@ paths:
     post:
       consumes:
       - application/json
-      description: Autentifications user and get token...
+      description: User authentication (returns JWT token)
       operationId: sign-in
       parameters:
-      - description: Data for login and password
+      - description: Login data
         in: body
         name: input
         required: true
@@ -307,18 +307,18 @@ paths:
           description: Server error
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-      summary: Enter to System
+      summary: Log in user
       tags:
       - auth
   /users:
     get:
-      description: GetAllUsers
+      description: Get a list of all registered users
       operationId: get-all-users
       produces:
       - application/json
       responses:
         "200":
-          description: Список пользователей
+          description: List of users
           schema:
             items:
               $ref: '#/definitions/models.User'
@@ -329,14 +329,14 @@ paths:
             $ref: '#/definitions/controllers.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: GetAllUsers
+      summary: Retrieve all users
       tags:
       - users
     post:
       consumes:
       - application/json
-      description: Create User
-      operationId: create-account
+      description: Register a new user (only Admin can do this)
+      operationId: create-user
       parameters:
       - description: User Information
         in: body
@@ -356,20 +356,384 @@ paths:
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
         "403":
-          description: Permission denied. Only Admin can create users...
+          description: Permission denied
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
         "500":
           description: Server error
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
-        default:
-          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Register a new user
+      tags:
+      - users
+  /users/{id}:
+    get:
+      description: Get user information by user ID
+      operationId: get-user-by-id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User information
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Create User
+      summary: Retrieve user by ID
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: Update user information by user ID (Admin only)
+      operationId: update-user-by-id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated user information
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated user
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update user by ID
+      tags:
+      - users
+  /users/{id}/block:
+    patch:
+      description: Block a user by ID (Admin only)
+      operationId: block-user-by-id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: User blocked successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Block user by ID
+      tags:
+      - users
+  /users/{id}/hard:
+    delete:
+      description: Permanently delete user by ID (Admin only)
+      operationId: hard-delete-user-by-id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: User hard deleted successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Hard delete user by ID
+      tags:
+      - users
+  /users/{id}/reset-password:
+    patch:
+      consumes:
+      - application/json
+      description: Reset a user's password (Admin only)
+      operationId: reset-password
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: New password
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.SwagUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password reset successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Reset user password
+      tags:
+      - users
+  /users/{id}/restore:
+    patch:
+      description: Restore a soft deleted user by ID (Admin only)
+      operationId: restore-user-by-id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: User restored successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Restore user by ID
+      tags:
+      - users
+  /users/{id}/soft:
+    delete:
+      description: Soft delete user by ID (Admin only)
+      operationId: soft-delete-user-by-id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: User soft deleted successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Soft delete user by ID
+      tags:
+      - users
+  /users/{id}/unblock:
+    patch:
+      description: Unblock a user by ID (Admin only)
+      operationId: unblock-user-by-id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: User unblocked successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Unblock user by ID
+      tags:
+      - users
+  /users/deleted:
+    get:
+      description: Get a list of all soft deleted users (Admin only)
+      operationId: get-all-deleted-users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of deleted users
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve all deleted users
+      tags:
+      - users
+  /users/password:
+    patch:
+      consumes:
+      - application/json
+      description: Change the logged-in user's password
+      operationId: change-own-password
+      parameters:
+      - description: Old and new passwords
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.SwagUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password changed successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Unauthorized password change
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Change own password
       tags:
       - users
 securityDefinitions:
