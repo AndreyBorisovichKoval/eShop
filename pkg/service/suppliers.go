@@ -13,13 +13,13 @@ import (
 
 // CreateSupplier создает нового поставщика
 func CreateSupplier(supplier models.Supplier) error {
-	// Проверяем, что хотя бы одно из полей (Name или Email) не пустое
-	if supplier.Name == "" && supplier.Email == "" {
+	// Проверяем, что хотя бы одно из полей (Title или Email) не пустое
+	if supplier.Title == "" && supplier.Email == "" {
 		return errs.ErrValidationFailed // Возвращаем ошибку валидации, если оба поля пусты
 	}
 
 	// Проверяем, существует ли уже поставщик с таким именем или email
-	existingSupplier, err := repository.GetSupplierByNameOrEmail(supplier.Name, supplier.Email)
+	existingSupplier, err := repository.GetSupplierByTitleOrEmail(supplier.Title, supplier.Email)
 	if err != nil && err != errs.ErrRecordNotFound {
 		return err
 	}
@@ -47,8 +47,8 @@ func UpdateSupplierByID(id uint, updatedSupplier models.Supplier) (supplier mode
 	}
 
 	// Обновляем только изменённые поля
-	if updatedSupplier.Name != "" {
-		supplier.Name = updatedSupplier.Name
+	if updatedSupplier.Title != "" {
+		supplier.Title = updatedSupplier.Title
 	}
 	if updatedSupplier.Email != "" {
 		supplier.Email = updatedSupplier.Email

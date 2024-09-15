@@ -42,14 +42,14 @@ func CreateSupplier(c *gin.Context) {
 		return
 	}
 
-	logger.Info.Printf("IP: [%s] attempting to create supplier: %s\n", c.ClientIP(), supplier.Name)
+	logger.Info.Printf("IP: [%s] attempting to create supplier: %s\n", c.ClientIP(), supplier.Title)
 
 	if err := service.CreateSupplier(supplier); err != nil {
 		handleError(c, err)
 		return
 	}
 
-	logger.Info.Printf("IP: [%s] successfully created supplier: %s\n", c.ClientIP(), supplier.Name)
+	logger.Info.Printf("IP: [%s] successfully created supplier: %s\n", c.ClientIP(), supplier.Title)
 	c.JSON(http.StatusCreated, gin.H{"message": "Supplier created successfully!!!"})
 }
 

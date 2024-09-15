@@ -17,11 +17,11 @@ func CreateSupplier(supplier models.Supplier) error {
 	return nil
 }
 
-// GetSupplierByNameOrEmail получает поставщика по имени или email
-func GetSupplierByNameOrEmail(name, email string) (supplier models.Supplier, err error) {
-	err = db.GetDBConn().Where("name = ? OR email = ?", name, email).First(&supplier).Error
+// GetSupplierByTitleOrEmail получает поставщика по имени или email
+func GetSupplierByTitleOrEmail(title, email string) (supplier models.Supplier, err error) {
+	err = db.GetDBConn().Where("title = ? OR email = ?", title, email).First(&supplier).Error
 	if err != nil {
-		logger.Error.Printf("[repository.GetSupplierByNameOrEmail] error getting supplier: %v\n", err)
+		logger.Error.Printf("[repository.GetSupplierByTitleOrEmail] error getting supplier: %v\n", err)
 		return supplier, translateError(err)
 	}
 	return supplier, nil
