@@ -13,74 +13,39 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetAllUsers
-// @Summary Retrieve all users
+// CreateUser
+// @Summary Register a new user
 // @Tags users
-// @Description Get a list of all registered users
-// @ID get-all-users
+// @Description Register a new user (only Admin can do this)
+// @ID create-user
+// @Accept json
 // @Produce json
-// @Success 200 {array} models.User "List of users"
+// @Param input body models.SwagUser true "User Information"
+// @Success 201 {string} string "User created successfully!!!"
+// @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 403 {object} ErrorResponse "Permission denied"
 // @Failure 500 {object} ErrorResponse "Server error"
-// @Router /users [get]
+// @Router /users [post]
 // @Security ApiKeyAuth
-func GetAllUsers(c *gin.Context) {
-	// Логируем IP клиента при запросе списка всех пользователей...
-	logger.Info.Printf("IP: [%s] requested list of all users\n", c.ClientIP())
+func CreateUser(c *gin.Context) {
+	// Получаем роль текущего пользователя из контекста
+	userRole, exists := c.Get(userRoleCtx)
 
-	// Вызываем сервис для получения списка всех пользователей...
-	users, err := service.GetAllUsers()
-	if err != nil {
-		// Логируем ошибку при получении списка пользователей...
-		logger.Error.Printf("[controllers.GetAllUsers] error getting all users: %v\n", err)
-		handleError(c, err)
+	if !exists || userRole != "Admin" {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Permission denied. Only Admin can create users..."})
 		return
 	}
 
-	// Логируем IP клиента при успешной выдаче списка пользователей...
-	logger.Info.Printf("IP: [%s] got list of all users\n", c.ClientIP())
-
-	// Отправляем клиенту ответ со списком пользователей...
-	c.JSON(http.StatusOK, users)
-}
-
-// GetUserByID
-// @Summary Retrieve user by ID
-// @Tags users
-// @Description Get user information by user ID
-// @ID get-user-by-id
-// @Produce json
-// @Param id path int true "User ID"
-// @Success 200 {object} models.User "User information"
-// @Failure 400 {object} ErrorResponse "Invalid ID"
-// @Failure 404 {object} ErrorResponse "User not found"
-// @Failure 500 {object} ErrorResponse "Server error"
-// @Router /users/{id} [get]
-// @Security ApiKeyAuth
-func GetUserByID(c *gin.Context) {
-	// Извлекаем ID пользователя из параметра запроса...
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		// Логируем ошибку при некорректном параметре ID...
-		logger.Error.Printf("[controllers.GetUserByID] invalid user_id path parameter: %s, IP: [%s]\n", c.Param("id"), c.ClientIP())
-		handleError(c, errs.ErrValidationFailed)
+	var user models.User
+	if err := c.BindJSON(&user); err != nil {
+		handleError(c, err) // Используем handleError для обработки ошибки
 		return
 	}
-
-	// Логируем IP клиента и запрашиваемый ID пользователя...
-	logger.Info.Printf("IP: [%s] requested user with ID: %d\n", c.ClientIP(), id)
-
-	// Вызываем сервис для получения данных пользователя по ID...
-	user, err := service.GetUserByID(uint(id))
-	if err != nil {
-		handleError(c, err)
+	if err := service.CreateUser(user); err != nil {
+		handleError(c, err) // Используем handleError для обработки ошибки
 		return
 	}
-
-	// Логируем успешное получение данных пользователя...
-	logger.Info.Printf("IP: [%s] got user with ID: %d\n", c.ClientIP(), id)
-
-	// Отправляем клиенту ответ с данными пользователя...
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully!!!"})
 }
 
 // UpdateUserByID
@@ -248,48 +213,6 @@ func RestoreUserByID(c *gin.Context) {
 
 	// Отправляем клиенту ответ...
 	c.JSON(http.StatusOK, gin.H{"message": "User restored successfully!"})
-}
-
-// GetAllDeletedUsers
-// @Summary Retrieve all deleted users
-// @Tags users
-// @Description Get a list of all soft deleted users (Admin only)
-// @ID get-all-deleted-users
-// @Produce json
-// @Success 200 {array} models.User "List of deleted users"
-// @Failure 403 {object} ErrorResponse "Permission denied"
-// @Failure 500 {object} ErrorResponse "Server error"
-// @Router /users/deleted [get]
-// @Security ApiKeyAuth
-func GetAllDeletedUsers(c *gin.Context) {
-	// Получаем роль пользователя из контекста...
-	userRole := c.GetString(userRoleCtx)
-	// if userRole == "" {
-	// 	handleError(c, errs.ErrValidationFailed)
-	// 	return
-	// }
-
-	// Проверяем, является ли пользователь администратором...
-	if userRole != "Admin" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
-	// Логируем запрос...
-	logger.Info.Printf("IP: [%s] requested list of all deleted users\n", c.ClientIP())
-
-	// Вызываем сервис для получения списка удалённых пользователей...
-	users, err := service.GetAllDeletedUsers()
-	if err != nil {
-		handleError(c, err)
-		return
-	}
-
-	// Логируем успешное получение списка...
-	logger.Info.Printf("IP: [%s] successfully retrieved list of deleted users\n", c.ClientIP())
-
-	// Возвращаем список удалённых пользователей клиенту...
-	c.JSON(http.StatusOK, users)
 }
 
 // HardDeleteUserByID
@@ -526,4 +449,116 @@ func ChangeOwnPassword(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Password changed successfully!"})
+}
+
+// GetAllUsers
+// @Summary Retrieve all users
+// @Tags users
+// @Description Get a list of all registered users
+// @ID get-all-users
+// @Produce json
+// @Success 200 {array} models.User "List of users"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users [get]
+// @Security ApiKeyAuth
+func GetAllUsers(c *gin.Context) {
+	// Логируем IP клиента при запросе списка всех пользователей...
+	logger.Info.Printf("IP: [%s] requested list of all users\n", c.ClientIP())
+
+	// Вызываем сервис для получения списка всех пользователей...
+	users, err := service.GetAllUsers()
+	if err != nil {
+		// Логируем ошибку при получении списка пользователей...
+		logger.Error.Printf("[controllers.GetAllUsers] error getting all users: %v\n", err)
+		handleError(c, err)
+		return
+	}
+
+	// Логируем IP клиента при успешной выдаче списка пользователей...
+	logger.Info.Printf("IP: [%s] got list of all users\n", c.ClientIP())
+
+	// Отправляем клиенту ответ со списком пользователей...
+	c.JSON(http.StatusOK, users)
+}
+
+// GetAllDeletedUsers
+// @Summary Retrieve all deleted users
+// @Tags users
+// @Description Get a list of all soft deleted users (Admin only)
+// @ID get-all-deleted-users
+// @Produce json
+// @Success 200 {array} models.User "List of deleted users"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/deleted [get]
+// @Security ApiKeyAuth
+func GetAllDeletedUsers(c *gin.Context) {
+	// Получаем роль пользователя из контекста...
+	userRole := c.GetString(userRoleCtx)
+	// if userRole == "" {
+	// 	handleError(c, errs.ErrValidationFailed)
+	// 	return
+	// }
+
+	// Проверяем, является ли пользователь администратором...
+	if userRole != "Admin" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
+	// Логируем запрос...
+	logger.Info.Printf("IP: [%s] requested list of all deleted users\n", c.ClientIP())
+
+	// Вызываем сервис для получения списка удалённых пользователей...
+	users, err := service.GetAllDeletedUsers()
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	// Логируем успешное получение списка...
+	logger.Info.Printf("IP: [%s] successfully retrieved list of deleted users\n", c.ClientIP())
+
+	// Возвращаем список удалённых пользователей клиенту...
+	c.JSON(http.StatusOK, users)
+}
+
+// GetUserByID
+// @Summary Retrieve user by ID
+// @Tags users
+// @Description Get user information by user ID
+// @ID get-user-by-id
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} models.User "User information"
+// @Failure 400 {object} ErrorResponse "Invalid ID"
+// @Failure 404 {object} ErrorResponse "User not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/{id} [get]
+// @Security ApiKeyAuth
+func GetUserByID(c *gin.Context) {
+	// Извлекаем ID пользователя из параметра запроса...
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		// Логируем ошибку при некорректном параметре ID...
+		logger.Error.Printf("[controllers.GetUserByID] invalid user_id path parameter: %s, IP: [%s]\n", c.Param("id"), c.ClientIP())
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	// Логируем IP клиента и запрашиваемый ID пользователя...
+	logger.Info.Printf("IP: [%s] requested user with ID: %d\n", c.ClientIP(), id)
+
+	// Вызываем сервис для получения данных пользователя по ID...
+	user, err := service.GetUserByID(uint(id))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	// Логируем успешное получение данных пользователя...
+	logger.Info.Printf("IP: [%s] got user with ID: %d\n", c.ClientIP(), id)
+
+	// Отправляем клиенту ответ с данными пользователя...
+	c.JSON(http.StatusOK, user)
 }
