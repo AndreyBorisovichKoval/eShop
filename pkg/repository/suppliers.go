@@ -8,25 +8,45 @@ import (
 	"eShop/models"
 )
 
-// CreateSupplier добавляет нового поставщика в базу данных...
+// CreateSupplier создает нового поставщика в базе данных
 func CreateSupplier(supplier models.Supplier) error {
-	err := db.GetDBConn().Create(&supplier).Error
-	if err != nil {
+	if err := db.GetDBConn().Create(&supplier).Error; err != nil {
 		logger.Error.Printf("[repository.CreateSupplier] error creating supplier: %v\n", err)
 		return translateError(err)
 	}
 	return nil
 }
 
-// UpdateSupplierByID обновляет данные поставщика в базе данных...
-func UpdateSupplierByID(supplier models.Supplier) error {
-	err := db.GetDBConn().Save(&supplier).Error
+// GetSupplierByNameOrEmail получает поставщика по имени или email
+func GetSupplierByNameOrEmail(name, email string) (supplier models.Supplier, err error) {
+	err = db.GetDBConn().Where("name = ? OR email = ?", name, email).First(&supplier).Error
 	if err != nil {
+		logger.Error.Printf("[repository.GetSupplierByNameOrEmail] error getting supplier: %v\n", err)
+		return supplier, translateError(err)
+	}
+	return supplier, nil
+}
+
+// UpdateSupplierByID обновляет данные поставщика в базе данных
+func UpdateSupplierByID(supplier models.Supplier) error {
+	if err := db.GetDBConn().Save(&supplier).Error; err != nil {
 		logger.Error.Printf("[repository.UpdateSupplierByID] error updating supplier: %v\n", err)
 		return translateError(err)
 	}
 	return nil
 }
+
+// GetSupplierByID получает поставщика по его ID
+func GetSupplierByID(id uint) (supplier models.Supplier, err error) {
+	err = db.GetDBConn().Where("id = ? AND is_deleted = ?", id, false).First(&supplier).Error
+	if err != nil {
+		logger.Error.Printf("[repository.GetSupplierByID] error getting supplier by id: %v\n", err)
+		return supplier, translateError(err)
+	}
+	return supplier, nil
+}
+
+// /
 
 // SoftDeleteSupplierByID помечает поставщика как удалённого...
 func SoftDeleteSupplierByID(id uint) error {
@@ -80,14 +100,4 @@ func GetAllDeletedSuppliers() (suppliers []models.Supplier, err error) {
 
 	// Возвращаем список поставщиков...
 	return suppliers, nil
-}
-
-// GetSupplierByID получает поставщика по ID...
-func GetSupplierByID(id uint) (supplier models.Supplier, err error) {
-	err = db.GetDBConn().Where("id = ? AND is_deleted = ?", id, false).First(&supplier).Error
-	if err != nil {
-		logger.Error.Printf("[repository.GetSupplierByID] error getting supplier by id: %v\n", err)
-		return supplier, translateError(err)
-	}
-	return supplier, nil
 }

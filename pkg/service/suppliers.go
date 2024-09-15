@@ -10,12 +10,32 @@ import (
 	"errors"
 )
 
-// CreateSupplier создаёт нового поставщика...
+// CreateSupplier создает нового поставщика
 func CreateSupplier(supplier models.Supplier) error {
-	return repository.CreateSupplier(supplier)
+	// Проверяем, что хотя бы одно из полей (Name или Email) не пустое
+	if supplier.Name == "" && supplier.Email == "" {
+		return errs.ErrValidationFailed // Возвращаем ошибку валидации, если оба поля пусты
+	}
+
+	// Проверяем, существует ли уже поставщик с таким именем или email
+	existingSupplier, err := repository.GetSupplierByNameOrEmail(supplier.Name, supplier.Email)
+	if err != nil && err != errs.ErrRecordNotFound {
+		return err
+	}
+
+	if existingSupplier.ID > 0 {
+		return errs.ErrSupplierAlreadyExists // Поставщик уже существует
+	}
+
+	// Создаем нового поставщика через репозиторий
+	if err := repository.CreateSupplier(supplier); err != nil {
+		return err
+	}
+
+	return nil
 }
 
-// UpdateSupplierByID обновляет данные поставщика по ID...
+// UpdateSupplierByID обновляет данные поставщика по его ID
 func UpdateSupplierByID(id uint, updatedSupplier models.Supplier) (supplier models.Supplier, err error) {
 	supplier, err = repository.GetSupplierByID(id)
 	if err != nil {
@@ -25,7 +45,7 @@ func UpdateSupplierByID(id uint, updatedSupplier models.Supplier) (supplier mode
 		return supplier, err
 	}
 
-	// Обновляем только переданные поля...
+	// Обновляем только изменённые поля
 	if updatedSupplier.Name != "" {
 		supplier.Name = updatedSupplier.Name
 	}
@@ -36,13 +56,16 @@ func UpdateSupplierByID(id uint, updatedSupplier models.Supplier) (supplier mode
 		supplier.Phone = updatedSupplier.Phone
 	}
 
+	// Используем функцию обновления в репозитории
 	err = repository.UpdateSupplierByID(supplier)
 	if err != nil {
-		logger.Error.Printf("[service.UpdateSupplierByID] error updating supplier: %v\n", err)
 		return supplier, err
 	}
+
 	return supplier, nil
 }
+
+// /
 
 // SoftDeleteSupplierByID помечает поставщика как удалённого...
 func SoftDeleteSupplierByID(id uint) error {

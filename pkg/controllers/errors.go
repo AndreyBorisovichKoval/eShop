@@ -57,6 +57,7 @@ func handleError(c *gin.Context, err error) {
 	case errors.Is(err, errs.ErrIncorrectPassword):
 		// Ошибка "Неверный старый пароль"...
 		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
+
 	case errors.Is(err, errs.ErrSupplierNotFound):
 		// Ошибка "Поставщик не найден"...
 		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
@@ -68,6 +69,10 @@ func handleError(c *gin.Context, err error) {
 	case errors.Is(err, errs.ErrSupplierNotDeleted):
 		// Ошибка "Поставщик не был удалён"...
 		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
+
+	case errors.Is(err, errs.ErrSupplierAlreadyExists):
+		// Ошибка "Поставщик уже существует"...
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
 
 	default:
 		// Внутренняя ошибка сервера...

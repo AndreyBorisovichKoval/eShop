@@ -16,20 +16,21 @@ import (
 // CreateSupplier
 // @Summary Create a new supplier
 // @Tags suppliers
-// @Description Add a new supplier to the system
+// @Description Register a new supplier (Admin only)
 // @ID create-supplier
 // @Accept json
 // @Produce json
-// @Param input body models.Supplier true "Supplier information"
-// @Success 201 {string} string "Supplier created successfully!"
+// @Param input body models.Supplier true "Supplier data"
+// @Success 201 {string} string "Supplier created successfully!!!"
 // @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 409 {object} ErrorResponse "Supplier already exists"
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /suppliers [post]
+// @Security ApiKeyAuth
 func CreateSupplier(c *gin.Context) {
-	// Получаем роль пользователя из контекста...
 	userRole := c.GetString(userRoleCtx)
 
-	// Проверяем доступ (только Admin или Manager)...
 	if userRole != "Admin" && userRole != "Manager" {
 		handleError(c, errs.ErrPermissionDenied)
 		return
@@ -41,24 +42,21 @@ func CreateSupplier(c *gin.Context) {
 		return
 	}
 
-	// Логируем запрос на создание поставщика...
 	logger.Info.Printf("IP: [%s] attempting to create supplier: %s\n", c.ClientIP(), supplier.Name)
 
-	// Создаем поставщика через сервис...
 	if err := service.CreateSupplier(supplier); err != nil {
 		handleError(c, err)
 		return
 	}
 
-	// Логируем успешное создание...
 	logger.Info.Printf("IP: [%s] successfully created supplier: %s\n", c.ClientIP(), supplier.Name)
-	c.JSON(http.StatusCreated, gin.H{"message": "Supplier created successfully!"})
+	c.JSON(http.StatusCreated, gin.H{"message": "Supplier created successfully!!!"})
 }
 
 // UpdateSupplierByID
 // @Summary Update supplier by ID
 // @Tags suppliers
-// @Description Update supplier information by ID
+// @Description Update supplier information by ID (Admin/Manager only)
 // @ID update-supplier-by-id
 // @Accept json
 // @Produce json
@@ -66,14 +64,14 @@ func CreateSupplier(c *gin.Context) {
 // @Param input body models.Supplier true "Updated supplier information"
 // @Success 200 {object} models.Supplier "Updated supplier"
 // @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 403 {object} ErrorResponse "Permission denied"
 // @Failure 404 {object} ErrorResponse "Supplier not found"
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /suppliers/{id} [patch]
+// @Security ApiKeyAuth
 func UpdateSupplierByID(c *gin.Context) {
-	// Получаем роль пользователя из контекста...
 	userRole := c.GetString(userRoleCtx)
 
-	// Проверяем доступ (только Admin или Manager)...
 	if userRole != "Admin" && userRole != "Manager" {
 		handleError(c, errs.ErrPermissionDenied)
 		return
@@ -81,13 +79,9 @@ func UpdateSupplierByID(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		logger.Error.Printf("IP: [%s] invalid supplier_id: %s\n", c.ClientIP(), c.Param("id"))
 		handleError(c, errs.ErrValidationFailed)
 		return
 	}
-
-	// Логируем запрос на обновление поставщика...
-	logger.Info.Printf("IP: [%s] requested update for supplier with ID: %d\n", c.ClientIP(), id)
 
 	var updatedSupplier models.Supplier
 	if err := c.BindJSON(&updatedSupplier); err != nil {
@@ -95,17 +89,19 @@ func UpdateSupplierByID(c *gin.Context) {
 		return
 	}
 
-	// Обновляем поставщика через сервис...
+	logger.Info.Printf("IP: [%s] requested to update supplier with ID: %d\n", c.ClientIP(), id)
+
 	supplier, err := service.UpdateSupplierByID(uint(id), updatedSupplier)
 	if err != nil {
 		handleError(c, err)
 		return
 	}
 
-	// Логируем успешное обновление...
 	logger.Info.Printf("IP: [%s] successfully updated supplier with ID: %d\n", c.ClientIP(), id)
 	c.JSON(http.StatusOK, supplier)
 }
+
+// /
 
 // SoftDeleteSupplierByID
 // @Summary Soft delete supplier by ID
