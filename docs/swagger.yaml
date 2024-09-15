@@ -181,19 +181,22 @@ definitions:
     type: object
   models.Supplier:
     properties:
-      contact_info:
-        description: Контактная информация.
-        type: string
       created_at:
         type: string
       deleted_at:
+        type: string
+      email:
+        description: Электронная почта поставщика...
         type: string
       id:
         type: integer
       is_deleted:
         type: boolean
       name:
-        description: Название или имя поставщика.
+        description: Название или имя поставщика...
+        type: string
+      phone:
+        description: Телефон поставщика...
         type: string
       products:
         description: Связи
@@ -310,6 +313,293 @@ paths:
       summary: Log in user
       tags:
       - auth
+  /suppliers:
+    get:
+      description: Get a list of all active suppliers (Admin/Manager only)
+      operationId: get-all-suppliers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of active suppliers
+          schema:
+            items:
+              $ref: '#/definitions/models.Supplier'
+            type: array
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve all active suppliers
+      tags:
+      - suppliers
+    post:
+      consumes:
+      - application/json
+      description: Register a new supplier (Admin only)
+      operationId: create-supplier
+      parameters:
+      - description: Supplier data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Supplier'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Supplier created successfully!!!
+          schema:
+            type: string
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "409":
+          description: Supplier already exists
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new supplier
+      tags:
+      - suppliers
+  /suppliers/{id}:
+    get:
+      description: Get supplier information by ID (Admin/Manager only)
+      operationId: get-supplier-by-id
+      parameters:
+      - description: Supplier ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Supplier information
+          schema:
+            $ref: '#/definitions/models.Supplier'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Supplier not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve supplier by ID
+      tags:
+      - suppliers
+    patch:
+      consumes:
+      - application/json
+      description: Update supplier information by ID (Admin/Manager only)
+      operationId: update-supplier-by-id
+      parameters:
+      - description: Supplier ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated supplier information
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Supplier'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated supplier
+          schema:
+            $ref: '#/definitions/models.Supplier'
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Supplier not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update supplier by ID
+      tags:
+      - suppliers
+  /suppliers/{id}/hard:
+    delete:
+      description: Permanently delete supplier by ID (Admin/Manager only)
+      operationId: hard-delete-supplier-by-id
+      parameters:
+      - description: Supplier ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Supplier permanently deleted successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Supplier not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "409":
+          description: Supplier already deleted
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Permanently delete supplier by ID
+      tags:
+      - suppliers
+  /suppliers/{id}/restore:
+    patch:
+      description: Restore a soft deleted supplier by ID (Admin/Manager only)
+      operationId: restore-supplier-by-id
+      parameters:
+      - description: Supplier ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Supplier restored successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Supplier not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "409":
+          description: Supplier not deleted
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Restore soft deleted supplier by ID
+      tags:
+      - suppliers
+  /suppliers/{id}/soft:
+    delete:
+      description: Soft delete supplier by ID (Admin/Manager only)
+      operationId: soft-delete-supplier-by-id
+      parameters:
+      - description: Supplier ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Supplier soft deleted successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Supplier not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Soft delete supplier by ID
+      tags:
+      - suppliers
+  /suppliers/deleted:
+    get:
+      description: Get a list of all soft deleted suppliers (Admin/Manager only)
+      operationId: get-all-deleted-suppliers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of deleted suppliers
+          schema:
+            items:
+              $ref: '#/definitions/models.Supplier'
+            type: array
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve all deleted suppliers
+      tags:
+      - suppliers
   /users:
     get:
       description: Get a list of all registered users
