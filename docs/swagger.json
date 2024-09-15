@@ -8,9 +8,6 @@
     },
     "host": "localhost:8585",
     "basePath": "/",
-<<<<<<< HEAD
-    "paths": {},
-=======
     "paths": {
         "/auth/sign-in": {
             "post": {
@@ -530,8 +527,12 @@
                     "type": "string"
                 },
                 "password_reset_required": {
-                    "description": "Флаг обязательной смены пароля после сброса...",
+                    "description": "Флаг обязательной смены пароля после сброса Админом...",
                     "type": "boolean"
+                },
+                "phone": {
+                    "description": "Телефон продавца...",
+                    "type": "string"
                 },
                 "role": {
                     "description": "Роль продавца (например: 'admin', 'manager', 'seller')...",
@@ -548,7 +549,6 @@
             }
         }
     },
->>>>>>> main
     "securityDefinitions": {
         "ApiKeyAuth": {
             "type": "apiKey",

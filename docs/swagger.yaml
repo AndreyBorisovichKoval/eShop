@@ -1,6 +1,4 @@
 basePath: /
-<<<<<<< HEAD
-=======
 definitions:
   controllers.ErrorResponse:
     properties:
@@ -255,8 +253,11 @@ definitions:
         description: Пароль продавца...
         type: string
       password_reset_required:
-        description: Флаг обязательной смены пароля после сброса...
+        description: Флаг обязательной смены пароля после сброса Админом...
         type: boolean
+      phone:
+        description: Телефон продавца...
+        type: string
       role:
         description: 'Роль продавца (например: ''admin'', ''manager'', ''seller'')...'
         type: string
@@ -267,16 +268,11 @@ definitions:
         description: Логин продавца...
         type: string
     type: object
->>>>>>> main
 host: localhost:8585
 info:
   contact: {}
   description: API Server for eShop Application
   title: eShop API
-<<<<<<< HEAD
-  version: "0.0001"
-paths: {}
-=======
   version: "0.0002"
 paths:
   /auth/sign-in:
@@ -376,7 +372,6 @@ paths:
       summary: Create User
       tags:
       - users
->>>>>>> main
 securityDefinitions:
   ApiKeyAuth:
     in: header

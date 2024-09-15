@@ -14,9 +14,6 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-<<<<<<< HEAD
-    "paths": {},
-=======
     "paths": {
         "/auth/sign-in": {
             "post": {
@@ -536,8 +533,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password_reset_required": {
-                    "description": "Флаг обязательной смены пароля после сброса...",
+                    "description": "Флаг обязательной смены пароля после сброса Админом...",
                     "type": "boolean"
+                },
+                "phone": {
+                    "description": "Телефон продавца...",
+                    "type": "string"
                 },
                 "role": {
                     "description": "Роль продавца (например: 'admin', 'manager', 'seller')...",
@@ -554,7 +555,6 @@ const docTemplate = `{
             }
         }
     },
->>>>>>> main
     "securityDefinitions": {
         "ApiKeyAuth": {
             "type": "apiKey",
