@@ -10,35 +10,6 @@
 			"name": "Authorization",
 			"item": [
 				{
-					"name": "Authorization",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"username\": \"Fred\",\r\n  \"password\": \"Fred_123\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8585/auth/sign-in",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"auth",
-								"sign-in"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "AuthorizationAdmin",
 					"request": {
 						"method": "POST",
@@ -103,7 +74,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"username\": \"Test8\",\r\n  \"password\": \"Fred_1234\"\r\n}\r\n",
+							"raw": "{\r\n  \"username\": \"Max\",\r\n  \"password\": \"Fred_123\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -701,11 +672,21 @@
 				{
 					"name": "CreateSupplier",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Limited Liability Company 'Komron'\",\r\n  \"email\": \"komron@example.com\",\r\n  \"phone\": \"992930001111\"\r\n}\r\n",
+							"raw": "{\r\n  \"title\": \"Limited Liability Company 'Vahdat-99'\",\r\n  \"email\": \"vahdat-99@example.com\",\r\n  \"phone\": \"992930001112\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -729,11 +710,21 @@
 				{
 					"name": "UpdateSupplier",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Limited Liability Company 'Komron'\",\r\n  \"email\": \"komron@example.com\",\r\n  \"phone\": \"992930001111\"\r\n}\r\n",
+							"raw": "{\r\n  \"title\": \"Limited Liability Company 'Vahdat-98'\",\r\n  \"email\": \"vahdat-98@example.com\",\r\n  \"phone\": \"992930001113\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -741,7 +732,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/suppliers/1",
+							"raw": "http://localhost:8585/suppliers/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -749,7 +740,7 @@
 							"port": "8585",
 							"path": [
 								"suppliers",
-								"1"
+								"4"
 							]
 						}
 					},
@@ -758,6 +749,16 @@
 				{
 					"name": "SoftDeleteSupplierByID",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
@@ -770,7 +771,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/suppliers/2/soft",
+							"raw": "http://localhost:8585/suppliers/5/soft",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -778,7 +779,7 @@
 							"port": "8585",
 							"path": [
 								"suppliers",
-								"2",
+								"5",
 								"soft"
 							]
 						}
@@ -788,6 +789,16 @@
 				{
 					"name": "RestoreSupplierByID",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
@@ -800,7 +811,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/suppliers/2/restore",
+							"raw": "http://localhost:8585/suppliers/5/restore",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -808,7 +819,7 @@
 							"port": "8585",
 							"path": [
 								"suppliers",
-								"2",
+								"5",
 								"restore"
 							]
 						}
@@ -818,6 +829,16 @@
 				{
 					"name": "HardDeleteSupplierByID",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
@@ -851,6 +872,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -882,6 +913,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -894,7 +935,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/suppliers/2",
+							"raw": "http://localhost:8585/suppliers/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -902,7 +943,376 @@
 							"port": "8585",
 							"path": [
 								"suppliers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllDeletedSupplier",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/suppliers/deleted",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"suppliers",
+								"deleted"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "CreateCategory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Beverages2\",\r\n  \"description\": \"All2 kinds of drinks\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/categories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateCategory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Non-Alcoholic Beverages\",\r\n  \"description\": \"All kinds of non-alcoholic drinks\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/categories/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"categories",
 								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SoftDeleteCategoryByID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/categories/3/soft",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"categories",
+								"3",
+								"soft"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RestoreCategoryByID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/categories/5/restore",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"categories",
+								"5",
+								"restore"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HardDeleteCategoryByID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/categories/8/hard",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"categories",
+								"8",
+								"hard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllCategories",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/categories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCategoryByID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/categories/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"categories",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllDeletedCategories",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/categories/deleted",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"categories",
+								"deleted"
 							]
 						}
 					},

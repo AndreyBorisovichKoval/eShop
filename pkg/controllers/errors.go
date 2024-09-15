@@ -74,6 +74,22 @@ func handleError(c *gin.Context, err error) {
 		// Ошибка "Поставщик уже существует"...
 		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
 
+	case errors.Is(err, errs.ErrCategoryNotFound):
+		// Ошибка "Категория не найдена"...
+		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
+
+	case errors.Is(err, errs.ErrCategoryAlreadyDeleted):
+		// Ошибка "Категория уже удалена"...
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+
+	case errors.Is(err, errs.ErrCategoryNotDeleted):
+		// Ошибка "Категория не была удалена"...
+		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
+
+	case errors.Is(err, errs.ErrCategoryAlreadyExists):
+		// Ошибка "Категория уже существует"...
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+
 	default:
 		// Внутренняя ошибка сервера...
 		c.JSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
