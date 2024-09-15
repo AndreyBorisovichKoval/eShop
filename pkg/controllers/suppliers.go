@@ -26,6 +26,15 @@ import (
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /suppliers [post]
 func CreateSupplier(c *gin.Context) {
+	// Получаем роль пользователя из контекста...
+	userRole := c.GetString(userRoleCtx)
+
+	// Проверяем доступ (только Admin или Manager)...
+	if userRole != "Admin" && userRole != "Manager" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
 	var supplier models.Supplier
 	if err := c.BindJSON(&supplier); err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -61,6 +70,15 @@ func CreateSupplier(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /suppliers/{id} [patch]
 func UpdateSupplierByID(c *gin.Context) {
+	// Получаем роль пользователя из контекста...
+	userRole := c.GetString(userRoleCtx)
+
+	// Проверяем доступ (только Admin или Manager)...
+	if userRole != "Admin" && userRole != "Manager" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		logger.Error.Printf("IP: [%s] invalid supplier_id: %s\n", c.ClientIP(), c.Param("id"))
@@ -100,6 +118,15 @@ func UpdateSupplierByID(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /suppliers/{id}/soft [delete]
 func SoftDeleteSupplierByID(c *gin.Context) {
+	// Получаем роль пользователя из контекста...
+	userRole := c.GetString(userRoleCtx)
+
+	// Проверяем доступ (только Admin или Manager)...
+	if userRole != "Admin" && userRole != "Manager" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -130,6 +157,15 @@ func SoftDeleteSupplierByID(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /suppliers/{id}/restore [patch]
 func RestoreSupplierByID(c *gin.Context) {
+	// Получаем роль пользователя из контекста...
+	userRole := c.GetString(userRoleCtx)
+
+	// Проверяем доступ (только Admin или Manager)...
+	if userRole != "Admin" && userRole != "Manager" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -160,6 +196,15 @@ func RestoreSupplierByID(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /suppliers/{id}/hard [delete]
 func HardDeleteSupplierByID(c *gin.Context) {
+	// Получаем роль пользователя из контекста...
+	userRole := c.GetString(userRoleCtx)
+
+	// Проверяем доступ (только Admin или Manager)...
+	if userRole != "Admin" && userRole != "Manager" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -216,11 +261,11 @@ func GetAllSuppliers(c *gin.Context) {
 // @Router /suppliers/deleted [get]
 // @Security ApiKeyAuth
 func GetAllDeletedSuppliers(c *gin.Context) {
-	// Получаем роль пользователя из контекста...
+	// Получаем роль пользователя из контекста
 	userRole := c.GetString(userRoleCtx)
 
-	// Проверяем, является ли пользователь администратором...
-	if userRole != "Admin" {
+	// Проверяем доступ (только Admin или Manager)
+	if userRole != "Admin" && userRole != "Manager" {
 		handleError(c, errs.ErrPermissionDenied)
 		return
 	}

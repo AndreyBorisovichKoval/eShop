@@ -67,10 +67,6 @@ func CreateUser(c *gin.Context) {
 func UpdateUserByID(c *gin.Context) {
 	// Получаем роль пользователя из контекста. Если она не задана, возвращаем ошибку валидации...
 	userRole := c.GetString(userRoleCtx)
-	// if userRole == "" {
-	// 	handleError(c, errs.ErrValidationFailed)
-	// 	return
-	// }
 
 	// Проверяем, является ли пользователь администратором. Если нет, возвращаем ошибку "Доступ запрещен"...
 	if userRole != "Admin" {
