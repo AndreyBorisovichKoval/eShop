@@ -10,19 +10,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// SignUp
-// @Summary Create User
+// CreateUser
+// @Summary Register a new user
 // @Tags users
-// @Description Create User
-// @ID create-account
+// @Description Register a new user (only Admin can do this)
+// @ID create-user
 // @Accept json
 // @Produce json
 // @Param input body models.SwagUser true "User Information"
 // @Success 201 {string} string "User created successfully!!!"
 // @Failure 400 {object} ErrorResponse "Invalid input"
-// @Failure 403 {object} ErrorResponse "Permission denied. Only Admin can create users..."
+// @Failure 403 {object} ErrorResponse "Permission denied"
 // @Failure 500 {object} ErrorResponse "Server error"
-// @Failure default {object} ErrorResponse
 // @Router /users [post]
 // @Security ApiKeyAuth
 func CreateUser(c *gin.Context) {
@@ -47,13 +46,13 @@ func CreateUser(c *gin.Context) {
 }
 
 // SignIn
-// @Summary Enter to System
+// @Summary Log in user
 // @Tags auth
-// @Description Autentifications user and get token...
+// @Description User authentication (returns JWT token)
 // @ID sign-in
 // @Accept json
 // @Produce json
-// @Param input body models.SignInInput true "Data for login and password"
+// @Param input body models.SignInInput true "Login data"
 // @Success 200 {object} accessTokenResponse "access_token"
 // @Failure 400 {object} ErrorResponse "Invalid input"
 // @Failure 401 {object} ErrorResponse "Unauthorized"

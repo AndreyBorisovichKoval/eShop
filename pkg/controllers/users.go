@@ -13,45 +13,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// // CreateUser создаёт нового пользователя...
-// func CreateUser(c *gin.Context) {
-// 	var user models.User
-
-// 	// Привязываем JSON тело запроса к модели пользователя...
-// 	if err := c.BindJSON(&user); err != nil {
-// 		// Возвращаем клиенту ошибку 400, если данные в запросе некорректные...
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-
-// 	// Вызываем сервис для создания пользователя...
-// 	err := service.CreateUser(user)
-// 	if err != nil {
-// 		// Возвращаем ошибку 500, если возникли проблемы на уровне сервиса...
-// 		c.JSON(http.StatusInternalServerError, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-
-// 	// Возвращаем успешный ответ с кодом 201 при успешном создании пользователя...
-// 	c.JSON(http.StatusCreated, gin.H{
-// 		"message": "User created successfully!!!",
-// 	})
-// }
-
 // GetAllUsers
-// @Summary GetAllUsers
+// @Summary Retrieve all users
 // @Tags users
-// @Security ApiKeyAuth
-// @Description GetAllUsers
+// @Description Get a list of all registered users
 // @ID get-all-users
 // @Produce json
-// @Success 200 {array} models.User "Список пользователей"
+// @Success 200 {array} models.User "List of users"
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /users [get]
+// @Security ApiKeyAuth
 func GetAllUsers(c *gin.Context) {
 	// Логируем IP клиента при запросе списка всех пользователей...
 	logger.Info.Printf("IP: [%s] requested list of all users\n", c.ClientIP())
@@ -72,7 +43,19 @@ func GetAllUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
-// GetUserByID получает данные конкретного пользователя по его ID...
+// GetUserByID
+// @Summary Retrieve user by ID
+// @Tags users
+// @Description Get user information by user ID
+// @ID get-user-by-id
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} models.User "User information"
+// @Failure 400 {object} ErrorResponse "Invalid ID"
+// @Failure 404 {object} ErrorResponse "User not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/{id} [get]
+// @Security ApiKeyAuth
 func GetUserByID(c *gin.Context) {
 	// Извлекаем ID пользователя из параметра запроса...
 	id, err := strconv.Atoi(c.Param("id"))
@@ -100,7 +83,22 @@ func GetUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-// UpdateUserByID обновляет данные пользователя по его ID...
+// UpdateUserByID
+// @Summary Update user by ID
+// @Tags users
+// @Description Update user information by user ID (Admin only)
+// @ID update-user-by-id
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Param input body models.User true "Updated user information"
+// @Success 200 {object} models.User "Updated user"
+// @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "User not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/{id} [patch]
+// @Security ApiKeyAuth
 func UpdateUserByID(c *gin.Context) {
 	// Получаем роль пользователя из контекста. Если она не задана, возвращаем ошибку валидации...
 	userRole := c.GetString(userRoleCtx)
@@ -150,7 +148,19 @@ func UpdateUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-// SoftDeleteUserByID помечает пользователя как удалённого...
+// SoftDeleteUserByID
+// @Summary Soft delete user by ID
+// @Tags users
+// @Description Soft delete user by ID (Admin only)
+// @ID soft-delete-user-by-id
+// @Param id path int true "User ID"
+// @Success 200 {string} string "User soft deleted successfully!"
+// @Failure 400 {object} ErrorResponse "Invalid ID"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "User not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/{id}/soft [delete]
+// @Security ApiKeyAuth
 func SoftDeleteUserByID(c *gin.Context) {
 	// Получаем роль пользователя из контекста. Если она не задана, возвращаем ошибку валидации...
 	userRole := c.GetString(userRoleCtx)
@@ -189,7 +199,19 @@ func SoftDeleteUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User soft deleted successfully!"})
 }
 
-// RestoreUserByID восстанавливает пользователя...
+// RestoreUserByID
+// @Summary Restore user by ID
+// @Tags users
+// @Description Restore a soft deleted user by ID (Admin only)
+// @ID restore-user-by-id
+// @Param id path int true "User ID"
+// @Success 200 {string} string "User restored successfully!"
+// @Failure 400 {object} ErrorResponse "Invalid ID"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "User not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/{id}/restore [patch]
+// @Security ApiKeyAuth
 func RestoreUserByID(c *gin.Context) {
 	// Получаем роль пользователя из контекста. Если она не задана, возвращаем ошибку валидации...
 	userRole := c.GetString(userRoleCtx)
@@ -228,7 +250,17 @@ func RestoreUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User restored successfully!"})
 }
 
-// GetDeletedUsers получает список всех удалённых пользователей...
+// GetAllDeletedUsers
+// @Summary Retrieve all deleted users
+// @Tags users
+// @Description Get a list of all soft deleted users (Admin only)
+// @ID get-all-deleted-users
+// @Produce json
+// @Success 200 {array} models.User "List of deleted users"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/deleted [get]
+// @Security ApiKeyAuth
 func GetAllDeletedUsers(c *gin.Context) {
 	// Получаем роль пользователя из контекста...
 	userRole := c.GetString(userRoleCtx)
@@ -260,7 +292,19 @@ func GetAllDeletedUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
-// HardDeleteUserByID удаляет пользователя из базы данных полностью...
+// HardDeleteUserByID
+// @Summary Hard delete user by ID
+// @Tags users
+// @Description Permanently delete user by ID (Admin only)
+// @ID hard-delete-user-by-id
+// @Param id path int true "User ID"
+// @Success 200 {string} string "User hard deleted successfully!"
+// @Failure 400 {object} ErrorResponse "Invalid ID"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "User not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/{id}/hard [delete]
+// @Security ApiKeyAuth
 func HardDeleteUserByID(c *gin.Context) {
 	// Получаем роль пользователя из контекста...
 	userRole := c.GetString(userRoleCtx)
@@ -299,7 +343,19 @@ func HardDeleteUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User hard deleted successfully!"})
 }
 
-// BlockUserByID блокирует пользователя по его ID...
+// BlockUserByID
+// @Summary Block user by ID
+// @Tags users
+// @Description Block a user by ID (Admin only)
+// @ID block-user-by-id
+// @Param id path int true "User ID"
+// @Success 200 {string} string "User blocked successfully!"
+// @Failure 400 {object} ErrorResponse "Invalid ID"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "User not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/{id}/block [patch]
+// @Security ApiKeyAuth
 func BlockUserByID(c *gin.Context) {
 	// Получаем роль пользователя из контекста...
 	userRole := c.GetString(userRoleCtx)
@@ -338,7 +394,19 @@ func BlockUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User blocked successfully!"})
 }
 
-// UnblockUserByID разблокирует пользователя по его ID...
+// UnblockUserByID
+// @Summary Unblock user by ID
+// @Tags users
+// @Description Unblock a user by ID (Admin only)
+// @ID unblock-user-by-id
+// @Param id path int true "User ID"
+// @Success 200 {string} string "User unblocked successfully!"
+// @Failure 400 {object} ErrorResponse "Invalid ID"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "User not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/{id}/unblock [patch]
+// @Security ApiKeyAuth
 func UnblockUserByID(c *gin.Context) {
 	// Получаем роль пользователя из контекста...
 	userRole := c.GetString(userRoleCtx)
@@ -377,7 +445,22 @@ func UnblockUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User unblocked successfully!"})
 }
 
-// ResetPassword сбрасывает пароль пользователя (доступно только администратору)...
+// ResetPassword
+// @Summary Reset user password
+// @Tags users
+// @Description Reset a user's password (Admin only)
+// @ID reset-password
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Param input body models.SwagUser true "New password"
+// @Success 200 {string} string "Password reset successfully!"
+// @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "User not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/{id}/reset-password [patch]
+// @Security ApiKeyAuth
 func ResetPassword(c *gin.Context) {
 	userRole := c.GetString(userRoleCtx)
 	if userRole != "Admin" {
@@ -409,7 +492,20 @@ func ResetPassword(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Password reset successfully!"})
 }
 
-// ChangeOwnPassword позволяет пользователю изменить свой пароль...
+// ChangeOwnPassword
+// @Summary Change own password
+// @Tags users
+// @Description Change the logged-in user's password
+// @ID change-own-password
+// @Accept json
+// @Produce json
+// @Param input body models.SwagUser true "Old and new passwords"
+// @Success 200 {string} string "Password changed successfully!"
+// @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 403 {object} ErrorResponse "Unauthorized password change"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/password [patch]
+// @Security ApiKeyAuth
 func ChangeOwnPassword(c *gin.Context) {
 	userID := c.GetUint(userIDCtx)
 

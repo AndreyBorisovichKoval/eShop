@@ -1,4 +1,4 @@
-// C:\GoProject\src\eShop\pkg\controllers\helpers.go
+// C:\GoProject\src\eShop\pkg\controllers\errors.go
 package controllers
 
 import (
