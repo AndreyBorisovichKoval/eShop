@@ -46,6 +46,16 @@ func GetSupplierByID(id uint) (supplier models.Supplier, err error) {
 	return supplier, nil
 }
 
+// GetSupplierIncludingSoftDeleted получает поставщика, включая мягко удалённых
+func GetSupplierIncludingSoftDeleted(id uint) (supplier models.Supplier, err error) {
+	err = db.GetDBConn().Unscoped().Where("id = ?", id).First(&supplier).Error
+	if err != nil {
+		logger.Error.Printf("[repository.GetSupplierIncludingSoftDeleted] error getting supplier: %v\n", err)
+		return supplier, translateError(err)
+	}
+	return supplier, nil
+}
+
 // /
 
 // SoftDeleteSupplierByID помечает поставщика как удалённого...

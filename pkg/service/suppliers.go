@@ -8,6 +8,7 @@ import (
 	"eShop/models"
 	"eShop/pkg/repository"
 	"errors"
+	"time"
 )
 
 // CreateSupplier создает нового поставщика
@@ -65,17 +66,62 @@ func UpdateSupplierByID(id uint, updatedSupplier models.Supplier) (supplier mode
 	return supplier, nil
 }
 
-// /
-
-// SoftDeleteSupplierByID помечает поставщика как удалённого...
+// SoftDeleteSupplierByID помечает поставщика как удалённого
 func SoftDeleteSupplierByID(id uint) error {
-	return repository.SoftDeleteSupplierByID(id)
+	supplier, err := repository.GetSupplierByID(id)
+	if err != nil {
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			return errs.ErrSupplierNotFound
+		}
+		return err
+	}
+
+	// Проверяем, не был ли поставщик уже удалён
+	if supplier.IsDeleted {
+		return errs.ErrSupplierAlreadyDeleted
+	}
+
+	// Помечаем как удалённого
+	supplier.IsDeleted = true
+	currentTime := time.Now()
+	supplier.DeletedAt = &currentTime
+
+	// Используем общую функцию обновления для сохранения изменений
+	if err := repository.UpdateSupplierByID(supplier); err != nil {
+		return err
+	}
+
+	return nil
 }
 
-// RestoreSupplierByID восстанавливает удалённого поставщика...
+// RestoreSupplierByID восстанавливает мягко удалённого поставщика
 func RestoreSupplierByID(id uint) error {
-	return repository.RestoreSupplierByID(id)
+	supplier, err := repository.GetSupplierIncludingSoftDeleted(id)
+	if err != nil {
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			return errs.ErrSupplierNotFound
+		}
+		return err
+	}
+
+	// Проверяем, был ли поставщик действительно удалён
+	if !supplier.IsDeleted {
+		return errs.ErrSupplierNotDeleted
+	}
+
+	// Восстанавливаем поставщика
+	supplier.IsDeleted = false
+	supplier.DeletedAt = nil
+
+	// Используем общую функцию обновления для сохранения изменений
+	if err := repository.UpdateSupplierByID(supplier); err != nil {
+		return err
+	}
+
+	return nil
 }
+
+// /
 
 // HardDeleteSupplierByID удаляет поставщика...
 func HardDeleteSupplierByID(id uint) error {

@@ -101,23 +101,22 @@ func UpdateSupplierByID(c *gin.Context) {
 	c.JSON(http.StatusOK, supplier)
 }
 
-// /
-
 // SoftDeleteSupplierByID
 // @Summary Soft delete supplier by ID
 // @Tags suppliers
-// @Description Soft delete supplier by ID
+// @Description Soft delete supplier by ID (Admin/Manager only)
 // @ID soft-delete-supplier-by-id
 // @Param id path int true "Supplier ID"
 // @Success 200 {string} string "Supplier soft deleted successfully!"
 // @Failure 400 {object} ErrorResponse "Invalid ID"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "Supplier not found"
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /suppliers/{id}/soft [delete]
+// @Security ApiKeyAuth
 func SoftDeleteSupplierByID(c *gin.Context) {
-	// Получаем роль пользователя из контекста...
 	userRole := c.GetString(userRoleCtx)
 
-	// Проверяем доступ (только Admin или Manager)...
 	if userRole != "Admin" && userRole != "Manager" {
 		handleError(c, errs.ErrPermissionDenied)
 		return
@@ -129,34 +128,34 @@ func SoftDeleteSupplierByID(c *gin.Context) {
 		return
 	}
 
-	// Логируем запрос на софт удаление...
-	logger.Info.Printf("IP: [%s] requested soft delete for supplier with ID: %d\n", c.ClientIP(), id)
+	logger.Info.Printf("IP: [%s] requested to soft delete supplier with ID: %d\n", c.ClientIP(), id)
 
 	if err := service.SoftDeleteSupplierByID(uint(id)); err != nil {
 		handleError(c, err)
 		return
 	}
 
-	// Логируем успешное удаление...
 	logger.Info.Printf("IP: [%s] successfully soft deleted supplier with ID: %d\n", c.ClientIP(), id)
 	c.JSON(http.StatusOK, gin.H{"message": "Supplier soft deleted successfully!"})
 }
 
 // RestoreSupplierByID
-// @Summary Restore supplier by ID
+// @Summary Restore soft deleted supplier by ID
 // @Tags suppliers
-// @Description Restore a soft deleted supplier by ID
+// @Description Restore a soft deleted supplier by ID (Admin/Manager only)
 // @ID restore-supplier-by-id
 // @Param id path int true "Supplier ID"
 // @Success 200 {string} string "Supplier restored successfully!"
 // @Failure 400 {object} ErrorResponse "Invalid ID"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "Supplier not found"
+// @Failure 409 {object} ErrorResponse "Supplier not deleted"
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /suppliers/{id}/restore [patch]
+// @Security ApiKeyAuth
 func RestoreSupplierByID(c *gin.Context) {
-	// Получаем роль пользователя из контекста...
 	userRole := c.GetString(userRoleCtx)
 
-	// Проверяем доступ (только Admin или Manager)...
 	if userRole != "Admin" && userRole != "Manager" {
 		handleError(c, errs.ErrPermissionDenied)
 		return
@@ -168,18 +167,18 @@ func RestoreSupplierByID(c *gin.Context) {
 		return
 	}
 
-	// Логируем запрос на восстановление поставщика...
-	logger.Info.Printf("IP: [%s] requested restore for supplier with ID: %d\n", c.ClientIP(), id)
+	logger.Info.Printf("IP: [%s] requested to restore supplier with ID: %d\n", c.ClientIP(), id)
 
 	if err := service.RestoreSupplierByID(uint(id)); err != nil {
 		handleError(c, err)
 		return
 	}
 
-	// Логируем успешное восстановление...
 	logger.Info.Printf("IP: [%s] successfully restored supplier with ID: %d\n", c.ClientIP(), id)
 	c.JSON(http.StatusOK, gin.H{"message": "Supplier restored successfully!"})
 }
+
+// /
 
 // HardDeleteSupplierByID
 // @Summary Hard delete supplier by ID
