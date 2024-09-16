@@ -77,5 +77,11 @@ func InitRoutes() *gin.Engine {
 		categoryG.DELETE("/:id/hard", HardDeleteCategoryByID) // Полное удаление категории...
 	}
 
+	taxesG := router.Group("/taxes", checkUserAuthentication, checkUserBlocked())
+	{
+		taxesG.GET("", GetAllTaxes)         // Получение списка всех текущих налогов...
+		taxesG.PATCH("/:id", UpdateTaxByID) // Обновление налоговой ставки по ID...
+	}
+
 	return router
 }
