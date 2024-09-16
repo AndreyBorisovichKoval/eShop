@@ -102,44 +102,6 @@
 			"name": "CreateUser",
 			"item": [
 				{
-					"name": "CreateUserTest",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjYzMzc5MjAsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.i8OMZDJ6ANaQR2B1Ey1XgULeDEp0KinY6_ObwYRxkSM",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"full_name\": \"Test Test\",\r\n  \"username\": \"Test8\",\r\n  \"email\": \"test.test8@example.com\",\r\n  \"password\": \"Fred_123\",\r\n  \"role\": \"Seller\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8585/users",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "CreateUserAdmin",
 					"request": {
 						"auth": {
@@ -223,7 +185,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjYwMDkwMjAsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.pnEyreWS29khQWzV_lcznEhYMD3O0sjEsyiCCcSJ6Ss",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY1MDk4NTIsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.b42s0UwSs-YPBCGCp_G_46FQ4urK-fdk67Jdsphwerk",
 									"type": "string"
 								}
 							]
@@ -232,7 +194,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"full_name\": \"Max Dekker\",\r\n  \"username\": \"Max\",\r\n  \"email\": \"max.dekker@example.com\",\r\n  \"password\": \"Fred_123\",\r\n  \"role\": \"Seller\"\r\n}\r\n",
+							"raw": "{\r\n  \"full_name\": \"Jony Crud\",\r\n  \"username\": \"Joni\",\r\n  \"email\": \"joni.crud@example.com\",\r\n  \"password\": \"Fred_123\",\r\n  \"role\": \"Seller\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -659,6 +621,80 @@
 								"users",
 								"22",
 								"reset-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UserSettings",
+			"item": [
+				{
+					"name": "GetSettings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjUxMjc2OSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.PxSP4vnDHrWkutQVUtKQSSOgsJSyjZ8g2jph7p6okfI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/users/settings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"users",
+								"settings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateSettings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjUxMjc2OSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.PxSP4vnDHrWkutQVUtKQSSOgsJSyjZ8g2jph7p6okfI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"add_confirmation\": true,\r\n  \"update_confirmation\": true,\r\n  \"delete_confirmation\": false,\r\n  \"display_language\": \"English\",\r\n  \"desktop_theme\": \"Dark blue classic\",\r\n  \"dark_mode_theme\": true,\r\n  \"font\": \"Arial\",\r\n  \"font_size\": 14,\r\n  \"accessibility_options\": \"Low contrast\",\r\n  \"notification_sound\": false,\r\n  \"email_notifications\": true,\r\n  \"notification_frequency\": \"Weekly\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/users/settings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"users",
+								"settings"
 							]
 						}
 					},
