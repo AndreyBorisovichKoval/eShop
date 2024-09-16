@@ -1,3 +1,7 @@
+netstat -ano | findstr :8585
+taskkill /PID <PID> /F
+taskkill /PID 16620 /F
+
 http://localhost:8585/swagger/index.html
 
 ========================================================

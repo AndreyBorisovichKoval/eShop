@@ -8,6 +8,7 @@ import (
 	"eShop/models"
 	"eShop/pkg/repository"
 	"errors"
+	"strings"
 	"time"
 )
 
@@ -36,6 +37,36 @@ func CreateSupplier(supplier models.Supplier) error {
 	return nil
 }
 
+// // UpdateSupplierByID обновляет данные поставщика по его ID
+// func UpdateSupplierByID(id uint, updatedSupplier models.Supplier) (supplier models.Supplier, err error) {
+// 	supplier, err = repository.GetSupplierByID(id)
+// 	if err != nil {
+// 		if errors.Is(err, errs.ErrRecordNotFound) {
+// 			return supplier, errs.ErrSupplierNotFound
+// 		}
+// 		return supplier, err
+// 	}
+
+// 	// Обновляем только изменённые поля
+// 	if updatedSupplier.Title != "" {
+// 		supplier.Title = updatedSupplier.Title
+// 	}
+// 	if updatedSupplier.Email != "" {
+// 		supplier.Email = updatedSupplier.Email
+// 	}
+// 	if updatedSupplier.Phone != "" {
+// 		supplier.Phone = updatedSupplier.Phone
+// 	}
+
+// 	// Используем функцию обновления в репозитории
+// 	err = repository.UpdateSupplierByID(supplier)
+// 	if err != nil {
+// 		return supplier, err
+// 	}
+
+// 	return supplier, nil
+// }
+
 // UpdateSupplierByID обновляет данные поставщика по его ID
 func UpdateSupplierByID(id uint, updatedSupplier models.Supplier) (supplier models.Supplier, err error) {
 	supplier, err = repository.GetSupplierByID(id)
@@ -60,6 +91,10 @@ func UpdateSupplierByID(id uint, updatedSupplier models.Supplier) (supplier mode
 	// Используем функцию обновления в репозитории
 	err = repository.UpdateSupplierByID(supplier)
 	if err != nil {
+		// Проверяем на ошибку дубликата
+		if strings.Contains(err.Error(), "duplicate key value") {
+			return supplier, errs.ErrSupplierAlreadyExists
+		}
 		return supplier, err
 	}
 

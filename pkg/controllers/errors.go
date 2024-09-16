@@ -13,9 +13,12 @@ import (
 // Добавляет статус код к ним и сразу возвращает клиенту...
 func handleError(c *gin.Context, err error) {
 	switch {
-	case errors.Is(err, errs.ErrUsernameUniquenessFailed),
-		errors.Is(err, errs.ErrIncorrectUsernameOrPassword):
+	case errors.Is(err, errs.ErrUsernameUniquenessFailed):
 		// Ошибка уникальности или неверного пароля...
+		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
+
+	case errors.Is(err, errs.ErrIncorrectUsernameOrPassword):
+		// Ошибка неверного имени пользователя или пароля...
 		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
 
 	case errors.Is(err, errs.ErrRecordNotFound):
@@ -88,6 +91,18 @@ func handleError(c *gin.Context, err error) {
 
 	case errors.Is(err, errs.ErrCategoryAlreadyExists):
 		// Ошибка "Категория уже существует"...
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+
+	case errors.Is(err, errs.ErrSupplierAlreadyExists):
+		// Ошибка "Поставщик уже существует"...
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+
+	case errors.Is(err, errs.ErrCategoryAlreadyExists):
+		// Ошибка "Категория уже существует"...
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+
+	case errors.Is(err, errs.ErrUniquenessViolation):
+		// Ошибка нарушения уникальности...
 		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
 
 	default:
