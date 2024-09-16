@@ -1,3 +1,5 @@
+-- C:\GoProject\src\eShop\db\insert_test_data.sql
+
 -- Вставка тестовых данных в таблицу suppliers
 INSERT INTO suppliers (title, email, phone, created_at, is_deleted) VALUES
 ('ООО Манижа-СОГД', 'supplier1@example.com', '123-456-7890', CURRENT_TIMESTAMP, false),
