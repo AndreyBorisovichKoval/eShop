@@ -1,4 +1,4 @@
-// C:\GoProject\src\eShop\models\returnsProduct.go
+// C:\GoProject\src\eShop\models\returns_product.go
 
 package models
 

@@ -5,6 +5,8 @@ package db
 import (
 	"eShop/logger"
 	"eShop/models"
+	"eShop/utils"
+	"os"
 
 	"gorm.io/gorm"
 )
@@ -22,6 +24,7 @@ func MigrateDB() error {
 		models.Supplier{},
 		models.Taxes{},
 		models.User{},
+		models.UserSettings{},
 	)
 	if err != nil {
 		logger.Error.Printf("Migration failed: %v", err)
@@ -31,6 +34,12 @@ func MigrateDB() error {
 	// После миграции добавляем начальные записи в таблицу Taxes
 	if err := addInitialTaxes(dbConn); err != nil {
 		logger.Error.Printf("Failed to add initial taxes: %v", err)
+		return err
+	}
+
+	// Добавляем начального администратора
+	if err := addInitialAdmin(dbConn); err != nil {
+		logger.Error.Printf("Failed to add initial admin: %v", err)
 		return err
 	}
 
@@ -67,6 +76,65 @@ func addInitialTaxes(db *gorm.DB) error {
 		logger.Info.Println("Initial tax records have been added to the Taxes table.")
 	} else {
 		logger.Info.Println("Taxes table already has records, skipping initial insert.")
+	}
+
+	return nil
+}
+
+// addInitialAdmin проверяет и добавляет начального администратора, если его нет
+func addInitialAdmin(db *gorm.DB) error {
+	var count int64
+	db.Model(&models.User{}).Where("role = ?", "Admin").Count(&count)
+
+	// Если администраторов нет, добавляем начального администратора
+	if count == 0 {
+		// Получаем пароль администратора из переменной окружения
+		adminPassword := os.Getenv("ADMIN_PASSWORD")
+		// if adminPassword == "" {
+		// 	adminPassword = "Admin_123" // Используем дефолтный пароль, если не задан в .env
+		// }
+
+		// Хешируем пароль
+		hashedPassword := utils.GenerateHash(adminPassword)
+
+		admin := models.User{
+			FullName: "Fred Doe",
+			Username: "Fred",
+			Email:    "fred.doe@example.com",
+			Password: hashedPassword, // Сохраняем хешированный пароль
+			Role:     "Admin",
+		}
+
+		// Создаем администратора
+		if err := db.Create(&admin).Error; err != nil {
+			return err
+		}
+
+		// После создания администратора создаём запись в таблице user_settings
+		adminSettings := models.UserSettings{
+			UserID:                admin.ID, // ID уже доступен после создания пользователя
+			AddConfirmation:       true,
+			UpdateConfirmation:    true,
+			DeleteConfirmation:    true,
+			DisplayLanguage:       "Russian",
+			DesktopTheme:          "Green animation",
+			DarkModeTheme:         false,
+			Font:                  "Helvetica",
+			FontSize:              11,
+			AccessibilityOptions:  "High contrast",
+			NotificationSound:     true,
+			EmailNotifications:    false,
+			NotificationFrequency: "daily",
+		}
+
+		// Сохраняем настройки администратора
+		if err := db.Create(&adminSettings).Error; err != nil {
+			return err
+		}
+
+		logger.Info.Println("Initial admin 'Fred Doe' has been added to the Users table.")
+	} else {
+		logger.Info.Println("Admin already exists, skipping initial admin insert.")
 	}
 
 	return nil

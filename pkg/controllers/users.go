@@ -562,3 +562,78 @@ func GetUserByID(c *gin.Context) {
 	// Отправляем клиенту ответ с данными пользователя...
 	c.JSON(http.StatusOK, user)
 }
+
+// UpdateUserSettings
+// @Summary Update user settings
+// @Tags users
+// @Description Update user settings (only the owner can update their own settings)
+// @ID update-user-settings
+// @Accept json
+// @Produce json
+// @Param input body models.UserSettings true "Updated user settings"
+// @Success 200 {string} string "User settings updated successfully!!!"
+// @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/settings [patch]
+// @Security ApiKeyAuth
+func UpdateUserSettings(c *gin.Context) {
+	// Получаем ID текущего пользователя из контекста
+	userID, exists := c.Get(userIDCtx)
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized access."})
+		return
+	}
+
+	// Получаем данные из тела запроса
+	var updatedSettings models.UserSettings
+	if err := c.BindJSON(&updatedSettings); err != nil {
+		handleError(c, err)
+		return
+	}
+
+	// Логируем попытку обновления настроек
+	logger.Info.Printf("IP: [%s] attempting to update settings for user ID: %d\n", c.ClientIP(), userID)
+
+	// Обновляем настройки пользователя
+	err := service.UpdateUserSettings(userID.(uint), updatedSettings)
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "User settings updated successfully!!!"})
+}
+
+// GetUserSettingsByID
+// @Summary Get user settings
+// @Tags users
+// @Description Get user settings by user ID (only the owner can get their own settings)
+// @ID get-user-settings
+// @Produce json
+// @Success 200 {object} models.UserSettings "User settings"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "User settings not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /users/settings [get]
+// @Security ApiKeyAuth
+func GetUserSettingsByID(c *gin.Context) {
+	// Получаем ID текущего пользователя из контекста
+	userID, exists := c.Get(userIDCtx)
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized access."})
+		return
+	}
+
+	// Логируем запрос на получение настроек
+	logger.Info.Printf("IP: [%s] requesting settings for user ID: %d\n", c.ClientIP(), userID)
+
+	// Получаем настройки пользователя через сервис
+	settings, err := service.GetUserSettingsByID(userID.(uint))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, settings)
+}

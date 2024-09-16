@@ -4,8 +4,12 @@ package repository
 
 import (
 	"eShop/db"
+	"eShop/errs"
 	"eShop/logger"
 	"eShop/models"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 // GetUserByUsername получает пользователя из базы данных по его имени пользователя...
@@ -38,17 +42,28 @@ func GetUserByUsernameAndPassword(username string, password string) (user models
 	return user, nil
 }
 
+// // CreateUser создаёт нового пользователя в базе данных...
+// func CreateUser(user models.User) (err error) {
+// 	// Выполняем запрос на создание нового пользователя в базе данных...
+// 	if err = db.GetDBConn().Create(&user).Error; err != nil {
+// 		// Логируем ошибку, если не удалось создать пользователя...
+// 		logger.Error.Printf("[repository.CreateUser] error creating user: %v\n", err)
+// 		// Преобразуем и возвращаем ошибку с помощью translateError...
+// 		return translateError(err)
+// 	}
+
+// 	// Возвращаем nil, если создание прошло успешно...
+// 	return nil
+// }
+
 // CreateUser создаёт нового пользователя в базе данных...
-func CreateUser(user models.User) (err error) {
+func CreateUser(user *models.User) (err error) {
 	// Выполняем запрос на создание нового пользователя в базе данных...
-	if err = db.GetDBConn().Create(&user).Error; err != nil {
-		// Логируем ошибку, если не удалось создать пользователя...
+	if err = db.GetDBConn().Create(user).Error; err != nil {
 		logger.Error.Printf("[repository.CreateUser] error creating user: %v\n", err)
-		// Преобразуем и возвращаем ошибку с помощью translateError...
 		return translateError(err)
 	}
-
-	// Возвращаем nil, если создание прошло успешно...
+	// Теперь ID пользователя доступен после создания.
 	return nil
 }
 
@@ -136,5 +151,37 @@ func HardDeleteUserByID(id uint) error {
 		return translateError(err)
 	}
 
+	return nil
+}
+
+// CreateUserSettings создаёт запись с настройками пользователя в базе данных
+func CreateUserSettings(userSettings models.UserSettings) error {
+	if err := db.GetDBConn().Create(&userSettings).Error; err != nil {
+		logger.Error.Printf("[repository.CreateUserSettings] error creating user settings: %v\n", err)
+		return translateError(err)
+	}
+	return nil
+}
+
+// GetUserSettingsByUserID получает настройки пользователя по его ID
+func GetUserSettingsByUserID(userID uint) (models.UserSettings, error) {
+	var settings models.UserSettings
+	if err := db.GetDBConn().Where("user_id = ?", userID).First(&settings).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			logger.Warning.Printf("[repository.GetUserSettingsByUserID] User settings not found for user ID: %d", userID)
+			return settings, errs.ErrRecordNotFound
+		}
+		logger.Error.Printf("[repository.GetUserSettingsByUserID] Error fetching settings for user ID: %d: %v", userID, err)
+		return settings, translateError(err)
+	}
+	return settings, nil
+}
+
+// UpdateUserSettings обновляет настройки пользователя в базе данных
+func UpdateUserSettings(settings models.UserSettings) error {
+	if err := db.GetDBConn().Save(&settings).Error; err != nil {
+		logger.Error.Printf("[repository.UpdateUserSettings] Error updating settings for user ID: %d: %v", settings.UserID, err)
+		return translateError(err)
+	}
 	return nil
 }

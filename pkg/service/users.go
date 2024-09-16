@@ -12,16 +12,40 @@ import (
 	"time"
 )
 
+// // CreateUser проверяет уникальность пользователя, генерирует хеш пароля и сохраняет пользователя...
+// func CreateUser(user models.User) error {
+// 	// 1. Проверяем уникальность имени пользователя...
+// 	userFromDB, err := repository.GetUserByUsername(user.Username)
+// 	if err != nil && !errors.Is(err, errs.ErrRecordNotFound) {
+// 		// Если возникает ошибка, отличная от "запись не найдена", возвращаем её...
+// 		return err
+// 	}
+
+// 	// Если пользователь с таким именем уже существует, возвращаем ошибку уникальности...
+// 	if userFromDB.ID > 0 {
+// 		return errs.ErrUsernameUniquenessFailed
+// 	}
+
+// 	// 2. Генерируем хеш пароля пользователя...
+// 	user.Password = utils.GenerateHash(user.Password)
+
+// 	// 3. Сохраняем пользователя через репозиторий...
+// 	err = repository.CreateUser(user)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	return nil
+// }
+
 // CreateUser проверяет уникальность пользователя, генерирует хеш пароля и сохраняет пользователя...
 func CreateUser(user models.User) error {
 	// 1. Проверяем уникальность имени пользователя...
 	userFromDB, err := repository.GetUserByUsername(user.Username)
 	if err != nil && !errors.Is(err, errs.ErrRecordNotFound) {
-		// Если возникает ошибка, отличная от "запись не найдена", возвращаем её...
 		return err
 	}
 
-	// Если пользователь с таким именем уже существует, возвращаем ошибку уникальности...
 	if userFromDB.ID > 0 {
 		return errs.ErrUsernameUniquenessFailed
 	}
@@ -29,8 +53,31 @@ func CreateUser(user models.User) error {
 	// 2. Генерируем хеш пароля пользователя...
 	user.Password = utils.GenerateHash(user.Password)
 
-	// 3. Сохраняем пользователя через репозиторий...
-	err = repository.CreateUser(user)
+	// 3. Сохраняем пользователя через репозиторий и получаем его ID...
+	err = repository.CreateUser(&user)
+	if err != nil {
+		return err
+	}
+
+	// 4. Теперь, когда пользователь создан и у него есть ID, создаём запись в таблице user_settings
+	userSettings := models.UserSettings{
+		UserID:                user.ID, // Здесь ID уже доступен
+		AddConfirmation:       true,
+		UpdateConfirmation:    true,
+		DeleteConfirmation:    true,
+		DisplayLanguage:       "Russian",
+		DesktopTheme:          "Green animation",
+		DarkModeTheme:         false,
+		Font:                  "Helvetica",
+		FontSize:              11,
+		AccessibilityOptions:  "High contrast",
+		NotificationSound:     true,
+		EmailNotifications:    false,
+		NotificationFrequency: "daily",
+	}
+
+	// Сохраняем настройки пользователя
+	err = repository.CreateUserSettings(userSettings)
 	if err != nil {
 		return err
 	}
@@ -320,4 +367,73 @@ func ChangeOwnPassword(userID uint, oldPassword, newPassword string) error {
 	// Сбрасываем флаг смены пароля...
 	user.PasswordResetRequired = false
 	return repository.UpdateUserByID(user)
+}
+
+// UpdateUserSettings обновляет настройки пользователя
+func UpdateUserSettings(userID uint, updatedSettings models.UserSettings) error {
+	// Получаем текущие настройки пользователя
+	currentSettings, err := repository.GetUserSettingsByUserID(userID)
+	if err != nil {
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			return errs.ErrUserNotFound
+		}
+		return err
+	}
+
+	// Обновляем только изменённые поля
+	if updatedSettings.AddConfirmation {
+		currentSettings.AddConfirmation = updatedSettings.AddConfirmation
+	}
+	if updatedSettings.UpdateConfirmation {
+		currentSettings.UpdateConfirmation = updatedSettings.UpdateConfirmation
+	}
+	if updatedSettings.DeleteConfirmation {
+		currentSettings.DeleteConfirmation = updatedSettings.DeleteConfirmation
+	}
+	if updatedSettings.DisplayLanguage != "" {
+		currentSettings.DisplayLanguage = updatedSettings.DisplayLanguage
+	}
+	if updatedSettings.DesktopTheme != "" {
+		currentSettings.DesktopTheme = updatedSettings.DesktopTheme
+	}
+	if updatedSettings.Font != "" {
+		currentSettings.Font = updatedSettings.Font
+	}
+	if updatedSettings.FontSize > 0 {
+		currentSettings.FontSize = updatedSettings.FontSize
+	}
+	if updatedSettings.AccessibilityOptions != "" {
+		currentSettings.AccessibilityOptions = updatedSettings.AccessibilityOptions
+	}
+	if updatedSettings.NotificationSound != currentSettings.NotificationSound {
+		currentSettings.NotificationSound = updatedSettings.NotificationSound
+	}
+	if updatedSettings.EmailNotifications != currentSettings.EmailNotifications {
+		currentSettings.EmailNotifications = updatedSettings.EmailNotifications
+	}
+	if updatedSettings.NotificationFrequency != "" {
+		currentSettings.NotificationFrequency = updatedSettings.NotificationFrequency
+	}
+
+	// Сохраняем обновлённые настройки
+	err = repository.UpdateUserSettings(currentSettings)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// GetUserSettingsByID получает настройки пользователя по его ID
+func GetUserSettingsByID(userID uint) (models.UserSettings, error) {
+	// Получаем настройки пользователя через репозиторий
+	settings, err := repository.GetUserSettingsByUserID(userID)
+	if err != nil {
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			return settings, errs.ErrUserNotFound
+		}
+		return settings, err
+	}
+
+	return settings, nil
 }

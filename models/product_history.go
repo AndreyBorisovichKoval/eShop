@@ -1,4 +1,4 @@
-// C:\GoProject\src\eShop\models\productHistory.go
+// C:\GoProject\src\eShop\models\product_history.go
 
 package models
 
