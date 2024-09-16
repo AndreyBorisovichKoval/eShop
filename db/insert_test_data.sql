@@ -152,7 +152,7 @@ INSERT INTO products (barcode, category_id, title, supplier_id, quantity, stock,
 ('123456789027', 17, 'Сигареты Parliament', 2, 80.0, 70.0, 130.0, 160.0, 10400.0, false, true, true, 'пачка', 'Табачный склад', CURRENT_TIMESTAMP, false),
 ('123456789028', 17, 'Сигары Cohiba', 3, 40.0, 30.0, 500.0, 700.0, 20000.0, false, true, true, 'пачка', 'Табачный склад', CURRENT_TIMESTAMP, false),
 ('123456789029', 17, 'Сигареты Winston', 4, 90.0, 80.0, 110.0, 140.0, 9900.0, false, true, true, 'пачка', 'Табачный склад', CURRENT_TIMESTAMP, false),
-('123456789030', 17, 'Сигареты Camel', 5, 60.0, 50.0, 100.0, 130.0, 7800.0, false, true, true, 'пачка', 'Табачный склад', CURRENT_TIMESTAMP, false);
+('123456789030', 17, 'Сигареты Camel', 5, 60.0, 50.0, 100.0, 130.0, 7800.0, false, true, true, 'пачка', 'Табачный склад', CURRENT_TIMESTAMP, false),
 
 -- Зерновые и хлопья
 ('123456789201', 18, 'Кукурузные хлопья', 1, 150.0, 130.0, 30.0, 50.0, 7500.0, false, true, false, 'кг', 'Склад хлопьев', CURRENT_TIMESTAMP, false),
@@ -169,9 +169,9 @@ INSERT INTO products (barcode, category_id, title, supplier_id, quantity, stock,
 ('123456789060', 19, 'Освежитель воздуха', 5, 120.0, 100.0, 50.0, 75.0, 7500.0, false, true, false, 'л', 'Склад бытовой химии', CURRENT_TIMESTAMP, false),
 
 -- Детское питание
-('123456789101', 20, 'Молочная смесь Nestle', 1, 100.0, 90.0, 150.0, 200.0, 15000.0, false, true, false, 'шт', 'Склад детского питания', CURRENT_TIMESTAMP, false),
-('123456789102', 20, 'Пюре фруктовое Gerber', 2, 200.0, 180.0, 50.0, 70.0, 10000.0, false, true, false, 'шт', 'Склад детского питания', CURRENT_TIMESTAMP, false),
-('123456789103', 20, 'Каша Heinz', 3, 150.0, 130.0, 100.0, 140.0, 15000.0, false, true, false, 'шт', 'Склад детского питания', CURRENT_TIMESTAMP, false),
-('123456789104', 20, 'Печенье HIPP', 4, 120.0, 100.0, 80.0, 120.0, 9600.0, false, true, false, 'шт', 'Склад детского питания', CURRENT_TIMESTAMP, false),
-('123456789105', 20, 'Сок Агуша', 5, 180.0, 160.0, 30.0, 50.0, 9000.0, false, true, false, 'литр', 'Склад детского питания', CURRENT_TIMESTAMP, false);
+('223456789101', 20, 'Молочная смесь Nestle', 1, 100.0, 90.0, 150.0, 200.0, 15000.0, false, true, false, 'шт', 'Склад детского питания', CURRENT_TIMESTAMP, false),
+('223456789102', 20, 'Пюре фруктовое Gerber', 2, 200.0, 180.0, 50.0, 70.0, 10000.0, false, true, false, 'шт', 'Склад детского питания', CURRENT_TIMESTAMP, false),
+('223456789103', 20, 'Каша Heinz', 3, 150.0, 130.0, 100.0, 140.0, 15000.0, false, true, false, 'шт', 'Склад детского питания', CURRENT_TIMESTAMP, false),
+('223456789104', 20, 'Печенье HIPP', 4, 120.0, 100.0, 80.0, 120.0, 9600.0, false, true, false, 'шт', 'Склад детского питания', CURRENT_TIMESTAMP, false),
+('223456789105', 20, 'Сок Агуша', 5, 180.0, 160.0, 30.0, 50.0, 9000.0, false, true, false, 'литр', 'Склад детского питания', CURRENT_TIMESTAMP, false);
 
