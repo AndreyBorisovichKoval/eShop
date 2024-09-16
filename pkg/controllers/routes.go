@@ -55,6 +55,12 @@ func InitRoutes() *gin.Engine {
 		userG.PATCH("/settings", UpdateUserSettings)      // Обновление настроек пользователя...
 	}
 
+	taxesG := router.Group("/taxes", checkUserAuthentication, checkUserBlocked())
+	{
+		taxesG.GET("", GetAllTaxes)         // Получение списка всех текущих налогов...
+		taxesG.PATCH("/:id", UpdateTaxByID) // Обновление налоговой ставки по ID...
+	}
+
 	supplierG := router.Group("/suppliers", checkUserAuthentication, checkUserBlocked())
 	{
 		supplierG.POST("", CreateSupplier)                    // Регистрация нового поставщика...
@@ -79,10 +85,9 @@ func InitRoutes() *gin.Engine {
 		categoryG.DELETE("/:id/hard", HardDeleteCategoryByID) // Полное удаление категории...
 	}
 
-	taxesG := router.Group("/taxes", checkUserAuthentication, checkUserBlocked())
+	productG := router.Group("/products", checkUserAuthentication, checkUserBlocked())
 	{
-		taxesG.GET("", GetAllTaxes)         // Получение списка всех текущих налогов...
-		taxesG.PATCH("/:id", UpdateTaxByID) // Обновление налоговой ставки по ID...
+		productG.GET("", GetAllProducts)
 	}
 
 	return router
