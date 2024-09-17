@@ -109,6 +109,9 @@ func handleError(c *gin.Context, err error) {
 		// Ошибка "Продукт не найден"...
 		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
 
+	case errors.Is(err, errs.ErrProductAlreadyExists):
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+
 	default:
 		// Внутренняя ошибка сервера...
 		c.JSON(http.StatusInternalServerError, newErrorResponse(err.Error()))

@@ -16,7 +16,7 @@ import (
 // GetAllProducts
 // @Summary Retrieve all products
 // @Tags products
-// @Description Get a list of all active products (Admin/Manager only)
+// @Description Get a list of all active products
 // @ID get-all-products
 // @Produce json
 // @Success 200 {array} models.Product "List of active products"
@@ -40,7 +40,7 @@ func GetAllProducts(c *gin.Context) {
 // AddProduct
 // @Summary Add a new product
 // @Tags products
-// @Description Add a new product with calculated taxes
+// @Description Add a new product with calculated taxes  (Admin/Manager only)
 // @ID add-product
 // @Accept json
 // @Produce json
@@ -51,6 +51,13 @@ func GetAllProducts(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /products [post]
 func AddProduct(c *gin.Context) {
+	// Проверка роли пользователя
+	userRole := c.GetString(userRoleCtx)
+	if userRole != "Admin" && userRole != "Manager" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
 	var product models.Product
 
 	if err := c.BindJSON(&product); err != nil {
@@ -71,7 +78,7 @@ func AddProduct(c *gin.Context) {
 // GetProductByID
 // @Summary Retrieve a product by ID
 // @Tags products
-// @Description Get product information by ID (Admin/Manager only)
+// @Description Get product information by ID
 // @ID get-product-by-id
 // @Produce json
 // @Param id path int true "Product ID"
@@ -102,7 +109,7 @@ func GetProductByID(c *gin.Context) {
 // GetProductByBarcode
 // @Summary Retrieve a product by barcode
 // @Tags products
-// @Description Get product information by barcode (Admin/Manager only)
+// @Description Get product information by barcode
 // @ID get-product-by-barcode
 // @Produce json
 // @Param barcode path string true "Product barcode"
@@ -123,5 +130,50 @@ func GetProductByBarcode(c *gin.Context) {
 	}
 
 	logger.Info.Printf("Product with barcode %s retrieved successfully", barcode)
+	c.JSON(http.StatusOK, product)
+}
+
+// UpdateProductByID
+// @Summary Update a product by ID
+// @Tags products
+// @Description Update a product's information by ID (Admin/Manager only)
+// @ID update-product-by-id
+// @Accept json
+// @Produce json
+// @Param id path int true "Product ID"
+// @Param input body models.Product true "Updated product information"
+// @Success 200 {object} models.Product "Updated product"
+// @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 404 {object} ErrorResponse "Product not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /products/{id} [patch]
+func UpdateProductByID(c *gin.Context) {
+	// Проверка роли пользователя
+	userRole := c.GetString(userRoleCtx)
+	if userRole != "Admin" && userRole != "Manager" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	var updatedProduct models.Product
+	if err := c.BindJSON(&updatedProduct); err != nil {
+		logger.Error.Printf("[controllers.UpdateProductByID] error binding product data: %v\n", err)
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	product, err := service.UpdateProductByID(uint(id), updatedProduct)
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	logger.Info.Printf("Product with ID %d updated successfully", id)
 	c.JSON(http.StatusOK, product)
 }

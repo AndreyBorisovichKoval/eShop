@@ -149,3 +149,63 @@ func GetProductByBarcode(barcode string) (models.Product, error) {
 
 	return product, nil
 }
+
+// UpdateProductByID обновляет данные продукта по его ID
+func UpdateProductByID(id uint, updatedProduct models.Product) (models.Product, error) {
+	// Получаем существующий продукт по ID
+	product, err := repository.GetProductByID(id)
+	if err != nil {
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			return product, errs.ErrProductNotFound
+		}
+		logger.Error.Printf("[service.UpdateProductByID] error retrieving product by id: %v\n", err)
+		return product, err
+	}
+
+	// Обновляем только изменённые поля
+	if updatedProduct.Title != "" {
+		product.Title = updatedProduct.Title
+	}
+	if updatedProduct.Quantity != 0 {
+		product.Quantity = updatedProduct.Quantity
+	}
+	if updatedProduct.SupplierPrice != 0 {
+		product.SupplierPrice = updatedProduct.SupplierPrice
+	}
+	if updatedProduct.CategoryID != 0 {
+		product.CategoryID = updatedProduct.CategoryID
+	}
+	if updatedProduct.SupplierID != 0 {
+		product.SupplierID = updatedProduct.SupplierID
+	}
+	if updatedProduct.Discount != 0 {
+		product.Discount = updatedProduct.Discount
+	}
+	if updatedProduct.Unit != "" {
+		product.Unit = updatedProduct.Unit
+	}
+	if updatedProduct.StorageLocation != "" {
+		product.StorageLocation = updatedProduct.StorageLocation
+	}
+	if updatedProduct.ExpirationDate != nil {
+		product.ExpirationDate = updatedProduct.ExpirationDate
+	}
+
+	// Пересчёт цены с учётом налогов
+	taxes, err := repository.GetAllTaxes()
+	if err != nil {
+		logger.Error.Printf("[service.UpdateProductByID] error fetching taxes: %v\n", err)
+		return product, err
+	}
+
+	product.RetailPrice = calculateRetailPrice(product.SupplierPrice, taxes, product.IsVATApplicable, product.IsExciseApplicable)
+	product.TotalPrice = product.RetailPrice * product.Quantity
+
+	// Сохраняем изменения
+	if err := repository.UpdateProduct(product); err != nil {
+		logger.Error.Printf("[service.UpdateProductByID] error updating product: %v\n", err)
+		return product, err
+	}
+
+	return product, nil
+}

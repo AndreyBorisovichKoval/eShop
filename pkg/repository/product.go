@@ -60,3 +60,12 @@ func GetProductByBarcode(barcode string) (models.Product, error) {
 	}
 	return product, nil
 }
+
+// UpdateProduct обновляет существующий продукт в базе данных
+func UpdateProduct(product models.Product) error {
+	if err := db.GetDBConn().Save(&product).Error; err != nil {
+		logger.Error.Printf("[repository.UpdateProduct] error updating product: %v\n", err)
+		return translateError(err)
+	}
+	return nil
+}
