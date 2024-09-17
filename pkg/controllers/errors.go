@@ -112,6 +112,14 @@ func handleError(c *gin.Context, err error) {
 	case errors.Is(err, errs.ErrProductAlreadyExists):
 		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
 
+	case errors.Is(err, errs.ErrProductAlreadyDeleted):
+		// Ошибка "Продукт уже удалён"...
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+
+	case errors.Is(err, errs.ErrProductNotDeleted):
+		// Ошибка "Продукт не был удалён"...
+		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
+
 	default:
 		// Внутренняя ошибка сервера...
 		c.JSON(http.StatusInternalServerError, newErrorResponse(err.Error()))

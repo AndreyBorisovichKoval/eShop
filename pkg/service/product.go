@@ -9,6 +9,7 @@ import (
 	"eShop/pkg/repository"
 	"eShop/utils"
 	"errors"
+	"time"
 )
 
 // GetAllProducts получает все активные продукты
@@ -208,4 +209,90 @@ func UpdateProductByID(id uint, updatedProduct models.Product) (models.Product, 
 	}
 
 	return product, nil
+}
+
+// // SoftDeleteProductByID мягко удаляет продукт
+// func SoftDeleteProductByID(id uint) error {
+// 	// Получаем продукт по его ID
+// 	product, err := repository.GetProductByID(id)
+// 	if err != nil {
+// 		if errors.Is(err, errs.ErrRecordNotFound) {
+// 			return errs.ErrProductNotFound
+// 		}
+// 		return err
+// 	}
+
+// 	// Проверяем, был ли продукт уже удалён
+// 	if product.IsDeleted {
+// 		return errs.ErrProductAlreadyDeleted
+// 	}
+
+// 	// Устанавливаем флаг удаления и время
+// 	product.IsDeleted = true
+// 	now := time.Now()
+// 	product.DeletedAt = &now
+
+// 	// Сохраняем изменения в базе данных
+// 	if err := repository.UpdateProduct(product); err != nil {
+// 		return err
+// 	}
+
+// 	return nil
+// }
+
+// // SoftDeleteProductByID мягко удаляет продукт
+func SoftDeleteProductByID(id uint) error {
+	// Получаем продукт, включая мягко удалённые записи
+	product, err := repository.GetProductIncludingSoftDeleted(id)
+	if err != nil {
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			return errs.ErrProductNotFound
+		}
+		return err
+	}
+
+	// Проверяем, был ли продукт уже удалён
+	if product.IsDeleted {
+		return errs.ErrProductAlreadyDeleted
+	}
+
+	// Устанавливаем флаг удаления и время
+	product.IsDeleted = true
+	now := time.Now()
+	product.DeletedAt = &now
+
+	// Сохраняем изменения в базе данных
+	if err := repository.UpdateProduct(product); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// RestoreProductByID восстанавливает продукт
+func RestoreProductByID(id uint) error {
+	// Получаем продукт, включая мягко удалённые записи
+	product, err := repository.GetProductIncludingSoftDeleted(id)
+	if err != nil {
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			return errs.ErrProductNotFound
+		}
+		return err
+	}
+
+	// Проверяем, не был ли продукт уже восстановлен
+	if !product.IsDeleted {
+		return errs.ErrProductNotDeleted
+	}
+
+	// Сбрасываем флаг удаления и удаляем дату удаления
+	product.IsDeleted = false
+	product.DeletedAt = nil
+
+	// Сохраняем изменения
+	if err := repository.UpdateProduct(product); err != nil {
+		return err
+	}
+
+	return nil
 }

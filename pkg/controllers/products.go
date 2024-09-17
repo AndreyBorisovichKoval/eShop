@@ -177,3 +177,73 @@ func UpdateProductByID(c *gin.Context) {
 	logger.Info.Printf("Product with ID %d updated successfully", id)
 	c.JSON(http.StatusOK, product)
 }
+
+// SoftDeleteProductByID
+// @Summary Soft delete a product by ID
+// @Tags products
+// @Description Soft delete a product by ID (Admin/Manager only)
+// @ID soft-delete-product-by-id
+// @Param id path int true "Product ID"
+// @Success 200 {string} string "Product soft deleted successfully!"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "Product not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /products/{id} [delete]
+func SoftDeleteProductByID(c *gin.Context) {
+	// Проверка роли пользователя
+	userRole := c.GetString(userRoleCtx)
+	if userRole != "Admin" && userRole != "Manager" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	err = service.SoftDeleteProductByID(uint(id))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	logger.Info.Printf("Product with ID %d soft deleted successfully", id)
+	c.JSON(http.StatusOK, gin.H{"message": "Product soft deleted successfully!"})
+}
+
+// RestoreProductByID
+// @Summary Restore a soft deleted product by ID
+// @Tags products
+// @Description Restore a soft deleted product by ID (Admin/Manager only)
+// @ID restore-product-by-id
+// @Param id path int true "Product ID"
+// @Success 200 {string} string "Product restored successfully!"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "Product not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /products/{id}/restore [put]
+func RestoreProductByID(c *gin.Context) {
+	// Проверка роли пользователя
+	userRole := c.GetString(userRoleCtx)
+	if userRole != "Admin" && userRole != "Manager" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	err = service.RestoreProductByID(uint(id))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	logger.Info.Printf("Product with ID %d restored successfully", id)
+	c.JSON(http.StatusOK, gin.H{"message": "Product restored successfully!"})
+}

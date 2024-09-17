@@ -194,7 +194,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"full_name\": \"Jony Crud\",\r\n  \"username\": \"Joni\",\r\n  \"email\": \"joni.crud@example.com\",\r\n  \"password\": \"Fred_123\",\r\n  \"role\": \"Seller\"\r\n}\r\n",
+							"raw": "{\r\n  \"full_name\": \"Max Dekker\",\r\n  \"username\": \"Max\",\r\n  \"email\": \"max.dekker@example.com\",\r\n  \"password\": \"Fred_123\",\r\n  \"role\": \"Seller\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -695,6 +695,110 @@
 							"path": [
 								"users",
 								"settings"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Taxes",
+			"item": [
+				{
+					"name": "GetAllTaxes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY1MDUyNjgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.ao97PtcDetucm-DO0LExx5-q9LodUHKYFw5UArl17ik",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/taxes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"taxes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateTaxByID-VAT",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"rate\": 19\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/taxes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"taxes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateTaxByID-Excise",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"rate\": 6\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/taxes/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"taxes",
+								"2"
 							]
 						}
 					},
@@ -1357,25 +1461,189 @@
 			]
 		},
 		{
-			"name": "Taxes",
+			"name": "Products",
 			"item": [
 				{
-					"name": "GetAllTaxes",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "GetAllProducts",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY1MDUyNjgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.ao97PtcDetucm-DO0LExx5-q9LodUHKYFw5UArl17ik",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY1ODcxNjQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.QsXbomJh-nryJEZ6W3YuRh1LaffIPbrxGPMt8EJ9E0I",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddProduct",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY1ODcxNjQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.QsXbomJh-nryJEZ6W3YuRh1LaffIPbrxGPMt8EJ9E0I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"barcode\": \"123456789996\",\r\n    \"category_id\": 1,\r\n    \"title\": \"Тестовый продукт 0003\",\r\n    \"supplier_id\": 1,\r\n    \"quantity\": 50.0,\r\n    \"stock\": 50.0,\r\n    \"supplier_price\": 100.0,\r\n    \"retail_price\": 150.0,\r\n    \"total_price\": 7500.0,\r\n    \"is_paid_to_supplier\": false,\r\n    \"is_vat_applicable\": true,\r\n    \"is_excise_applicable\": true,\r\n    \"expiration_date\": \"2024-12-31T00:00:00Z\",\r\n    \"discount\": 0.0,\r\n    \"discount_details\": \"Новогодняя скидка\",\r\n    \"unit\": \"шт\",\r\n    \"storage_location\": \"Склад 3\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProductsByID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY1ODcxNjQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.QsXbomJh-nryJEZ6W3YuRh1LaffIPbrxGPMt8EJ9E0I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/products/100",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"products",
+								"100"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProductsByBarcode",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY1ODcxNjQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.QsXbomJh-nryJEZ6W3YuRh1LaffIPbrxGPMt8EJ9E0I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/products/barcode/123456789002",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"products",
+								"barcode",
+								"123456789002"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateProduct",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY1ODcxNjQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.QsXbomJh-nryJEZ6W3YuRh1LaffIPbrxGPMt8EJ9E0I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Updated Product Title\",\r\n    \"quantity\": 100,\r\n    \"supplier_price\": 100.50,\r\n    \"category_id\": 2,\r\n    \"supplier_id\": 3,\r\n    \"discount\": 10.00,\r\n    \"unit\": \"kg\",\r\n    \"storage_location\": \"Warehouse D\",\r\n    \"expiration_date\": \"2024-12-31T00:00:00Z\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/products/120",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"products",
+								"120"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SoftDeleteProductByID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY1ODcxNjQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.QsXbomJh-nryJEZ6W3YuRh1LaffIPbrxGPMt8EJ9E0I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -1387,27 +1655,39 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/taxes",
+							"raw": "http://localhost:8585/products/126/soft",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8585",
 							"path": [
-								"taxes"
+								"products",
+								"126",
+								"soft"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "UpdateTaxByID-VAT",
+					"name": "RestoreProductByID",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY1ODcxNjQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.QsXbomJh-nryJEZ6W3YuRh1LaffIPbrxGPMt8EJ9E0I",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"rate\": 19\r\n}\r\n",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1415,44 +1695,16 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/taxes/1",
+							"raw": "http://localhost:8585/products/126/restore",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8585",
 							"path": [
-								"taxes",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "UpdateTaxByID-Excise",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"rate\": 6\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8585/taxes/2",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"taxes",
-								"2"
+								"products",
+								"126",
+								"restore"
 							]
 						}
 					},

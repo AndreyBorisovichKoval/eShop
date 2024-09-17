@@ -69,3 +69,50 @@ func UpdateProduct(product models.Product) error {
 	}
 	return nil
 }
+
+// // UpdateProduct обновляет продукт в базе данных
+// func UpdateProduct(product *models.Product) error {
+//     if err := db.GetDBConn().Save(product).Error; err != nil {
+//         logger.Error.Printf("[repository.UpdateProduct] error updating product: %v\n", err)
+//         return translateError(err)
+//     }
+//     return nil
+// }
+
+// SoftDeleteProductByID обновляет продукт, устанавливая флаг IsDeleted и время удаления
+func SoftDeleteProductByID(product *models.Product) error {
+	if err := db.GetDBConn().Save(product).Error; err != nil {
+		logger.Error.Printf("[repository.SoftDeleteProductByID] error soft deleting product: %v\n", err)
+		return translateError(err)
+	}
+	return nil
+}
+
+// RestoreProductByID обновляет продукт, сбрасывая флаг IsDeleted и время удаления
+func RestoreProductByID(product *models.Product) error {
+	if err := db.GetDBConn().Save(product).Error; err != nil {
+		logger.Error.Printf("[repository.RestoreProductByID] error restoring product: %v\n", err)
+		return translateError(err)
+	}
+	return nil
+}
+
+// GetDeletedProductByID получает удалённый продукт по ID
+func GetDeletedProductByID(id uint) (models.Product, error) {
+	var product models.Product
+	err := db.GetDBConn().Where("id = ? AND is_deleted = ?", id, true).First(&product).Error
+	if err != nil {
+		return product, translateError(err)
+	}
+	return product, nil
+}
+
+func GetProductIncludingSoftDeleted(id uint) (models.Product, error) {
+	var product models.Product
+	err := db.GetDBConn().Unscoped().Where("id = ?", id).First(&product).Error
+	if err != nil {
+		logger.Error.Printf("[repository.GetProductIncludingSoftDeleted] error retrieving product: %v", err)
+		return product, translateError(err)
+	}
+	return product, nil
+}
