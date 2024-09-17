@@ -120,6 +120,20 @@ func handleError(c *gin.Context, err error) {
 		// Ошибка "Продукт не был удалён"...
 		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
 
+	// /
+	case errors.Is(err, errs.ErrOrderNotFound):
+		// Ошибка "Заказ не найден"...
+		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
+
+	case errors.Is(err, errs.ErrOrderItemNotFound):
+		// Ошибка "Элемент заказа не найден"...
+		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
+
+	case errors.Is(err, errs.ErrInsufficientStock):
+		// Ошибка "Недостаточно товара на складе"...
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+
+	// /
 	default:
 		// Внутренняя ошибка сервера...
 		c.JSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
