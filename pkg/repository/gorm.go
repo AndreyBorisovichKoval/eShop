@@ -28,5 +28,6 @@ func translateError(err error) error {
 	// Добавить логирование для других ошибок по мере необходимости...
 	logger.Error.Printf("Unhandled error: %v...", err)
 
-	return err
+	// return err
+	return errs.ErrSomethingWentWrong
 }

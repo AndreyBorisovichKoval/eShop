@@ -87,7 +87,8 @@ func InitRoutes() *gin.Engine {
 
 	productG := router.Group("/products", checkUserAuthentication, checkUserBlocked())
 	{
-		productG.GET("", GetAllProducts)
+		productG.GET("", GetAllProducts) // Просмотр товаров...
+		productG.POST("", AddProduct)    // Добавление нового товара...
 	}
 
 	return router
