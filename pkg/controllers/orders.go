@@ -96,3 +96,34 @@ func DeleteOrderItem(c *gin.Context) {
 	logger.Info.Printf("Successfully deleted item ID [%d] from order ID [%d]\n", itemID, orderID)
 	c.JSON(http.StatusOK, gin.H{"message": "Order item deleted successfully"})
 }
+
+// MarkOrderAsPaid
+// @Summary Mark an order as paid
+// @Tags orders
+// @Description Mark a specific order as paid
+// @ID mark-order-as-paid
+// @Param id path int true "Order ID"
+// @Success 200 {string} string "Order marked as paid successfully"
+// @Failure 404 {object} ErrorResponse "Order not found"
+// @Failure 409 {object} ErrorResponse "Order already paid"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /orders/{id}/pay [patch]
+func MarkOrderAsPaid(c *gin.Context) {
+	orderID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	logger.Info.Printf("User requested to mark order ID [%d] as paid\n", orderID)
+
+	// Call the service to mark the order as paid
+	err = service.MarkOrderAsPaid(uint(orderID))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	logger.Info.Printf("Order ID [%d] successfully marked as paid\n", orderID)
+	c.JSON(http.StatusOK, gin.H{"message": "Order marked as paid successfully"})
+}

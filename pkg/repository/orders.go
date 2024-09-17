@@ -57,3 +57,16 @@ func DeleteOrderItem(orderItem models.OrderItem) error {
 	}
 	return nil
 }
+
+// GetOrderByID retrieves an order by its ID
+func GetOrderByID(orderID uint) (models.Order, error) {
+	var order models.Order
+	err := db.GetDBConn().Where("id = ?", orderID).First(&order).Error
+	if err != nil {
+		if err.Error() == "record not found" {
+			return order, errs.ErrRecordNotFound
+		}
+		return order, translateError(err)
+	}
+	return order, nil
+}

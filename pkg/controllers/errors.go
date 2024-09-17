@@ -137,6 +137,10 @@ func handleError(c *gin.Context, err error) {
 		// Ошибка "Неавторизованный доступ"...
 		c.JSON(http.StatusUnauthorized, newErrorResponse(err.Error()))
 
+	case errors.Is(err, errs.ErrOrderAlreadyPaid):
+		// Ошибка "Заказ уже оплачен"...
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+
 	// /
 	default:
 		// Внутренняя ошибка сервера...

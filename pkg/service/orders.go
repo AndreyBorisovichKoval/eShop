@@ -114,3 +114,34 @@ func DeleteOrderItem(orderID, itemID uint) error {
 
 	return nil
 }
+
+// MarkOrderAsPaid updates the order status to 'paid'
+func MarkOrderAsPaid(orderID uint) error {
+	// Get the order by ID
+	order, err := repository.GetOrderByID(orderID)
+	if err != nil {
+		if err == errs.ErrRecordNotFound {
+			logger.Warning.Printf("[service.MarkOrderAsPaid] order with ID [%d] not found\n", orderID)
+			return errs.ErrOrderNotFound
+		}
+		return err
+	}
+
+	// Check if the order is already paid
+	if order.IsPaid {
+		logger.Warning.Printf("[service.MarkOrderAsPaid] order with ID [%d] is already paid\n", orderID)
+		return errs.ErrOrderAlreadyPaid
+	}
+
+	// Mark the order as paid
+	order.IsPaid = true
+
+	// Update the order in the database
+	err = repository.UpdateOrder(order)
+	if err != nil {
+		return err
+	}
+
+	logger.Info.Printf("Order with ID [%d] has been marked as paid\n", orderID)
+	return nil
+}
