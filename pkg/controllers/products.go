@@ -8,6 +8,7 @@ import (
 	"eShop/models"
 	"eShop/pkg/service"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,37 +36,6 @@ func GetAllProducts(c *gin.Context) {
 	logger.Info.Printf("IP: [%s] successfully retrieved list of products\n", c.ClientIP())
 	c.JSON(http.StatusOK, products)
 }
-
-// // AddProduct
-// // @Summary Add a new product
-// // @Tags products
-// // @Description Add a new product with calculated taxes
-// // @ID add-product
-// // @Accept json
-// // @Produce json
-// // @Param input body models.Product true "Product data"
-// // @Success 201 {string} string "Product added successfully!"
-// // @Failure 400 {object} ErrorResponse "Invalid input"
-// // @Failure 500 {object} ErrorResponse "Server error"
-// // @Router /products [post]
-// func AddProduct(c *gin.Context) {
-// 	var product models.Product
-
-// 	if err := c.BindJSON(&product); err != nil {
-// 		logger.Error.Printf("[controllers.AddProduct] error binding product data: %v\n", err)
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
-// 		return
-// 	}
-
-// 	if err := service.AddProduct(product); err != nil {
-// 		logger.Error.Printf("[controllers.AddProduct] error adding product: %v\n", err)
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Server error"})
-// 		return
-// 	}
-
-// 	logger.Info.Printf("Product %s added successfully", product.Title)
-// 	c.JSON(http.StatusCreated, gin.H{"message": "Product added successfully!"})
-// }
 
 // AddProduct
 // @Summary Add a new product
@@ -96,4 +66,62 @@ func AddProduct(c *gin.Context) {
 
 	logger.Info.Printf("Product %s added successfully", product.Title)
 	c.JSON(http.StatusCreated, gin.H{"message": "Product added successfully!"})
+}
+
+// GetProductByID
+// @Summary Retrieve a product by ID
+// @Tags products
+// @Description Get product information by ID (Admin/Manager only)
+// @ID get-product-by-id
+// @Produce json
+// @Param id path int true "Product ID"
+// @Success 200 {object} models.Product "Product information"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "Product not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /products/{id} [get]
+func GetProductByID(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	logger.Info.Printf("IP: [%s] requested product with ID: %d\n", c.ClientIP(), id)
+
+	product, err := service.GetProductByID(uint(id))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	logger.Info.Printf("Product with ID %d retrieved successfully", id)
+	c.JSON(http.StatusOK, product)
+}
+
+// GetProductByBarcode
+// @Summary Retrieve a product by barcode
+// @Tags products
+// @Description Get product information by barcode (Admin/Manager only)
+// @ID get-product-by-barcode
+// @Produce json
+// @Param barcode path string true "Product barcode"
+// @Success 200 {object} models.Product "Product information"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "Product not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /products/barcode/{barcode} [get]
+func GetProductByBarcode(c *gin.Context) {
+	barcode := c.Param("barcode")
+
+	logger.Info.Printf("IP: [%s] requested product with barcode: %s\n", c.ClientIP(), barcode)
+
+	product, err := service.GetProductByBarcode(barcode)
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	logger.Info.Printf("Product with barcode %s retrieved successfully", barcode)
+	c.JSON(http.StatusOK, product)
 }

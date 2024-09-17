@@ -19,20 +19,6 @@ func GetAllProducts() ([]models.Product, error) {
 	return products, nil
 }
 
-// // CreateProduct добавляет новый продукт в базу данных
-// func CreateProduct(product models.Product) error {
-// 	if err := db.GetDBConn().Create(&product).Error; err != nil {
-// 		// Проверка на нарушение уникальности (например, дубликат barcode)
-// 		if strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
-// 			logger.Warning.Printf("[repository.CreateProduct] duplicate barcode error: %v\n", err)
-// 			return errs.ErrUniquenessViolation
-// 		}
-// 		logger.Error.Printf("[repository.CreateProduct] error creating product: %v\n", err)
-// 		return translateError(err)
-// 	}
-// 	return nil
-// }
-
 // CreateProduct добавляет новый продукт в базу данных
 func CreateProduct(product models.Product) error {
 	if err := db.GetDBConn().Create(&product).Error; err != nil {
@@ -51,4 +37,26 @@ func CheckBarcodeExists(barcode string) (bool, error) {
 		return false, err
 	}
 	return count > 0, nil
+}
+
+// GetProductByID получает продукт по его ID
+func GetProductByID(id uint) (models.Product, error) {
+	var product models.Product
+	err := db.GetDBConn().Preload("Category").Preload("Supplier").Where("id = ? AND is_deleted = ?", id, false).First(&product).Error
+	if err != nil {
+		logger.Error.Printf("[repository.GetProductByID] error retrieving product by id: %v\n", err)
+		return product, translateError(err)
+	}
+	return product, nil
+}
+
+// GetProductByBarcode получает продукт по его штрих-коду
+func GetProductByBarcode(barcode string) (models.Product, error) {
+	var product models.Product
+	err := db.GetDBConn().Preload("Category").Preload("Supplier").Where("barcode = ? AND is_deleted = ?", barcode, false).First(&product).Error
+	if err != nil {
+		logger.Error.Printf("[repository.GetProductByBarcode] error retrieving product by barcode: %v\n", err)
+		return product, translateError(err)
+	}
+	return product, nil
 }
