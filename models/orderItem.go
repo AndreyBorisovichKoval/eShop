@@ -10,6 +10,7 @@ type OrderItem struct {
 	ProductID uint       `gorm:"not null" json:"product_id"` // Внешний ключ на продукт.
 	Quantity  int        `gorm:"not null" json:"quantity"`   // Количество товара в заказе.
 	Price     float64    `gorm:"not null" json:"price"`      // Цена товара в момент продажи.
+	Total     float64    `gorm:"not null" json:"total"`      // Общая сумма.
 	CreatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt *time.Time `json:"updated_at"`
 	DeletedAt *time.Time `json:"deleted_at"`
