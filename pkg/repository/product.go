@@ -4,10 +4,8 @@ package repository
 
 import (
 	"eShop/db"
-	"eShop/errs"
 	"eShop/logger"
 	"eShop/models"
-	"strings"
 )
 
 // GetAllProducts получает все активные продукты с их категориями и поставщиками
@@ -24,6 +22,11 @@ func GetAllProducts() ([]models.Product, error) {
 // // CreateProduct добавляет новый продукт в базу данных
 // func CreateProduct(product models.Product) error {
 // 	if err := db.GetDBConn().Create(&product).Error; err != nil {
+// 		// Проверка на нарушение уникальности (например, дубликат barcode)
+// 		if strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
+// 			logger.Warning.Printf("[repository.CreateProduct] duplicate barcode error: %v\n", err)
+// 			return errs.ErrUniquenessViolation
+// 		}
 // 		logger.Error.Printf("[repository.CreateProduct] error creating product: %v\n", err)
 // 		return translateError(err)
 // 	}
@@ -33,43 +36,19 @@ func GetAllProducts() ([]models.Product, error) {
 // CreateProduct добавляет новый продукт в базу данных
 func CreateProduct(product models.Product) error {
 	if err := db.GetDBConn().Create(&product).Error; err != nil {
-		// Проверка на нарушение уникальности (например, дубликат barcode)
-		if strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
-			logger.Warning.Printf("[repository.CreateProduct] duplicate barcode error: %v\n", err)
-			return errs.ErrUniquenessViolation
-		}
 		logger.Error.Printf("[repository.CreateProduct] error creating product: %v\n", err)
 		return translateError(err)
 	}
 	return nil
 }
 
-// // GetCategoryByID получает категорию по её ID (только активные)
-// func GetCategoryByID(id uint) (category models.Category, err error) {
-// 	err = db.GetDBConn().Where("id = ? AND is_deleted = ?", id, false).First(&category).Error
-// 	if err != nil {
-// 		logger.Error.Printf("[repository.GetCategoryByID] error getting category by id: %v\n", err)
-// 		return category, translateError(err)
-// 	}
-// 	return category, nil
-// }
-
-// // GetSupplierByID получает поставщика по его ID (только активные)
-// func GetSupplierByID(id uint) (supplier models.Supplier, err error) {
-// 	err = db.GetDBConn().Where("id = ? AND is_deleted = ?", id, false).First(&supplier).Error
-// 	if err != nil {
-// 		logger.Error.Printf("[repository.GetSupplierByID] error getting supplier by id: %v\n", err)
-// 		return supplier, translateError(err)
-// 	}
-// 	return supplier, nil
-// }
-
-// // GetAllTaxes получает все текущие налоги
-// func GetAllTaxes() (taxes []models.Taxes, err error) {
-// 	err = db.GetDBConn().Find(&taxes).Error
-// 	if err != nil {
-// 		logger.Error.Printf("[repository.GetAllTaxes] error retrieving all taxes: %v\n", err)
-// 		return nil, translateError(err)
-// 	}
-// 	return taxes, nil
-// }
+// CheckBarcodeExists проверяет, существует ли штрих-код в базе данных
+func CheckBarcodeExists(barcode string) (bool, error) {
+	var count int64
+	err := db.GetDBConn().Model(&models.Product{}).Where("barcode = ?", barcode).Count(&count).Error
+	if err != nil {
+		logger.Error.Printf("[repository.CheckBarcodeExists] error checking barcode: %v\n", err)
+		return false, err
+	}
+	return count > 0, nil
+}
