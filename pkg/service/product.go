@@ -240,7 +240,7 @@ func UpdateProductByID(id uint, updatedProduct models.Product) (models.Product, 
 // 	return nil
 // }
 
-// // SoftDeleteProductByID мягко удаляет продукт
+// SoftDeleteProductByID мягко удаляет продукт
 func SoftDeleteProductByID(id uint) error {
 	// Получаем продукт, включая мягко удалённые записи
 	product, err := repository.GetProductIncludingSoftDeleted(id)
@@ -294,5 +294,26 @@ func RestoreProductByID(id uint) error {
 		return err
 	}
 
+	return nil
+}
+
+// HardDeleteProductByID выполняет жесткое удаление продукта
+func HardDeleteProductByID(id uint) error {
+	// Получаем продукт по ID, включая мягко удалённые записи
+	product, err := repository.GetProductIncludingSoftDeleted(id)
+	if err != nil {
+		if errors.Is(err, errs.ErrRecordNotFound) {
+			logger.Warning.Printf("[service.HardDeleteProductByID] product with ID: %v not found", id)
+			return errs.ErrProductNotFound
+		}
+		return err
+	}
+
+	// Выполняем жёсткое удаление продукта
+	if err := repository.HardDeleteProductByID(product); err != nil {
+		return err
+	}
+
+	logger.Info.Printf("[service.HardDeleteProductByID] product with ID %v hard deleted successfully", id)
 	return nil
 }

@@ -1709,6 +1709,46 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "HardDeleteProductByID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY1ODcxNjQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.QsXbomJh-nryJEZ6W3YuRh1LaffIPbrxGPMt8EJ9E0I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/products/126/hard",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"products",
+								"126",
+								"hard"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

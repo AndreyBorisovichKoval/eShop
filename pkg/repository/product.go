@@ -116,3 +116,12 @@ func GetProductIncludingSoftDeleted(id uint) (models.Product, error) {
 	}
 	return product, nil
 }
+
+// HardDeleteProductByID удаляет продукт из базы данных (жёстко)
+func HardDeleteProductByID(product models.Product) error {
+	if err := db.GetDBConn().Unscoped().Delete(&product).Error; err != nil {
+		logger.Error.Printf("[repository.HardDeleteProductByID] error hard deleting product with ID: %v, error: %v", product.ID, err)
+		return translateError(err)
+	}
+	return nil
+}

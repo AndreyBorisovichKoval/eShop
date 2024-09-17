@@ -247,3 +247,38 @@ func RestoreProductByID(c *gin.Context) {
 	logger.Info.Printf("Product with ID %d restored successfully", id)
 	c.JSON(http.StatusOK, gin.H{"message": "Product restored successfully!"})
 }
+
+// HardDeleteProductByID
+// @Summary Permanently delete a product by ID
+// @Tags products
+// @Description Permanently delete a product by ID (Admin/Manager only)
+// @ID hard-delete-product-by-id
+// @Param id path int true "Product ID"
+// @Success 200 {string} string "Product permanently deleted successfully!"
+// @Failure 403 {object} ErrorResponse "Permission denied"
+// @Failure 404 {object} ErrorResponse "Product not found"
+// @Failure 409 {object} ErrorResponse "Product already deleted"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /products/{id}/hard [delete]
+func HardDeleteProductByID(c *gin.Context) {
+	userRole := c.GetString(userRoleCtx)
+	if userRole != "Admin" && userRole != "Manager" {
+		handleError(c, errs.ErrPermissionDenied)
+		return
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	err = service.HardDeleteProductByID(uint(id))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	logger.Info.Printf("Product with ID %d hard deleted successfully", id)
+	c.JSON(http.StatusOK, gin.H{"message": "Product permanently deleted successfully!"})
+}
