@@ -40,7 +40,7 @@ func CreateOrder(userID uint, orderItems []models.OrderItem) (models.Order, erro
 		}
 
 		// Проверяем количество на складе
-		if product.Stock < item.Quantity {
+		if product.Stock < float64(item.Quantity) {
 			logger.Warning.Printf("[service.CreateOrder] insufficient stock for product ID [%d]\n", item.ProductID)
 			return order, errs.ErrInsufficientStock
 		}
@@ -51,7 +51,7 @@ func CreateOrder(userID uint, orderItems []models.OrderItem) (models.Order, erro
 		item.Total = product.RetailPrice * float64(item.Quantity)
 
 		// Вычитаем количество товара из склада
-		product.Stock -= item.Quantity
+		product.Stock += float64(item.Quantity)
 
 		// Обновляем данные продукта в БД
 		err = repository.UpdateProduct(product)
@@ -97,7 +97,8 @@ func DeleteOrderItem(orderID, itemID uint) error {
 	if err != nil {
 		return err
 	}
-	product.Stock += orderItem.Quantity
+
+	product.Stock += float64(orderItem.Quantity)
 
 	// Обновляем количество товара на складе
 	err = repository.UpdateProduct(product)

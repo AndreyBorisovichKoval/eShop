@@ -133,6 +133,10 @@ func handleError(c *gin.Context, err error) {
 		// Ошибка "Недостаточно товара на складе"...
 		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
 
+	case errors.Is(err, errs.ErrUnauthorized):
+		// Ошибка "Неавторизованный доступ"...
+		c.JSON(http.StatusUnauthorized, newErrorResponse(err.Error()))
+
 	// /
 	default:
 		// Внутренняя ошибка сервера...
