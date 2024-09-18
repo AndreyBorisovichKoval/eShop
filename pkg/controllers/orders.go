@@ -169,3 +169,65 @@ func DeleteOrder(c *gin.Context) {
 	logger.Info.Printf("Order with ID [%d] deleted successfully\n", orderID)
 	c.JSON(http.StatusOK, gin.H{"message": "Order deleted successfully"})
 }
+
+// // GetOrderByID
+// // @Summary Get order by ID
+// // @Tags orders
+// // @Description Retrieves a specific order by ID, including its items
+// // @ID get-order-by-id
+// // @Param id path int true "Order ID"
+// // @Success 200 {object} models.Order "Order with items"
+// // @Failure 404 {object} ErrorResponse "Order not found"
+// // @Failure 500 {object} ErrorResponse "Server error"
+// // @Router /orders/{id} [get]
+// func GetOrderByID(c *gin.Context) {
+// 	orderIDStr := c.Param("id")
+// 	orderID, err := strconv.Atoi(orderIDStr)
+// 	if err != nil {
+// 		handleError(c, errs.ErrValidationFailed)
+// 		return
+// 	}
+
+// 	logger.Info.Printf("[controllers.GetOrderByID] Request to get order with ID: %d", orderID)
+
+// 	// Получаем заказ через сервис
+// 	order, err := service.GetOrderByID(uint(orderID))
+// 	if err != nil {
+// 		handleError(c, err)
+// 		return
+// 	}
+
+// 	logger.Info.Printf("Successfully retrieved order with ID: %d\n", orderID)
+// 	c.JSON(http.StatusOK, order)
+// }
+
+// GetOrderByID
+// @Summary Get order by ID
+// @Tags orders
+// @Description Retrieves a specific order by ID, including its items with product names, quantities, price, and total
+// @ID get-order-by-id
+// @Param id path int true "Order ID"
+// @Success 200 {object} map[string]interface{} "Order with product names, quantities, price, and total"
+// @Failure 404 {object} ErrorResponse "Order not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /orders/{id} [get]
+func GetOrderByID(c *gin.Context) {
+	orderIDStr := c.Param("id")
+	orderID, err := strconv.Atoi(orderIDStr)
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	logger.Info.Printf("[controllers.GetOrderByID] Request to get order with ID: %d", orderID)
+
+	// Получаем заказ через сервис
+	order, err := service.GetOrderByID(uint(orderID))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	logger.Info.Printf("Successfully retrieved order with ID: %d\n", orderID)
+	c.JSON(http.StatusOK, order)
+}

@@ -93,3 +93,29 @@ func DeleteOrderItemsByOrderID(orderID uint) error {
 	logger.Info.Printf("[repository.DeleteOrderItemsByOrderID] Deleting all items for order ID: %d", orderID)
 	return db.GetDBConn().Where("order_id = ?", orderID).Delete(&models.OrderItem{}).Error
 }
+
+// // GetOrderByID получает заказ по ID без логики
+// func GetOrderByID(orderID uint) (models.Order, error) {
+// 	var order models.Order
+// 	err := db.GetDBConn().Where("id = ?", orderID).First(&order).Error
+// 	if err != nil {
+// 		if err.Error() == "record not found" {
+// 			return order, errs.ErrRecordNotFound
+// 		}
+// 		return order, translateError(err)
+// 	}
+// 	return order, nil
+// }
+
+// // GetOrderItemsByOrderID получает товары заказа по ID заказа
+// func GetOrderItemsByOrderID(orderID uint) ([]models.OrderItem, error) {
+// 	var orderItems []models.OrderItem
+// 	err := db.GetDBConn().Where("order_id = ?", orderID).Find(&orderItems).Error
+// 	if err != nil {
+// 		if err.Error() == "record not found" {
+// 			return orderItems, errs.ErrRecordNotFound
+// 		}
+// 		return orderItems, translateError(err)
+// 	}
+// 	return orderItems, nil
+// }

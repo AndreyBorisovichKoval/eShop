@@ -188,3 +188,69 @@ func DeleteOrder(orderID uint) error {
 	logger.Info.Printf("Order with ID [%d] and all its items have been deleted\n", orderID)
 	return nil
 }
+
+// // GetOrderByID получает заказ по ID
+// func GetOrderByID(orderID uint) (models.Order, error) {
+// 	// Получаем заказ через репозиторий
+// 	order, err := repository.GetOrderByID(orderID)
+// 	if err != nil {
+// 		if err == errs.ErrRecordNotFound {
+// 			logger.Warning.Printf("[service.GetOrderByID] order with ID [%d] not found\n", orderID)
+// 			return order, errs.ErrOrderNotFound
+// 		}
+// 		return order, err
+// 	}
+
+// 	// Получаем связанные товары (items) через репозиторий
+// 	orderItems, err := repository.GetOrderItemsByOrderID(orderID)
+// 	if err != nil {
+// 		return order, err
+// 	}
+
+// 	// Присваиваем список товаров заказу
+// 	order.OrderItems = orderItems
+
+// 	return order, nil
+// }
+
+// GetOrderByID получает заказ по ID с нужными полями
+func GetOrderByID(orderID uint) (map[string]interface{}, error) {
+	// Получаем заказ через репозиторий
+	order, err := repository.GetOrderByID(orderID)
+	if err != nil {
+		if err == errs.ErrRecordNotFound {
+			logger.Warning.Printf("[service.GetOrderByID] order with ID [%d] not found\n", orderID)
+			return nil, errs.ErrOrderNotFound
+		}
+		return nil, err
+	}
+
+	// Получаем связанные товары (items) через репозиторий
+	orderItems, err := repository.GetOrderItemsByOrderID(orderID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Составляем минимизированный ответ с нужными полями
+	var items []map[string]interface{}
+	for _, item := range orderItems {
+		product, err := repository.GetProductByID(item.ProductID)
+		if err != nil {
+			return nil, err
+		}
+		items = append(items, map[string]interface{}{
+			"product_title": product.Title,
+			"quantity":      item.Quantity,
+			"price":         item.Price,
+			"total":         item.Total,
+		})
+	}
+
+	result := map[string]interface{}{
+		"order_id":     order.ID,
+		"total_amount": order.TotalAmount,
+		"order_items":  items,
+	}
+
+	return result, nil
+}
