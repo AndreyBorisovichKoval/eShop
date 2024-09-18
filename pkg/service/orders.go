@@ -113,39 +113,6 @@ func MarkOrderAsPaid(orderID uint) error {
 	return nil
 }
 
-// // DeleteOrderItem удаляет товар из заказа
-// func DeleteOrderItem(orderID, itemID uint) error {
-// 	orderItem, err := repository.GetOrderItemByID(orderID, itemID)
-// 	if err != nil {
-// 		if err == errs.ErrRecordNotFound {
-// 			return errs.ErrOrderItemNotFound
-// 		}
-// 		return err
-// 	}
-
-// 	// Возвращаем товар на склад
-// 	product, err := repository.GetProductByID(orderItem.ProductID)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	product.Stock += float64(orderItem.Quantity)
-
-// 	// Обновляем количество товара на складе
-// 	err = repository.UpdateProduct(product)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	// Удаляем товар из заказа
-// 	err = repository.DeleteOrderItem(orderItem)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	return nil
-// }
-
 func DeleteOrderItem(orderID, itemID uint) error {
 	orderItem, err := repository.GetOrderItemByID(orderID, itemID)
 	if err != nil {
@@ -188,5 +155,79 @@ func DeleteOrderItem(orderID, itemID uint) error {
 	}
 
 	logger.Info.Printf("Order item ID [%d] deleted from order ID [%d]\n", itemID, orderID)
+	return nil
+}
+
+// // DeleteOrder удаляет заказ и все его товары
+// func DeleteOrder(orderID uint) error {
+// 	logger.Info.Printf("[service.DeleteOrder] Deleting order ID: %d", orderID)
+
+// 	// Удаление всех товаров в заказе
+// 	err := repository.DeleteOrderItemsByOrderID(orderID)
+// 	if err != nil {
+// 		logger.Error.Printf("[service.DeleteOrder] Error deleting order items for order ID [%d]: %v", orderID, err)
+// 		return err
+// 	}
+
+// 	// Удаление самого заказа
+// 	err = repository.DeleteOrder(orderID)
+// 	if err != nil {
+// 		logger.Error.Printf("[service.DeleteOrder] Error deleting order with ID [%d]: %v", orderID, err)
+// 		return err
+// 	}
+
+// 	logger.Info.Printf("Order with ID [%d] and all its items have been deleted\n", orderID)
+// 	return nil
+// }
+
+// func DeleteOrder(orderID uint) error {
+// 	logger.Info.Printf("[service.DeleteOrder] Deleting order ID: %d", orderID)
+
+// 	// Удаление всех товаров в заказе
+// 	err := repository.DeleteOrderItemsByOrderID(orderID)
+// 	if err != nil {
+// 		logger.Error.Printf("[service.DeleteOrder] Error deleting order items for order ID [%d]: %v", orderID, err)
+// 		return err
+// 	}
+
+// 	// Удаление самого заказа
+// 	err = repository.DeleteOrder(orderID)
+// 	if err != nil {
+// 		logger.Error.Printf("[service.DeleteOrder] Error deleting order with ID [%d]: %v", orderID, err)
+// 		return err
+// 	}
+
+// 	logger.Info.Printf("Order with ID [%d] and all its items have been deleted\n", orderID)
+// 	return nil
+// }
+
+func DeleteOrder(orderID uint) error {
+	logger.Info.Printf("[service.DeleteOrder] Attempting to delete order ID: %d", orderID)
+
+	// Проверяем, существует ли заказ
+	_, err := repository.GetOrderByID(orderID)
+	if err != nil {
+		if err == errs.ErrRecordNotFound {
+			logger.Warning.Printf("[service.DeleteOrder] Order with ID [%d] not found", orderID)
+			return errs.ErrOrderNotFound
+		}
+		return err
+	}
+
+	// Удаление всех товаров в заказе
+	err = repository.DeleteOrderItemsByOrderID(orderID)
+	if err != nil {
+		logger.Error.Printf("[service.DeleteOrder] Error deleting order items for order ID [%d]: %v", orderID, err)
+		return err
+	}
+
+	// Удаление самого заказа
+	err = repository.DeleteOrder(orderID)
+	if err != nil {
+		logger.Error.Printf("[service.DeleteOrder] Error deleting order with ID [%d]: %v", orderID, err)
+		return err
+	}
+
+	logger.Info.Printf("Order with ID [%d] and all its items have been deleted\n", orderID)
 	return nil
 }

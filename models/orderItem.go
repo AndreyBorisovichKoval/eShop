@@ -12,9 +12,9 @@ type OrderItem struct {
 	Price     float64    `gorm:"not null" json:"price"`      // Цена товара в момент продажи.
 	Total     float64    `gorm:"not null" json:"total"`      // Общая сумма.
 	CreatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt *time.Time `json:"updated_at"`
-	DeletedAt *time.Time `json:"deleted_at"`
-	IsDeleted bool       `gorm:"default:false" json:"is_deleted"`
+	// UpdatedAt *time.Time `json:"updated_at"`
+	// DeletedAt *time.Time `json:"deleted_at"`
+	// IsDeleted bool       `gorm:"default:false" json:"is_deleted"`
 
 	// Связи
 	Order   Order   `gorm:"foreignKey:OrderID" json:"order"`
