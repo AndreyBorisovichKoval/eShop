@@ -106,8 +106,6 @@ func InitRoutes() *gin.Engine {
 		orderG.GET("/:id", GetOrderByID)                      // Получение заказа по ID...
 	}
 
-	router.POST("/insert-test-data", InsertTestData)
-
 	reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked())
 	{
 		reportG.GET("/sales", GetSalesReport)                  // Маршрут для получения отчета по продажам за указанный период...
@@ -117,6 +115,8 @@ func InitRoutes() *gin.Engine {
 		reportG.GET("/category-sales", GetCategorySalesReport) // Маршрут для отчета по категориям товаров...
 
 	}
+
+	router.POST("/insert-test-data", InsertTestData)
 
 	return router
 }
