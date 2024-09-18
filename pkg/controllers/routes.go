@@ -106,9 +106,17 @@ func InitRoutes() *gin.Engine {
 		orderG.GET("/:id", GetOrderByID)                      // Получение заказа по ID...
 	}
 
-	// Добавление тестовых данных
-	// router.POST("/insert-test-data", controllers.InsertTestData)
 	router.POST("/insert-test-data", InsertTestData)
+
+	reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked())
+	{
+		reportG.GET("/sales", GetSalesReport)                  // Маршрут для получения отчета по продажам за указанный период...
+		reportG.GET("/low-stock", GetLowStockReport)           // Маршрут для получения отчета по товарам с низким запасом...
+		reportG.GET("/sellers", GetSellerReport)               // Маршрут для получения отчета по продавцам...
+		reportG.GET("/suppliers", GetSupplierReport)           // Маршрут для получения отчета по поставщикам...
+		reportG.GET("/category-sales", GetCategorySalesReport) // Маршрут для отчета по категориям товаров...
+
+	}
 
 	return router
 }

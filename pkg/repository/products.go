@@ -1,4 +1,4 @@
-// C:\GoProject\src\eShop\pkg\repository\product.go
+// C:\GoProject\src\eShop\pkg\repository\products.go
 
 package repository
 
@@ -69,15 +69,6 @@ func UpdateProduct(product models.Product) error {
 	}
 	return nil
 }
-
-// // UpdateProduct обновляет продукт в базе данных
-// func UpdateProduct(product *models.Product) error {
-//     if err := db.GetDBConn().Save(product).Error; err != nil {
-//         logger.Error.Printf("[repository.UpdateProduct] error updating product: %v\n", err)
-//         return translateError(err)
-//     }
-//     return nil
-// }
 
 // SoftDeleteProductByID обновляет продукт, устанавливая флаг IsDeleted и время удаления
 func SoftDeleteProductByID(product *models.Product) error {

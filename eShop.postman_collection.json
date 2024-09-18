@@ -1958,6 +1958,187 @@
 			]
 		},
 		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "GetSalesReport",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2NzE1MDIsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.XF1QjWmie7-AUfStzh8ix1xlv0gwrJbyAY5fQTyU988",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"reports",
+								"sales"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2024-01-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2024-12-31"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetLowStockReport",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2NzE1MDIsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.XF1QjWmie7-AUfStzh8ix1xlv0gwrJbyAY5fQTyU988",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/reports/low-stock?threshold=100",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"reports",
+								"low-stock"
+							],
+							"query": [
+								{
+									"key": "threshold",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSellerReport",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2NzE1MDIsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.XF1QjWmie7-AUfStzh8ix1xlv0gwrJbyAY5fQTyU988",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/reports/sellers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"reports",
+								"sellers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSupplierReport",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2NzE1MDIsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.XF1QjWmie7-AUfStzh8ix1xlv0gwrJbyAY5fQTyU988",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/reports/suppliers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"reports",
+								"suppliers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCategorySalesReport",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2NzE1MDIsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.XF1QjWmie7-AUfStzh8ix1xlv0gwrJbyAY5fQTyU988",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/reports/category-sales?start_date=2024-01-01&end_date=2024-12-31",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"reports",
+								"category-sales"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2024-01-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2024-12-31"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "PingServer",
 			"request": {
 				"method": "GET",
