@@ -82,7 +82,70 @@ func CreateOrder(userID uint, orderItems []models.OrderItem) (models.Order, erro
 	return order, nil
 }
 
-// DeleteOrderItem удаляет товар из заказа
+// MarkOrderAsPaid updates the order status to 'paid'
+func MarkOrderAsPaid(orderID uint) error {
+	// Get the order by ID
+	order, err := repository.GetOrderByID(orderID)
+	if err != nil {
+		if err == errs.ErrRecordNotFound {
+			logger.Warning.Printf("[service.MarkOrderAsPaid] order with ID [%d] not found\n", orderID)
+			return errs.ErrOrderNotFound
+		}
+		return err
+	}
+
+	// Check if the order is already paid
+	if order.IsPaid {
+		logger.Warning.Printf("[service.MarkOrderAsPaid] order with ID [%d] is already paid\n", orderID)
+		return errs.ErrOrderAlreadyPaid
+	}
+
+	// Mark the order as paid
+	order.IsPaid = true
+
+	// Update the order in the database
+	err = repository.UpdateOrder(order)
+	if err != nil {
+		return err
+	}
+
+	logger.Info.Printf("Order with ID [%d] has been marked as paid\n", orderID)
+	return nil
+}
+
+// // DeleteOrderItem удаляет товар из заказа
+// func DeleteOrderItem(orderID, itemID uint) error {
+// 	orderItem, err := repository.GetOrderItemByID(orderID, itemID)
+// 	if err != nil {
+// 		if err == errs.ErrRecordNotFound {
+// 			return errs.ErrOrderItemNotFound
+// 		}
+// 		return err
+// 	}
+
+// 	// Возвращаем товар на склад
+// 	product, err := repository.GetProductByID(orderItem.ProductID)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	product.Stock += float64(orderItem.Quantity)
+
+// 	// Обновляем количество товара на складе
+// 	err = repository.UpdateProduct(product)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	// Удаляем товар из заказа
+// 	err = repository.DeleteOrderItem(orderItem)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	return nil
+// }
+
 func DeleteOrderItem(orderID, itemID uint) error {
 	orderItem, err := repository.GetOrderItemByID(orderID, itemID)
 	if err != nil {
@@ -112,36 +175,18 @@ func DeleteOrderItem(orderID, itemID uint) error {
 		return err
 	}
 
-	return nil
-}
-
-// MarkOrderAsPaid updates the order status to 'paid'
-func MarkOrderAsPaid(orderID uint) error {
-	// Get the order by ID
+	// Обновляем общую сумму заказа
 	order, err := repository.GetOrderByID(orderID)
 	if err != nil {
-		if err == errs.ErrRecordNotFound {
-			logger.Warning.Printf("[service.MarkOrderAsPaid] order with ID [%d] not found\n", orderID)
-			return errs.ErrOrderNotFound
-		}
 		return err
 	}
 
-	// Check if the order is already paid
-	if order.IsPaid {
-		logger.Warning.Printf("[service.MarkOrderAsPaid] order with ID [%d] is already paid\n", orderID)
-		return errs.ErrOrderAlreadyPaid
-	}
-
-	// Mark the order as paid
-	order.IsPaid = true
-
-	// Update the order in the database
+	order.TotalAmount -= orderItem.Total
 	err = repository.UpdateOrder(order)
 	if err != nil {
 		return err
 	}
 
-	logger.Info.Printf("Order with ID [%d] has been marked as paid\n", orderID)
+	logger.Info.Printf("Order item ID [%d] deleted from order ID [%d]\n", itemID, orderID)
 	return nil
 }

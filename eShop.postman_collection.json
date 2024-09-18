@@ -1753,6 +1753,130 @@
 			]
 		},
 		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "AddOrder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjY1MDQ1OSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.DqL5Xtz1htGxJYvBjU3vr1_shwOoFlJRypgIzDuOR1c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"product_id\": 1,\r\n    \"quantity\": 2\r\n  },\r\n  {\r\n    \"product_id\": 3,\r\n    \"quantity\": 1\r\n  }\r\n]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteOrderItem",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjY1MDQ1OSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.DqL5Xtz1htGxJYvBjU3vr1_shwOoFlJRypgIzDuOR1c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/orders/3/items/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"orders",
+								"3",
+								"items",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MarkOrderAsPaid",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjY1MDQ1OSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.DqL5Xtz1htGxJYvBjU3vr1_shwOoFlJRypgIzDuOR1c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/orders/3/paid",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"orders",
+								"3",
+								"paid"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "PingServer",
 			"request": {
 				"method": "GET",
