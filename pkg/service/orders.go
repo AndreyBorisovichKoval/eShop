@@ -51,7 +51,7 @@ func CreateOrder(userID uint, orderItems []models.OrderItem) (models.Order, erro
 		item.Total = product.RetailPrice * float64(item.Quantity)
 
 		// Вычитаем количество товара из склада
-		product.Stock += float64(item.Quantity)
+		product.Stock -= float64(item.Quantity)
 
 		// Обновляем данные продукта в БД
 		err = repository.UpdateProduct(product)
@@ -188,30 +188,6 @@ func DeleteOrder(orderID uint) error {
 	logger.Info.Printf("Order with ID [%d] and all its items have been deleted\n", orderID)
 	return nil
 }
-
-// // GetOrderByID получает заказ по ID
-// func GetOrderByID(orderID uint) (models.Order, error) {
-// 	// Получаем заказ через репозиторий
-// 	order, err := repository.GetOrderByID(orderID)
-// 	if err != nil {
-// 		if err == errs.ErrRecordNotFound {
-// 			logger.Warning.Printf("[service.GetOrderByID] order with ID [%d] not found\n", orderID)
-// 			return order, errs.ErrOrderNotFound
-// 		}
-// 		return order, err
-// 	}
-
-// 	// Получаем связанные товары (items) через репозиторий
-// 	orderItems, err := repository.GetOrderItemsByOrderID(orderID)
-// 	if err != nil {
-// 		return order, err
-// 	}
-
-// 	// Присваиваем список товаров заказу
-// 	order.OrderItems = orderItems
-
-// 	return order, nil
-// }
 
 // GetOrderByID получает заказ по ID с нужными полями
 func GetOrderByID(orderID uint) (map[string]interface{}, error) {
