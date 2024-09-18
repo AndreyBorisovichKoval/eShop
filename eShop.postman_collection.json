@@ -1975,6 +1975,25 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Insert-Test-Data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8585/insert-test-data",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8585",
+					"path": [
+						"insert-test-data"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
