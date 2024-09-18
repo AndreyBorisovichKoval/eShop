@@ -116,6 +116,13 @@ func InitRoutes() *gin.Engine {
 
 	}
 
+	returnG := router.Group("/returns", checkUserAuthentication, checkUserBlocked())
+	{
+		returnG.POST("", AddReturnProduct) // Добавление возврата товара...
+		returnG.GET("", GetAllReturns)     // Получение списка всех возвратов...
+		returnG.GET("/:id", GetReturnByID) // Получение возврата по ID...
+	}
+
 	router.POST("/insert-test-data", InsertTestData)
 
 	return router

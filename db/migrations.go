@@ -20,7 +20,7 @@ func MigrateDB() error {
 		// models.Payment{},
 		models.Product{},
 		// models.ProductHistory{},
-		// models.ReturnsProduct{},
+		models.ReturnsProduct{},
 		models.Supplier{},
 		models.Taxes{},
 		models.User{},
