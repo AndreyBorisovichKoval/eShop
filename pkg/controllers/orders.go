@@ -58,7 +58,12 @@ func AddOrder(c *gin.Context) {
 	}
 
 	logger.Info.Printf("User ID [%d] successfully created an order with ID: %d\n", uid, order.ID)
-	c.JSON(http.StatusCreated, gin.H{"message": "Order created successfully!!!"})
+	// c.JSON(http.StatusCreated, gin.H{"message": "Order created successfully!!!"})
+	// Возвращаем сообщение и ID заказа
+	c.JSON(http.StatusCreated, gin.H{
+		"message":  "Order created successfully!!!",
+		"order_id": order.ID,
+	})
 }
 
 // MarkOrderAsPaid

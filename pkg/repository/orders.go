@@ -84,28 +84,6 @@ func GetOrderItemsByOrderID(orderID uint) ([]models.OrderItem, error) {
 	return orderItems, nil
 }
 
-// // DeleteOrderItemsByOrderID удаляет все товары по ID заказа
-// func DeleteOrderItemsByOrderID(orderID uint) error {
-// 	logger.Info.Printf("[repository.DeleteOrderItemsByOrderID] Deleting all items for order ID: %d", orderID)
-// 	err := db.GetDBConn().Where("order_id = ?", orderID).Delete(&models.OrderItem{}).Error
-// 	if err != nil {
-// 		logger.Error.Printf("[repository.DeleteOrderItemsByOrderID] Error deleting items for order ID [%d]: %v", orderID, err)
-// 		return translateError(err)
-// 	}
-// 	return nil
-// }
-
-// // DeleteOrder удаляет сам заказ
-// func DeleteOrder(orderID uint) error {
-// 	logger.Info.Printf("[repository.DeleteOrder] Deleting order ID: %d", orderID)
-// 	err := db.GetDBConn().Where("id = ?", orderID).Delete(&models.Order{}).Error
-// 	if err != nil {
-// 		logger.Error.Printf("[repository.DeleteOrder] Error deleting order with ID [%d]: %v", orderID, err)
-// 		return translateError(err)
-// 	}
-// 	return nil
-// }
-
 func DeleteOrder(orderID uint) error {
 	logger.Info.Printf("[repository.DeleteOrder] Deleting order ID: %d", orderID)
 	return db.GetDBConn().Where("id = ?", orderID).Delete(&models.Order{}).Error
