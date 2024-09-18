@@ -1818,7 +1818,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/orders/3/items/2",
+							"raw": "http://localhost:8585/orders/1/items/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1826,7 +1826,7 @@
 							"port": "8585",
 							"path": [
 								"orders",
-								"3",
+								"1",
 								"items",
 								"2"
 							]
@@ -1869,6 +1869,45 @@
 								"orders",
 								"3",
 								"paid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteOrder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjY1MDQ1OSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.DqL5Xtz1htGxJYvBjU3vr1_shwOoFlJRypgIzDuOR1c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/orders/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"orders",
+								"1"
 							]
 						}
 					},
