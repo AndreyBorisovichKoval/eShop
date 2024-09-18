@@ -1,4 +1,4 @@
-// C:\GoProject\src\eShop\pkg\controllers\returns.go
+// C:\GoProject\src\eShop\pkg\controllers\returns_products.go
 
 package controllers
 

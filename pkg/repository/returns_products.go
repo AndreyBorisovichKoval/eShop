@@ -1,4 +1,4 @@
-// C:\GoProject\src\eShop\pkg\repository\returns.go
+// C:\GoProject\src\eShop\pkg\repository\returns_products.go
 
 package repository
 
@@ -17,10 +17,10 @@ func AddReturnProduct(returnProduct models.ReturnsProduct) error {
 	return nil
 }
 
-// GetAllReturns возвращает список всех возвратов товаров
+// GetAllReturns возвращает список всех возвратов товаров с загрузкой данных о продукте и поставщике
 func GetAllReturns() ([]models.ReturnsProduct, error) {
 	var returns []models.ReturnsProduct
-	err := db.GetDBConn().Find(&returns).Error
+	err := db.GetDBConn().Preload("Product").Preload("Product.Category").Preload("Supplier").Find(&returns).Error
 	if err != nil {
 		logger.Error.Printf("[repository.GetAllReturns] error retrieving returns: %v\n", err)
 		return nil, translateError(err)
@@ -28,10 +28,10 @@ func GetAllReturns() ([]models.ReturnsProduct, error) {
 	return returns, nil
 }
 
-// GetReturnByID возвращает возврат товара по ID
+// GetReturnByID возвращает возврат товара по ID с загрузкой данных о продукте и поставщике
 func GetReturnByID(id uint) (models.ReturnsProduct, error) {
 	var returnProduct models.ReturnsProduct
-	err := db.GetDBConn().First(&returnProduct, id).Error
+	err := db.GetDBConn().Preload("Product").Preload("Product.Category").Preload("Supplier").First(&returnProduct, id).Error
 	if err != nil {
 		logger.Error.Printf("[repository.GetReturnByID] error retrieving return by ID: %v\n", err)
 		return returnProduct, translateError(err)

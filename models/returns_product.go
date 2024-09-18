@@ -22,5 +22,15 @@ type ReturnsProduct struct {
 }
 
 func (ReturnsProduct) TableName() string {
-	return "returns_product"
+	return "returns_products"
+}
+
+type ReturnResponse struct {
+	ID         uint    `json:"id"`
+	Product    string  `json:"product"`     // Название товара
+	Category   string  `json:"category"`    // Категория товара
+	Supplier   string  `json:"supplier"`    // Поставщик
+	Quantity   float64 `json:"quantity"`    // Количество
+	Reason     string  `json:"reason"`      // Причина возврата
+	ReturnedAt string  `json:"returned_at"` // Дата возврата
 }
