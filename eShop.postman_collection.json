@@ -1818,7 +1818,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/orders/1/items/2",
+							"raw": "http://localhost:8585/orders/11/items/22",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1826,9 +1826,9 @@
 							"port": "8585",
 							"path": [
 								"orders",
-								"1",
+								"11",
 								"items",
-								"2"
+								"22"
 							]
 						}
 					},
@@ -1859,7 +1859,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/orders/3/paid",
+							"raw": "http://localhost:8585/orders/13/paid",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1867,7 +1867,7 @@
 							"port": "8585",
 							"path": [
 								"orders",
-								"3",
+								"13",
 								"paid"
 							]
 						}
@@ -1899,7 +1899,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/orders/1",
+							"raw": "http://localhost:8585/orders/13",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1907,7 +1907,49 @@
 							"port": "8585",
 							"path": [
 								"orders",
-								"1"
+								"13"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetOrderByID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjY1MDQ1OSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.DqL5Xtz1htGxJYvBjU3vr1_shwOoFlJRypgIzDuOR1c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/orders/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"orders",
+								"10"
 							]
 						}
 					},
