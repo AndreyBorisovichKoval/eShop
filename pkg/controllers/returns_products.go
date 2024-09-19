@@ -14,15 +14,15 @@ import (
 )
 
 // AddReturnProduct
-// @Summary Добавить возврат товара
+// @Summary Add a product return
 // @Tags returns
-// @Description Добавить новую запись о возврате товара
+// @Description Add a new record for a product return
 // @Accept json
 // @Produce json
-// @Param input body models.ReturnsProduct true "Информация о возврате товара"
-// @Success 201 {string} string "Возврат добавлен успешно!"
-// @Failure 400 {object} ErrorResponse "Ошибка ввода"
-// @Failure 500 {object} ErrorResponse "Ошибка сервера"
+// @Param input body models.ReturnsProduct true "Product return information"
+// @Success 201 {string} string "Return added successfully!"
+// @Failure 400 {object} ErrorResponse "Input error"
+// @Failure 500 {object} ErrorResponse "Server error"
 // @Router /returns [post]
 func AddReturnProduct(c *gin.Context) {
 	var returnProduct models.ReturnsProduct
@@ -42,12 +42,12 @@ func AddReturnProduct(c *gin.Context) {
 }
 
 // GetAllReturns
-// @Summary Получить все возвраты
+// @Summary Get all returns
 // @Tags returns
-// @Description Получить список всех возвратов
+// @Description Retrieve a list of all product returns
 // @Produce json
-// @Success 200 {array} models.ReturnsProduct "Список возвратов"
-// @Failure 500 {object} ErrorResponse "Ошибка сервера"
+// @Success 200 {array} models.ReturnResponse "List of returns"
+// @Failure 500 {object} ErrorResponse "Server error"
 // @Router /returns [get]
 func GetAllReturns(c *gin.Context) {
 	// Получаем список всех возвратов через сервис
@@ -62,14 +62,14 @@ func GetAllReturns(c *gin.Context) {
 }
 
 // GetReturnByID
-// @Summary Получить возврат по ID
+// @Summary Get a return by ID
 // @Tags returns
-// @Description Получить информацию о возврате по ID
+// @Description Retrieve product return information by ID
 // @Param id path int true "Return ID"
 // @Produce json
-// @Success 200 {object} models.ReturnsProduct "Информация о возврате"
-// @Failure 404 {object} ErrorResponse "Возврат не найден"
-// @Failure 500 {object} ErrorResponse "Ошибка сервера"
+// @Success 200 {object} models.ReturnResponse "Return information"
+// @Failure 404 {object} ErrorResponse "Return not found"
+// @Failure 500 {object} ErrorResponse "Server error"
 // @Router /returns/{id} [get]
 func GetReturnByID(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
