@@ -106,7 +106,8 @@ func InitRoutes() *gin.Engine {
 		orderG.GET("/:id", GetOrderByID)                      // Получение заказа по ID...
 	}
 
-	reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked())
+	// reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked())
+	reportG := router.Group("/reports")
 	{
 		reportG.GET("/sales", GetSalesReport)                  // Маршрут для получения отчета по продажам за указанный период...
 		reportG.GET("/low-stock", GetLowStockReport)           // Маршрут для получения отчета по товарам с низким запасом...

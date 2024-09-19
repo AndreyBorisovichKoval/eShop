@@ -18,48 +18,120 @@ import (
 // @Tags reports
 // @Description Get a sales report including total sales, total quantity, and top selling products for a specified date range
 // @ID get-sales-report
-// @Produce json
+// @Produce json, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv
 // @Param start_date query string true "Start date in format YYYY-MM-DD"
 // @Param end_date query string true "End date in format YYYY-MM-DD"
+// @Param format query string false "Report format: 'json', 'csv', 'xlsx'" Enums(json, csv, xlsx)
 // @Success 200 {object} models.SalesReport "Sales report"
 // @Failure 400 {object} ErrorResponse "Invalid input"
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /reports/sales [get]
 // @Security ApiKeyAuth
 func GetSalesReport(c *gin.Context) {
-	startDateStr := c.Query("start_date")
-	endDateStr := c.Query("end_date")
+    startDateStr := c.Query("start_date")
+    endDateStr := c.Query("end_date")
+    format := c.DefaultQuery("format", "json") // Формат по умолчанию - json
 
-	if startDateStr == "" || endDateStr == "" {
-		handleError(c, errs.ErrValidationFailed)
-		return
-	}
+    if startDateStr == "" || endDateStr == "" {
+        handleError(c, errs.ErrValidationFailed)
+        return
+    }
 
-	// Парсим даты
-	startDate, err := time.Parse("2006-01-02", startDateStr)
-	if err != nil {
-		logger.Error.Printf("[controllers.GetSalesReport] error parsing start_date: %v\n", err)
-		handleError(c, errs.ErrValidationFailed)
-		return
-	}
+    // Парсим даты
+    startDate, err := time.Parse("2006-01-02", startDateStr)
+    if err != nil {
+        logger.Error.Printf("[controllers.GetSalesReport] error parsing start_date: %v\n", err)
+        handleError(c, errs.ErrValidationFailed)
+        return
+    }
 
-	endDate, err := time.Parse("2006-01-02", endDateStr)
-	if err != nil {
-		logger.Error.Printf("[controllers.GetSalesReport] error parsing end_date: %v\n", err)
-		handleError(c, errs.ErrValidationFailed)
-		return
-	}
+    endDate, err := time.Parse("2006-01-02", endDateStr)
+    if err != nil {
+        logger.Error.Printf("[controllers.GetSalesReport] error parsing end_date: %v\n", err)
+        handleError(c, errs.ErrValidationFailed)
+        return
+    }
 
-	// Получаем отчёт из сервиса
-	report, err := service.GetSalesReport(startDate, endDate)
-	if err != nil {
-		handleError(c, err)
-		return
-	}
+    // Получаем отчёт из сервиса
+    report, err := service.GetSalesReport(startDate, endDate)
+    if err != nil {
+        handleError(c, err)
+        return
+    }
 
-	logger.Info.Printf("Sales report retrieved for period %s to %s\n", startDateStr, endDateStr)
-	c.JSON(http.StatusOK, report)
+    // В зависимости от формата генерируем отчёт
+    switch format {
+    case "json":
+        logger.Info.Printf("Sales report retrieved in JSON format for period %s to %s\n", startDateStr, endDateStr)
+        c.JSON(http.StatusOK, report)
+    case "csv":
+        file, err := service.GenerateSalesReportCSV(report)
+        if err != nil {
+            handleError(c, err)
+            return
+        }
+        c.Header("Content-Disposition", "attachment; filename=sales_report.csv")
+        c.Data(http.StatusOK, "text/csv", file)
+    case "xlsx":
+        file, err := service.GenerateSalesReportXLSX(report)
+        if err != nil {
+            handleError(c, err)
+            return
+        }
+        c.Header("Content-Disposition", "attachment; filename=sales_report.xlsx")
+        c.Data(http.StatusOK, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", file)
+    default:
+        handleError(c, errs.ErrValidationFailed)
+    }
 }
+
+// // GetSalesReport
+// // @Summary Retrieve sales report for a given period
+// // @Tags reports
+// // @Description Get a sales report including total sales, total quantity, and top selling products for a specified date range
+// // @ID get-sales-report
+// // @Produce json
+// // @Param start_date query string true "Start date in format YYYY-MM-DD"
+// // @Param end_date query string true "End date in format YYYY-MM-DD"
+// // @Success 200 {object} models.SalesReport "Sales report"
+// // @Failure 400 {object} ErrorResponse "Invalid input"
+// // @Failure 500 {object} ErrorResponse "Server error"
+// // @Router /reports/sales [get]
+// // @Security ApiKeyAuth
+// func GetSalesReport(c *gin.Context) {
+// 	startDateStr := c.Query("start_date")
+// 	endDateStr := c.Query("end_date")
+
+// 	if startDateStr == "" || endDateStr == "" {
+// 		handleError(c, errs.ErrValidationFailed)
+// 		return
+// 	}
+
+// 	// Парсим даты
+// 	startDate, err := time.Parse("2006-01-02", startDateStr)
+// 	if err != nil {
+// 		logger.Error.Printf("[controllers.GetSalesReport] error parsing start_date: %v\n", err)
+// 		handleError(c, errs.ErrValidationFailed)
+// 		return
+// 	}
+
+// 	endDate, err := time.Parse("2006-01-02", endDateStr)
+// 	if err != nil {
+// 		logger.Error.Printf("[controllers.GetSalesReport] error parsing end_date: %v\n", err)
+// 		handleError(c, errs.ErrValidationFailed)
+// 		return
+// 	}
+
+// 	// Получаем отчёт из сервиса
+// 	report, err := service.GetSalesReport(startDate, endDate)
+// 	if err != nil {
+// 		handleError(c, err)
+// 		return
+// 	}
+
+// 	logger.Info.Printf("Sales report retrieved for period %s to %s\n", startDateStr, endDateStr)
+// 	c.JSON(http.StatusOK, report)
+// }
 
 // GetLowStockReport
 // @Summary Получить отчет по товарам с низким запасом
