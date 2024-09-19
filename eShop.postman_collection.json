@@ -2268,6 +2268,50 @@
 			"name": "ReportsToFiles",
 			"item": [
 				{
+					"name": "GetSalesReport-JSON",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31&format=json",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"reports",
+								"sales"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2024-01-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2024-12-31"
+								},
+								{
+									"key": "format",
+									"value": "json"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "GetSalesReport-CSV",
 					"request": {
 						"auth": {
@@ -2349,6 +2393,94 @@
 								{
 									"key": "format",
 									"value": "xlsx"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSalesReport-CSVZIP",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31&format=csvzip",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"reports",
+								"sales"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2024-01-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2024-12-31"
+								},
+								{
+									"key": "format",
+									"value": "csvzip"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSalesReport-XLSXZIP",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31&format=xlsxzip",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"reports",
+								"sales"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2024-01-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2024-12-31"
+								},
+								{
+									"key": "format",
+									"value": "xlsxzip"
 								}
 							]
 						}
