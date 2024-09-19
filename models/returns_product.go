@@ -41,12 +41,12 @@ func (ReturnsProduct) TableName() string {
 	return "returns_products"
 }
 
+// ReturnResponse - кастомная структура для возвратов.
 type ReturnResponse struct {
-	ID         uint    `json:"id"`
-	Product    string  `json:"product"`     // Название товара
-	Category   string  `json:"category"`    // Категория товара
-	Supplier   string  `json:"supplier"`    // Поставщик
-	Quantity   float64 `json:"quantity"`    // Количество
-	Reason     string  `json:"reason"`      // Причина возврата
-	ReturnedAt string  `json:"returned_at"` // Дата возврата
+	ID           uint    `json:"id"`            // ID записи возврата
+	ProductName  string  `json:"product_name"`  // Название товара
+	SupplierName string  `json:"supplier_name"` // Название поставщика
+	Quantity     float64 `json:"quantity"`      // Количество
+	ReturnReason string  `json:"return_reason"` // Причина возврата
+	ReturnedAt   string  `json:"returned_at"`   // Дата возврата
 }

@@ -50,13 +50,14 @@ func AddReturnProduct(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Ошибка сервера"
 // @Router /returns [get]
 func GetAllReturns(c *gin.Context) {
+	// Получаем список всех возвратов через сервис
 	returns, err := service.GetAllReturns()
 	if err != nil {
 		handleError(c, err)
 		return
 	}
 
-	logger.Info.Printf("Retrieved list of all returns")
+	// Возвращаем список всех возвратов в нужном формате
 	c.JSON(http.StatusOK, returns)
 }
 
@@ -77,12 +78,13 @@ func GetReturnByID(c *gin.Context) {
 		return
 	}
 
+	// Получаем данные возврата через сервис
 	returnProduct, err := service.GetReturnByID(uint(id))
 	if err != nil {
 		handleError(c, err)
 		return
 	}
 
-	logger.Info.Printf("Return with ID %d retrieved successfully", id)
+	// Возвращаем результат в нужном формате
 	c.JSON(http.StatusOK, returnProduct)
 }
