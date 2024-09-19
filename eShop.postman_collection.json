@@ -1958,6 +1958,132 @@
 			]
 		},
 		{
+			"name": "ReturnsProducts",
+			"item": [
+				{
+					"name": "AddReturnProduct",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2ODg0OTAsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.EmAbsKqmPOa3jedR06klkevb1IP_JtP3EywTw4gwErU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"product_id\": 1,\r\n  \"supplier_id\": 1,\r\n  \"quantity\": 10.5,\r\n  \"return_reason\": \"Бракованный товар\",\r\n  \"returned_at\": \"2024-09-18T15:00:00Z\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/returns",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"returns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllReturns",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2ODg0OTAsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.EmAbsKqmPOa3jedR06klkevb1IP_JtP3EywTw4gwErU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/returns",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"returns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetReturnByID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2ODg0OTAsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.EmAbsKqmPOa3jedR06klkevb1IP_JtP3EywTw4gwErU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/returns/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"returns",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Reports",
 			"item": [
 				{
@@ -2131,132 +2257,6 @@
 									"key": "end_date",
 									"value": "2024-12-31"
 								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "ReturnsProducts",
-			"item": [
-				{
-					"name": "AddReturnProduct",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2ODg0OTAsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.EmAbsKqmPOa3jedR06klkevb1IP_JtP3EywTw4gwErU",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"product_id\": 1,\r\n  \"supplier_id\": 1,\r\n  \"quantity\": 10.5,\r\n  \"return_reason\": \"Бракованный товар\",\r\n  \"returned_at\": \"2024-09-18T15:00:00Z\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8585/returns",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"returns"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetAllReturns",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2ODg0OTAsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.EmAbsKqmPOa3jedR06klkevb1IP_JtP3EywTw4gwErU",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8585/returns",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"returns"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetReturnByID",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2ODg0OTAsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.EmAbsKqmPOa3jedR06klkevb1IP_JtP3EywTw4gwErU",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8585/returns/7",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"returns",
-								"7"
 							]
 						}
 					},
