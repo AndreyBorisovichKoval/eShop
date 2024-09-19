@@ -16,12 +16,12 @@ import (
 // GetSalesReport
 // @Summary Retrieve sales report for a given period
 // @Tags reports
-// @Description Get a sales report in JSON, CSV, or XLSX format
+// @Description Get a sales report in JSON, CSV, XLSX, or ZIP format
 // @ID get-sales-report
-// @Produce json
+// @Produce json, application/octet-stream, application/zip
 // @Param start_date query string true "Start date in format YYYY-MM-DD"
 // @Param end_date query string true "End date in format YYYY-MM-DD"
-// @Param format query string false "File format (json, csv, or xlsx)"
+// @Param format query string false "File format (json, csv, xlsx, csv_zip, or xlsx_zip)"
 // @Success 200 {object} models.SalesReport "Sales report"
 // @Failure 400 {object} ErrorResponse "Invalid input"
 // @Failure 500 {object} ErrorResponse "Server error"
@@ -39,21 +39,18 @@ func GetSalesReport(c *gin.Context) {
 	// Парсим даты
 	startDate, err := time.Parse("2006-01-02", startDateStr)
 	if err != nil {
-		logger.Error.Printf("[controllers.GetSalesReport] error parsing start_date: %v\n", err)
 		handleError(c, errs.ErrValidationFailed)
 		return
 	}
 
 	endDate, err := time.Parse("2006-01-02", endDateStr)
 	if err != nil {
-		logger.Error.Printf("[controllers.GetSalesReport] error parsing end_date: %v\n", err)
 		handleError(c, errs.ErrValidationFailed)
 		return
 	}
 
-	// Генерация отчета в зависимости от формата
+	// Если формат не указан или указан JSON, возвращаем данные в формате JSON
 	if format == "json" || format == "" {
-		// Возвращаем отчет в формате JSON
 		report, err := service.GetSalesReport(startDate, endDate)
 		if err != nil {
 			handleError(c, err)
@@ -63,7 +60,7 @@ func GetSalesReport(c *gin.Context) {
 		return
 	}
 
-	// Генерация файла отчета (CSV или XLSX)
+	// Генерация файла отчета (CSV, XLSX, ZIP)
 	fileBuffer, fileName, err := service.GenerateSalesReportFile(startDate, endDate, format)
 	if err != nil {
 		handleError(c, err)
@@ -71,20 +68,24 @@ func GetSalesReport(c *gin.Context) {
 	}
 
 	// Отправляем файл в ответе
+	contentType := "application/octet-stream"
+	if format == "csv_zip" || format == "xlsx_zip" {
+		contentType = "application/zip"
+	}
 	c.Header("Content-Disposition", "attachment; filename="+fileName)
-	c.Data(http.StatusOK, "application/octet-stream", fileBuffer.Bytes())
+	c.Data(http.StatusOK, contentType, fileBuffer.Bytes())
 }
 
 // // GetSalesReport
 // // @Summary Retrieve sales report for a given period
 // // @Tags reports
-// // @Description Get a sales report in CSV or XLSX format
+// // @Description Get a sales report in JSON, CSV, or XLSX format
 // // @ID get-sales-report
 // // @Produce json
 // // @Param start_date query string true "Start date in format YYYY-MM-DD"
 // // @Param end_date query string true "End date in format YYYY-MM-DD"
-// // @Param format query string true "File format (csv or xlsx)"
-// // @Success 200 {file} file "Sales report file"
+// // @Param format query string false "File format (json, csv, or xlsx)"
+// // @Success 200 {object} models.SalesReport "Sales report"
 // // @Failure 400 {object} ErrorResponse "Invalid input"
 // // @Failure 500 {object} ErrorResponse "Server error"
 // // @Router /reports/sales [get]
@@ -92,127 +93,6 @@ func GetSalesReport(c *gin.Context) {
 // 	startDateStr := c.Query("start_date")
 // 	endDateStr := c.Query("end_date")
 // 	format := c.Query("format")
-
-// 	if startDateStr == "" || endDateStr == "" || format == "" {
-// 		handleError(c, errs.ErrValidationFailed)
-// 		return
-// 	}
-
-// 	// Парсим даты
-// 	startDate, err := time.Parse("2006-01-02", startDateStr)
-// 	if err != nil {
-// 		logger.Error.Printf("[controllers.GetSalesReport] error parsing start_date: %v\n", err)
-// 		handleError(c, errs.ErrValidationFailed)
-// 		return
-// 	}
-
-// 	endDate, err := time.Parse("2006-01-02", endDateStr)
-// 	if err != nil {
-// 		logger.Error.Printf("[controllers.GetSalesReport] error parsing end_date: %v\n", err)
-// 		handleError(c, errs.ErrValidationFailed)
-// 		return
-// 	}
-
-// 	// Генерация файла отчета
-// 	fileBuffer, fileName, err := service.GenerateSalesReportFile(startDate, endDate, format)
-// 	if err != nil {
-// 		handleError(c, err)
-// 		return
-// 	}
-
-// 	// Отправляем файл в ответе
-// 	c.Header("Content-Disposition", "attachment; filename="+fileName)
-// 	c.Data(http.StatusOK, "application/octet-stream", fileBuffer.Bytes())
-// }
-
-// // GetSalesReport
-// // @Summary Retrieve sales report for a given period
-// // @Tags reports
-// // @Description Get a sales report including total sales, total quantity, and top selling products for a specified date range
-// // @ID get-sales-report
-// // @Produce json, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv
-// // @Param start_date query string true "Start date in format YYYY-MM-DD"
-// // @Param end_date query string true "End date in format YYYY-MM-DD"
-// // @Param format query string false "Report format: 'json', 'csv', 'xlsx'" Enums(json, csv, xlsx)
-// // @Success 200 {object} models.SalesReport "Sales report"
-// // @Failure 400 {object} ErrorResponse "Invalid input"
-// // @Failure 500 {object} ErrorResponse "Server error"
-// // @Router /reports/sales [get]
-// // @Security ApiKeyAuth
-// func GetSalesReport(c *gin.Context) {
-//     startDateStr := c.Query("start_date")
-//     endDateStr := c.Query("end_date")
-//     format := c.DefaultQuery("format", "json") // Формат по умолчанию - json
-
-//     if startDateStr == "" || endDateStr == "" {
-//         handleError(c, errs.ErrValidationFailed)
-//         return
-//     }
-
-//     // Парсим даты
-//     startDate, err := time.Parse("2006-01-02", startDateStr)
-//     if err != nil {
-//         logger.Error.Printf("[controllers.GetSalesReport] error parsing start_date: %v\n", err)
-//         handleError(c, errs.ErrValidationFailed)
-//         return
-//     }
-
-//     endDate, err := time.Parse("2006-01-02", endDateStr)
-//     if err != nil {
-//         logger.Error.Printf("[controllers.GetSalesReport] error parsing end_date: %v\n", err)
-//         handleError(c, errs.ErrValidationFailed)
-//         return
-//     }
-
-//     // Получаем отчёт из сервиса
-//     report, err := service.GetSalesReport(startDate, endDate)
-//     if err != nil {
-//         handleError(c, err)
-//         return
-//     }
-
-//     // В зависимости от формата генерируем отчёт
-//     switch format {
-//     case "json":
-//         logger.Info.Printf("Sales report retrieved in JSON format for period %s to %s\n", startDateStr, endDateStr)
-//         c.JSON(http.StatusOK, report)
-//     case "csv":
-//         file, err := service.GenerateSalesReportCSV(report)
-//         if err != nil {
-//             handleError(c, err)
-//             return
-//         }
-//         c.Header("Content-Disposition", "attachment; filename=sales_report.csv")
-//         c.Data(http.StatusOK, "text/csv", file)
-//     case "xlsx":
-//         file, err := service.GenerateSalesReportXLSX(report)
-//         if err != nil {
-//             handleError(c, err)
-//             return
-//         }
-//         c.Header("Content-Disposition", "attachment; filename=sales_report.xlsx")
-//         c.Data(http.StatusOK, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", file)
-//     default:
-//         handleError(c, errs.ErrValidationFailed)
-//     }
-// }
-
-// // GetSalesReport
-// // @Summary Retrieve sales report for a given period
-// // @Tags reports
-// // @Description Get a sales report including total sales, total quantity, and top selling products for a specified date range
-// // @ID get-sales-report
-// // @Produce json
-// // @Param start_date query string true "Start date in format YYYY-MM-DD"
-// // @Param end_date query string true "End date in format YYYY-MM-DD"
-// // @Success 200 {object} models.SalesReport "Sales report"
-// // @Failure 400 {object} ErrorResponse "Invalid input"
-// // @Failure 500 {object} ErrorResponse "Server error"
-// // @Router /reports/sales [get]
-// // @Security ApiKeyAuth
-// func GetSalesReport(c *gin.Context) {
-// 	startDateStr := c.Query("start_date")
-// 	endDateStr := c.Query("end_date")
 
 // 	if startDateStr == "" || endDateStr == "" {
 // 		handleError(c, errs.ErrValidationFailed)
@@ -234,15 +114,28 @@ func GetSalesReport(c *gin.Context) {
 // 		return
 // 	}
 
-// 	// Получаем отчёт из сервиса
-// 	report, err := service.GetSalesReport(startDate, endDate)
+// 	// Генерация отчета в зависимости от формата
+// 	if format == "json" || format == "" {
+// 		// Возвращаем отчет в формате JSON
+// 		report, err := service.GetSalesReport(startDate, endDate)
+// 		if err != nil {
+// 			handleError(c, err)
+// 			return
+// 		}
+// 		c.JSON(http.StatusOK, report)
+// 		return
+// 	}
+
+// 	// Генерация файла отчета (CSV или XLSX)
+// 	fileBuffer, fileName, err := service.GenerateSalesReportFile(startDate, endDate, format)
 // 	if err != nil {
 // 		handleError(c, err)
 // 		return
 // 	}
 
-// 	logger.Info.Printf("Sales report retrieved for period %s to %s\n", startDateStr, endDateStr)
-// 	c.JSON(http.StatusOK, report)
+// 	// Отправляем файл в ответе
+// 	c.Header("Content-Disposition", "attachment; filename="+fileName)
+// 	c.Data(http.StatusOK, "application/octet-stream", fileBuffer.Bytes())
 // }
 
 // GetLowStockReport
