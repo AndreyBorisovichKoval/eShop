@@ -76,103 +76,6 @@ func GetSalesReport(c *gin.Context) {
 	c.Data(http.StatusOK, contentType, fileBuffer.Bytes())
 }
 
-// // GetSalesReport
-// // @Summary Retrieve sales report for a given period
-// // @Tags reports
-// // @Description Get a sales report in JSON, CSV, or XLSX format
-// // @ID get-sales-report
-// // @Produce json
-// // @Param start_date query string true "Start date in format YYYY-MM-DD"
-// // @Param end_date query string true "End date in format YYYY-MM-DD"
-// // @Param format query string false "File format (json, csv, or xlsx)"
-// // @Success 200 {object} models.SalesReport "Sales report"
-// // @Failure 400 {object} ErrorResponse "Invalid input"
-// // @Failure 500 {object} ErrorResponse "Server error"
-// // @Router /reports/sales [get]
-// func GetSalesReport(c *gin.Context) {
-// 	startDateStr := c.Query("start_date")
-// 	endDateStr := c.Query("end_date")
-// 	format := c.Query("format")
-
-// 	if startDateStr == "" || endDateStr == "" {
-// 		handleError(c, errs.ErrValidationFailed)
-// 		return
-// 	}
-
-// 	// Парсим даты
-// 	startDate, err := time.Parse("2006-01-02", startDateStr)
-// 	if err != nil {
-// 		logger.Error.Printf("[controllers.GetSalesReport] error parsing start_date: %v\n", err)
-// 		handleError(c, errs.ErrValidationFailed)
-// 		return
-// 	}
-
-// 	endDate, err := time.Parse("2006-01-02", endDateStr)
-// 	if err != nil {
-// 		logger.Error.Printf("[controllers.GetSalesReport] error parsing end_date: %v\n", err)
-// 		handleError(c, errs.ErrValidationFailed)
-// 		return
-// 	}
-
-// 	// Генерация отчета в зависимости от формата
-// 	if format == "json" || format == "" {
-// 		// Возвращаем отчет в формате JSON
-// 		report, err := service.GetSalesReport(startDate, endDate)
-// 		if err != nil {
-// 			handleError(c, err)
-// 			return
-// 		}
-// 		c.JSON(http.StatusOK, report)
-// 		return
-// 	}
-
-// 	// Генерация файла отчета (CSV или XLSX)
-// 	fileBuffer, fileName, err := service.GenerateSalesReportFile(startDate, endDate, format)
-// 	if err != nil {
-// 		handleError(c, err)
-// 		return
-// 	}
-
-// 	// Отправляем файл в ответе
-// 	c.Header("Content-Disposition", "attachment; filename="+fileName)
-// 	c.Data(http.StatusOK, "application/octet-stream", fileBuffer.Bytes())
-// }
-
-// GetLowStockReport
-// @Summary Получить отчет по товарам с низким запасом
-// @Tags reports
-// @Description Отчет по товарам, у которых уровень запаса ниже порога
-// @ID get-low-stock-report
-// @Produce json
-// @Param threshold query float64 true "Минимальный порог запаса"
-// @Success 200 {array} models.LowStockReport "Список товаров с низким запасом"
-// @Failure 400 {object} ErrorResponse "Ошибка ввода"
-// @Failure 500 {object} ErrorResponse "Ошибка сервера"
-// @Router /reports/low-stock [get]
-// @Security ApiKeyAuth
-func GetLowStockReport(c *gin.Context) {
-	thresholdStr := c.Query("threshold")
-	if thresholdStr == "" {
-		handleError(c, errs.ErrValidationFailed)
-		return
-	}
-
-	threshold, err := strconv.ParseFloat(thresholdStr, 64)
-	if err != nil {
-		logger.Error.Printf("[controllers.GetLowStockReport] error parsing threshold: %v\n", err)
-		handleError(c, errs.ErrValidationFailed)
-		return
-	}
-
-	lowStockReport, err := service.GetLowStockReport(threshold)
-	if err != nil {
-		handleError(c, err)
-		return
-	}
-
-	c.JSON(http.StatusOK, lowStockReport)
-}
-
 // GetSellerReport
 // @Summary Получить отчет по продавцам
 // @Tags reports
@@ -211,8 +114,6 @@ func GetSupplierReport(c *gin.Context) {
 
 	c.JSON(http.StatusOK, report)
 }
-
-// /
 
 // GetCategorySalesReport
 // @Summary Получить отчет по категориям товаров
@@ -258,4 +159,93 @@ func GetCategorySalesReport(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, report)
+}
+
+// // GetLowStockReport
+// // @Summary Получить отчет по товарам с низким запасом
+// // @Tags reports
+// // @Description Отчет по товарам, у которых уровень запаса ниже порога
+// // @ID get-low-stock-report
+// // @Produce json
+// // @Param threshold query float64 true "Минимальный порог запаса"
+// // @Success 200 {array} models.LowStockReport "Список товаров с низким запасом"
+// // @Failure 400 {object} ErrorResponse "Ошибка ввода"
+// // @Failure 500 {object} ErrorResponse "Ошибка сервера"
+// // @Router /reports/low-stock [get]
+// // @Security ApiKeyAuth
+// func GetLowStockReport(c *gin.Context) {
+// 	thresholdStr := c.Query("threshold")
+// 	if thresholdStr == "" {
+// 		handleError(c, errs.ErrValidationFailed)
+// 		return
+// 	}
+
+// 	threshold, err := strconv.ParseFloat(thresholdStr, 64)
+// 	if err != nil {
+// 		logger.Error.Printf("[controllers.GetLowStockReport] error parsing threshold: %v\n", err)
+// 		handleError(c, errs.ErrValidationFailed)
+// 		return
+// 	}
+
+// 	lowStockReport, err := service.GetLowStockReport(threshold)
+// 	if err != nil {
+// 		handleError(c, err)
+// 		return
+// 	}
+
+// 	c.JSON(http.StatusOK, lowStockReport)
+// }
+
+// GetLowStockReport
+// @Summary Retrieve low stock report
+// @Tags reports
+// @Description Get a low stock report in JSON, CSV, XLSX, or ZIP format
+// @ID get-low-stock-report
+// @Produce json, application/octet-stream, application/zip
+// @Param threshold query float64 true "Minimum stock threshold"
+// @Param format query string false "File format (json, csv, xlsx, csv_zip, or xlsx_zip)"
+// @Success 200 {array} models.LowStockReport "Low stock report"
+// @Failure 400 {object} ErrorResponse "Invalid input"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /reports/low-stock [get]
+func GetLowStockReport(c *gin.Context) {
+	thresholdStr := c.Query("threshold")
+	format := c.Query("format")
+
+	if thresholdStr == "" {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	threshold, err := strconv.ParseFloat(thresholdStr, 64)
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	// Если формат не указан или указан JSON, возвращаем данные в формате JSON
+	if format == "json" || format == "" {
+		lowStockReport, err := service.GetLowStockReport(threshold)
+		if err != nil {
+			handleError(c, err)
+			return
+		}
+		c.JSON(http.StatusOK, lowStockReport)
+		return
+	}
+
+	// Генерация файла отчета (CSV, XLSX, ZIP)
+	fileBuffer, fileName, err := service.GenerateLowStockReportFile(threshold, format)
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	// Отправляем файл в ответе
+	contentType := "application/octet-stream"
+	if format == "csv_zip" || format == "xlsx_zip" {
+		contentType = "application/zip"
+	}
+	c.Header("Content-Disposition", "attachment; filename="+fileName)
+	c.Data(http.StatusOK, contentType, fileBuffer.Bytes())
 }
