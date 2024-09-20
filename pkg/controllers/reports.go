@@ -76,26 +76,6 @@ func GetSalesReport(c *gin.Context) {
 	c.Data(http.StatusOK, contentType, fileBuffer.Bytes())
 }
 
-// GetSellerReport
-// @Summary Получить отчет по продавцам
-// @Tags reports
-// @Description Отчет по количеству заказов и выручке каждого продавца
-// @ID get-seller-report
-// @Produce json
-// @Success 200 {array} models.SellerReport "Список продавцов с количеством заказов и общей выручкой"
-// @Failure 500 {object} ErrorResponse "Ошибка сервера"
-// @Router /reports/sellers [get]
-func GetSellerReport(c *gin.Context) {
-	report, err := service.GetSellerReport()
-	if err != nil {
-		logger.Error.Printf("[controllers.GetSellerReport] error generating seller report: %v\n", err)
-		handleError(c, errs.ErrServerError)
-		return
-	}
-
-	c.JSON(http.StatusOK, report)
-}
-
 // GetSupplierReport
 // @Summary Получить отчет по поставщикам
 // @Tags reports
@@ -161,41 +141,6 @@ func GetCategorySalesReport(c *gin.Context) {
 	c.JSON(http.StatusOK, report)
 }
 
-// // GetLowStockReport
-// // @Summary Получить отчет по товарам с низким запасом
-// // @Tags reports
-// // @Description Отчет по товарам, у которых уровень запаса ниже порога
-// // @ID get-low-stock-report
-// // @Produce json
-// // @Param threshold query float64 true "Минимальный порог запаса"
-// // @Success 200 {array} models.LowStockReport "Список товаров с низким запасом"
-// // @Failure 400 {object} ErrorResponse "Ошибка ввода"
-// // @Failure 500 {object} ErrorResponse "Ошибка сервера"
-// // @Router /reports/low-stock [get]
-// // @Security ApiKeyAuth
-// func GetLowStockReport(c *gin.Context) {
-// 	thresholdStr := c.Query("threshold")
-// 	if thresholdStr == "" {
-// 		handleError(c, errs.ErrValidationFailed)
-// 		return
-// 	}
-
-// 	threshold, err := strconv.ParseFloat(thresholdStr, 64)
-// 	if err != nil {
-// 		logger.Error.Printf("[controllers.GetLowStockReport] error parsing threshold: %v\n", err)
-// 		handleError(c, errs.ErrValidationFailed)
-// 		return
-// 	}
-
-// 	lowStockReport, err := service.GetLowStockReport(threshold)
-// 	if err != nil {
-// 		handleError(c, err)
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusOK, lowStockReport)
-// }
-
 // GetLowStockReport
 // @Summary Retrieve low stock report
 // @Tags reports
@@ -238,6 +183,66 @@ func GetLowStockReport(c *gin.Context) {
 	fileBuffer, fileName, err := service.GenerateLowStockReportFile(threshold, format)
 	if err != nil {
 		handleError(c, err)
+		return
+	}
+
+	// Отправляем файл в ответе
+	contentType := "application/octet-stream"
+	if format == "csv_zip" || format == "xlsx_zip" {
+		contentType = "application/zip"
+	}
+	c.Header("Content-Disposition", "attachment; filename="+fileName)
+	c.Data(http.StatusOK, contentType, fileBuffer.Bytes())
+}
+
+// // GetSellerReport
+// // @Summary Получить отчет по продавцам
+// // @Tags reports
+// // @Description Отчет по количеству заказов и выручке каждого продавца
+// // @ID get-seller-report
+// // @Produce json
+// // @Success 200 {array} models.SellerReport "Список продавцов с количеством заказов и общей выручкой"
+// // @Failure 500 {object} ErrorResponse "Ошибка сервера"
+// // @Router /reports/sellers [get]
+// func GetSellerReport(c *gin.Context) {
+// 	report, err := service.GetSellerReport()
+// 	if err != nil {
+// 		logger.Error.Printf("[controllers.GetSellerReport] error generating seller report: %v\n", err)
+// 		handleError(c, errs.ErrServerError)
+// 		return
+// 	}
+
+// 	c.JSON(http.StatusOK, report)
+// }
+
+// GetSellerReport
+// @Summary Retrieve seller report
+// @Tags reports
+// @Description Get a seller report in JSON, CSV, XLSX, or ZIP format
+// @ID get-seller-report
+// @Produce json, application/octet-stream, application/zip
+// @Param format query string false "File format (json, csv, xlsx, csv_zip, or xlsx_zip)"
+// @Success 200 {array} models.SellerReport "Seller report"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /reports/sellers [get]
+func GetSellerReport(c *gin.Context) {
+	format := c.Query("format")
+
+	// Если формат не указан или указан JSON, возвращаем данные в формате JSON
+	if format == "json" || format == "" {
+		report, err := service.GetSellerReport()
+		if err != nil {
+			handleError(c, errs.ErrServerError)
+			return
+		}
+		c.JSON(http.StatusOK, report)
+		return
+	}
+
+	// Генерация файла отчета (CSV, XLSX, ZIP)
+	fileBuffer, fileName, err := service.GenerateSellerReportFile(format)
+	if err != nil {
+		handleError(c, errs.ErrServerError)
 		return
 	}
 

@@ -302,3 +302,134 @@ func GenerateLowStockReportFile(threshold float64, format string) (*bytes.Buffer
 
 	return &buf, fileName, nil
 }
+
+// GenerateSellerReportFile генерирует отчет в формате CSV или XLSX, а также возвращает ZIP-архив при необходимости.
+func GenerateSellerReportFile(format string) (*bytes.Buffer, string, error) {
+	report, err := GetSellerReport()
+	if err != nil {
+		return nil, "", err
+	}
+
+	var buf bytes.Buffer
+	var fileName string
+
+	switch format {
+	case "csv", "csvzip":
+		// Создаем временный файл для CSV
+		tmpFile, err := os.CreateTemp("", "seller_report_*.csv")
+		if err != nil {
+			return nil, "", err
+		}
+		defer tmpFile.Close()
+		defer os.Remove(tmpFile.Name()) // Удаляем файл после завершения
+
+		writer := csv.NewWriter(tmpFile)
+
+		// Заголовки CSV
+		writer.Write([]string{"Seller ID", "Seller Name", "Order Count", "Total Revenue"})
+
+		// Данные по продавцам
+		for _, item := range report {
+			row := []string{
+				fmt.Sprintf("%d", item.SellerID),
+				item.SellerName,
+				fmt.Sprintf("%d", item.OrderCount),
+				fmt.Sprintf("%.2f", item.TotalRevenue),
+			}
+			writer.Write(row)
+		}
+
+		// Обязательно очищаем буфер
+		writer.Flush()
+
+		// Проверяем на ошибки записи
+		if err := writer.Error(); err != nil {
+			return nil, "", err
+		}
+
+		// Если запрашивается ZIP
+		if format == "csvzip" {
+			fileName = "seller_report.zip"
+			zipWriter := zip.NewWriter(&buf)
+			defer zipWriter.Close()
+
+			// Добавляем CSV файл в архив
+			csvFileInZip, err := zipWriter.Create("seller_report.csv")
+			if err != nil {
+				return nil, "", err
+			}
+
+			// Открываем временный файл для чтения
+			tmpFile.Seek(0, io.SeekStart)
+			_, err = io.Copy(csvFileInZip, tmpFile)
+			if err != nil {
+				return nil, "", err
+			}
+
+			zipWriter.Close()
+		} else {
+			// Читаем временный файл в буфер
+			tmpFile.Seek(0, io.SeekStart)
+			_, err = io.Copy(&buf, tmpFile)
+			if err != nil {
+				return nil, "", err
+			}
+			fileName = "seller_report.csv"
+		}
+
+	case "xlsx", "xlsxzip":
+		excelFile := excelize.NewFile()
+		sheetName := "SellerReport"
+		excelFile.NewSheet(sheetName)
+
+		// Заголовки Excel
+		excelFile.SetCellValue(sheetName, "A1", "Seller ID")
+		excelFile.SetCellValue(sheetName, "B1", "Seller Name")
+		excelFile.SetCellValue(sheetName, "C1", "Order Count")
+		excelFile.SetCellValue(sheetName, "D1", "Total Revenue")
+
+		// Данные по продавцам
+		for i, item := range report {
+			rowIndex := i + 2
+			excelFile.SetCellValue(sheetName, fmt.Sprintf("A%d", rowIndex), item.SellerID)
+			excelFile.SetCellValue(sheetName, fmt.Sprintf("B%d", rowIndex), item.SellerName)
+			excelFile.SetCellValue(sheetName, fmt.Sprintf("C%d", rowIndex), item.OrderCount)
+			excelFile.SetCellValue(sheetName, fmt.Sprintf("D%d", rowIndex), item.TotalRevenue)
+		}
+
+		if format == "xlsxzip" {
+			fileName = "seller_report.zip"
+			zipWriter := zip.NewWriter(&buf)
+			defer zipWriter.Close()
+
+			// Создаем XLSX файл в буфере
+			var xlsxBuffer bytes.Buffer
+			if err := excelFile.Write(&xlsxBuffer); err != nil {
+				return nil, "", err
+			}
+
+			// Добавляем XLSX файл в архив
+			xlsxFileInZip, err := zipWriter.Create("seller_report.xlsx")
+			if err != nil {
+				return nil, "", err
+			}
+			_, err = io.Copy(xlsxFileInZip, &xlsxBuffer)
+			if err != nil {
+				return nil, "", err
+			}
+
+			zipWriter.Close()
+		} else {
+			// Сохраняем в буфер для XLSX
+			if err := excelFile.Write(&buf); err != nil {
+				return nil, "", err
+			}
+			fileName = "seller_report.xlsx"
+		}
+
+	default:
+		return nil, "", fmt.Errorf("unsupported format: %s", format)
+	}
+
+	return &buf, fileName, nil
+}

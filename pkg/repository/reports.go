@@ -93,21 +93,6 @@ func GetCategorySalesReport(startDate, endDate time.Time) ([]models.CategorySale
 	return categoryReport, nil
 }
 
-// // GetLowStockProducts получает список товаров с запасом, меньшим или равным указанному порогу.
-// // Возвращает список товаров с полями ID продукта, названием и количеством на складе.
-// func GetLowStockProducts(threshold float64) ([]models.LowStockReport, error) {
-// 	var lowStockProducts []models.LowStockReport
-// 	err := db.GetDBConn().Model(&models.Product{}).
-// 		Select("id as product_id, title, stock").
-// 		Where("stock <= ?", threshold).
-// 		Scan(&lowStockProducts).Error
-// 	if err != nil {
-// 		logger.Error.Printf("[repository.GetLowStockProducts] error retrieving low stock products: %v\n", err)
-// 		return nil, err
-// 	}
-// 	return lowStockProducts, nil
-// }
-
 // GetLowStockProducts получает список товаров с запасом, меньшим или равным указанному порогу.
 func GetLowStockProducts(threshold float64) ([]models.LowStockReport, error) {
 	var lowStockProducts []models.LowStockReport
