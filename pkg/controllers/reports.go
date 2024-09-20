@@ -209,52 +209,6 @@ func GetSupplierReport(c *gin.Context) {
 	c.Data(http.StatusOK, contentType, fileBuffer.Bytes())
 }
 
-// // GetCategorySalesReport
-// // @Summary Получить отчет по категориям товаров
-// // @Tags reports
-// // @Description Отчет по категориям товаров с выручкой за указанный период
-// // @ID get-category-sales-report
-// // @Produce json
-// // @Param start_date query string true "Дата начала в формате YYYY-MM-DD"
-// // @Param end_date query string true "Дата окончания в формате YYYY-MM-DD"
-// // @Success 200 {array} models.CategorySalesReport "Список категорий с выручкой"
-// // @Failure 400 {object} ErrorResponse "Ошибка ввода"
-// // @Failure 500 {object} ErrorResponse "Ошибка сервера"
-// // @Router /reports/category-sales [get]
-// func GetCategorySalesReport(c *gin.Context) {
-// 	startDateStr := c.Query("start_date")
-// 	endDateStr := c.Query("end_date")
-
-// 	if startDateStr == "" || endDateStr == "" {
-// 		handleError(c, errs.ErrValidationFailed)
-// 		return
-// 	}
-
-// 	// Парсим даты
-// 	startDate, err := time.Parse("2006-01-02", startDateStr)
-// 	if err != nil {
-// 		logger.Error.Printf("[controllers.GetCategorySalesReport] error parsing start_date: %v\n", err)
-// 		handleError(c, errs.ErrValidationFailed)
-// 		return
-// 	}
-
-// 	endDate, err := time.Parse("2006-01-02", endDateStr)
-// 	if err != nil {
-// 		logger.Error.Printf("[controllers.GetCategorySalesReport] error parsing end_date: %v\n", err)
-// 		handleError(c, errs.ErrValidationFailed)
-// 		return
-// 	}
-
-// 	// Получаем отчет из сервиса
-// 	report, err := service.GetCategorySalesReport(startDate, endDate)
-// 	if err != nil {
-// 		handleError(c, err)
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusOK, report)
-// }
-
 // GetCategorySalesReport
 // @Summary Retrieve category sales report for a given period
 // @Tags reports
