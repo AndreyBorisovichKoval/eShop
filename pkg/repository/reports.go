@@ -41,41 +41,6 @@ func GetSalesReport(startDate, endDate time.Time) (models.SalesReport, error) {
 	return report, nil
 }
 
-func GetSellerReport() ([]models.SellerReport, error) {
-	var report []models.SellerReport
-
-	err := db.GetDBConn().Model(&models.Order{}).
-		Select("orders.user_id AS seller_id, users.full_name AS seller_name, COUNT(orders.id) AS order_count, SUM(orders.total_amount) AS total_revenue").
-		Joins("JOIN users ON users.id = orders.user_id").
-		Group("orders.user_id, users.full_name").
-		Scan(&report).Error
-	if err != nil {
-		logger.Error.Printf("[repository.GetSellerReport] error generating seller report: %v\n", err)
-		return nil, err
-	}
-
-	return report, nil
-}
-
-func GetCategorySalesReport(startDate, endDate time.Time) ([]models.CategorySalesReport, error) {
-	var categoryReport []models.CategorySalesReport
-
-	// Подсчет выручки по каждой категории за указанный период
-	err := db.GetDBConn().Model(&models.OrderItem{}).
-		Select("products.category_id, categories.title as category_name, SUM(order_items.total) as total_sales").
-		Joins("JOIN products ON products.id = order_items.product_id").
-		Joins("JOIN categories ON categories.id = products.category_id").
-		Where("order_items.created_at BETWEEN ? AND ?", startDate, endDate).
-		Group("products.category_id, categories.title").
-		Scan(&categoryReport).Error
-	if err != nil {
-		logger.Error.Printf("[repository.GetCategorySalesReport] error generating category sales report: %v\n", err)
-		return nil, err
-	}
-
-	return categoryReport, nil
-}
-
 // GetLowStockProducts получает список товаров с запасом, меньшим или равным указанному порогу.
 func GetLowStockProducts(threshold float64) ([]models.LowStockReport, error) {
 	var lowStockProducts []models.LowStockReport
@@ -105,4 +70,40 @@ func GetSupplierReport() ([]models.SupplierReport, error) {
 	}
 
 	return supplierReport, nil
+}
+
+func GetSellerReport() ([]models.SellerReport, error) {
+	var report []models.SellerReport
+
+	err := db.GetDBConn().Model(&models.Order{}).
+		Select("orders.user_id AS seller_id, users.full_name AS seller_name, COUNT(orders.id) AS order_count, SUM(orders.total_amount) AS total_revenue").
+		Joins("JOIN users ON users.id = orders.user_id").
+		Group("orders.user_id, users.full_name").
+		Scan(&report).Error
+	if err != nil {
+		logger.Error.Printf("[repository.GetSellerReport] error generating seller report: %v\n", err)
+		return nil, err
+	}
+
+	return report, nil
+}
+
+
+func GetCategorySalesReport(startDate, endDate time.Time) ([]models.CategorySalesReport, error) {
+	var categoryReport []models.CategorySalesReport
+
+	// Подсчет выручки по каждой категории за указанный период
+	err := db.GetDBConn().Model(&models.OrderItem{}).
+		Select("products.category_id, categories.title as category_name, SUM(order_items.total) as total_sales").
+		Joins("JOIN products ON products.id = order_items.product_id").
+		Joins("JOIN categories ON categories.id = products.category_id").
+		Where("order_items.created_at BETWEEN ? AND ?", startDate, endDate).
+		Group("products.category_id, categories.title").
+		Scan(&categoryReport).Error
+	if err != nil {
+		logger.Error.Printf("[repository.GetCategorySalesReport] error generating category sales report: %v\n", err)
+		return nil, err
+	}
+
+	return categoryReport, nil
 }
