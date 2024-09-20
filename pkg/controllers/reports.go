@@ -76,25 +76,6 @@ func GetSalesReport(c *gin.Context) {
 	c.Data(http.StatusOK, contentType, fileBuffer.Bytes())
 }
 
-// GetSupplierReport
-// @Summary Получить отчет по поставщикам
-// @Tags reports
-// @Description Отчет по поставщикам: количество товаров и общая стоимость поставок
-// @ID get-supplier-report
-// @Produce json
-// @Success 200 {array} models.SupplierReport "Список поставщиков с количеством товаров и общей стоимостью"
-// @Failure 500 {object} ErrorResponse "Ошибка сервера"
-// @Router /reports/suppliers [get]
-func GetSupplierReport(c *gin.Context) {
-	report, err := service.GetSupplierReport()
-	if err != nil {
-		handleError(c, err)
-		return
-	}
-
-	c.JSON(http.StatusOK, report)
-}
-
 // GetCategorySalesReport
 // @Summary Получить отчет по категориям товаров
 // @Tags reports
@@ -195,26 +176,6 @@ func GetLowStockReport(c *gin.Context) {
 	c.Data(http.StatusOK, contentType, fileBuffer.Bytes())
 }
 
-// // GetSellerReport
-// // @Summary Получить отчет по продавцам
-// // @Tags reports
-// // @Description Отчет по количеству заказов и выручке каждого продавца
-// // @ID get-seller-report
-// // @Produce json
-// // @Success 200 {array} models.SellerReport "Список продавцов с количеством заказов и общей выручкой"
-// // @Failure 500 {object} ErrorResponse "Ошибка сервера"
-// // @Router /reports/sellers [get]
-// func GetSellerReport(c *gin.Context) {
-// 	report, err := service.GetSellerReport()
-// 	if err != nil {
-// 		logger.Error.Printf("[controllers.GetSellerReport] error generating seller report: %v\n", err)
-// 		handleError(c, errs.ErrServerError)
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusOK, report)
-// }
-
 // GetSellerReport
 // @Summary Retrieve seller report
 // @Tags reports
@@ -243,6 +204,65 @@ func GetSellerReport(c *gin.Context) {
 	fileBuffer, fileName, err := service.GenerateSellerReportFile(format)
 	if err != nil {
 		handleError(c, errs.ErrServerError)
+		return
+	}
+
+	// Отправляем файл в ответе
+	contentType := "application/octet-stream"
+	if format == "csv_zip" || format == "xlsx_zip" {
+		contentType = "application/zip"
+	}
+	c.Header("Content-Disposition", "attachment; filename="+fileName)
+	c.Data(http.StatusOK, contentType, fileBuffer.Bytes())
+}
+
+// // GetSupplierReport
+// // @Summary Получить отчет по поставщикам
+// // @Tags reports
+// // @Description Отчет по поставщикам: количество товаров и общая стоимость поставок
+// // @ID get-supplier-report
+// // @Produce json
+// // @Success 200 {array} models.SupplierReport "Список поставщиков с количеством товаров и общей стоимостью"
+// // @Failure 500 {object} ErrorResponse "Ошибка сервера"
+// // @Router /reports/suppliers [get]
+// func GetSupplierReport(c *gin.Context) {
+// 	report, err := service.GetSupplierReport()
+// 	if err != nil {
+// 		handleError(c, err)
+// 		return
+// 	}
+
+// 	c.JSON(http.StatusOK, report)
+// }
+
+// GetSupplierReport
+// @Summary Retrieve supplier report
+// @Tags reports
+// @Description Get a supplier report with total products and total supply value
+// @ID get-supplier-report
+// @Produce json, application/octet-stream, application/zip
+// @Param format query string false "File format (json, csv, xlsx, csv_zip, or xlsx_zip)"
+// @Success 200 {array} models.SupplierReport "Supplier report"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /reports/suppliers [get]
+func GetSupplierReport(c *gin.Context) {
+	format := c.Query("format")
+
+	// Если формат не указан или указан JSON, возвращаем данные в формате JSON
+	if format == "json" || format == "" {
+		report, err := service.GetSupplierReport()
+		if err != nil {
+			handleError(c, err)
+			return
+		}
+		c.JSON(http.StatusOK, report)
+		return
+	}
+
+	// Генерация файла отчета (CSV, XLSX, ZIP)
+	fileBuffer, fileName, err := service.GenerateSupplierReportFile(format)
+	if err != nil {
+		handleError(c, err)
 		return
 	}
 

@@ -57,23 +57,6 @@ func GetSellerReport() ([]models.SellerReport, error) {
 	return report, nil
 }
 
-func GetSupplierReport() ([]models.SupplierReport, error) {
-	var supplierReport []models.SupplierReport
-
-	// Подсчет количества товаров и общей суммы поставок для каждого поставщика
-	err := db.GetDBConn().Model(&models.Product{}).
-		Select("supplier_id, suppliers.title as supplier_name, COUNT(products.id) as product_count, SUM(products.total_price) as total_supplies").
-		Joins("JOIN suppliers ON suppliers.id = products.supplier_id").
-		Group("supplier_id, suppliers.title").
-		Scan(&supplierReport).Error
-	if err != nil {
-		logger.Error.Printf("[repository.GetSupplierReport] error generating supplier report: %v\n", err)
-		return nil, err
-	}
-
-	return supplierReport, nil
-}
-
 func GetCategorySalesReport(startDate, endDate time.Time) ([]models.CategorySalesReport, error) {
 	var categoryReport []models.CategorySalesReport
 
@@ -105,4 +88,21 @@ func GetLowStockProducts(threshold float64) ([]models.LowStockReport, error) {
 		return nil, err
 	}
 	return lowStockProducts, nil
+}
+
+func GetSupplierReport() ([]models.SupplierReport, error) {
+	var supplierReport []models.SupplierReport
+
+	// Подсчет количества товаров и общей суммы поставок для каждого поставщика
+	err := db.GetDBConn().Model(&models.Product{}).
+		Select("supplier_id, suppliers.title as supplier_name, COUNT(products.id) as product_count, SUM(products.total_price) as total_supplies").
+		Joins("JOIN suppliers ON suppliers.id = products.supplier_id").
+		Group("supplier_id, suppliers.title").
+		Scan(&supplierReport).Error
+	if err != nil {
+		logger.Error.Printf("[repository.GetSupplierReport] error generating supplier report: %v\n", err)
+		return nil, err
+	}
+
+	return supplierReport, nil
 }

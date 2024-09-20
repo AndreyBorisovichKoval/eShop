@@ -2268,224 +2268,804 @@
 			"name": "ReportsToFiles",
 			"item": [
 				{
-					"name": "GetSalesReport-JSON",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
-									"type": "string"
+					"name": "SalesReport",
+					"item": [
+						{
+							"name": "GetSalesReport-JSON",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31&format=json",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"sales"
+									],
+									"query": [
+										{
+											"key": "start_date",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "end_date",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "json"
+										}
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31&format=json",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"reports",
-								"sales"
-							],
-							"query": [
-								{
-									"key": "start_date",
-									"value": "2024-01-01"
+						{
+							"name": "GetSalesReport-CSV",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
 								},
-								{
-									"key": "end_date",
-									"value": "2024-12-31"
-								},
-								{
-									"key": "format",
-									"value": "json"
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31&format=csv",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"sales"
+									],
+									"query": [
+										{
+											"key": "start_date",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "end_date",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "csv"
+										}
+									]
 								}
-							]
+							},
+							"response": []
+						},
+						{
+							"name": "GetSalesReport-XLSX",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31&format=xlsx",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"sales"
+									],
+									"query": [
+										{
+											"key": "start_date",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "end_date",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "xlsx"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSalesReport-CSVZIP",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31&format=csvzip",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"sales"
+									],
+									"query": [
+										{
+											"key": "start_date",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "end_date",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "csvzip"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSalesReport-XLSXZIP",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31&format=xlsxzip",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"sales"
+									],
+									"query": [
+										{
+											"key": "start_date",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "end_date",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "format",
+											"value": "xlsxzip"
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetSalesReport-CSV",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
-									"type": "string"
+					"name": "LowStockReport",
+					"item": [
+						{
+							"name": "GetLowStockReport-JSON",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/low-stock?threshold=39&format=json",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"low-stock"
+									],
+									"query": [
+										{
+											"key": "threshold",
+											"value": "39"
+										},
+										{
+											"key": "format",
+											"value": "json"
+										}
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31&format=csv",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"reports",
-								"sales"
-							],
-							"query": [
-								{
-									"key": "start_date",
-									"value": "2024-01-01"
+						{
+							"name": "GetLowStockReport-CSV",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
 								},
-								{
-									"key": "end_date",
-									"value": "2024-12-31"
-								},
-								{
-									"key": "format",
-									"value": "csv"
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/low-stock?threshold=39&format=csv",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"low-stock"
+									],
+									"query": [
+										{
+											"key": "threshold",
+											"value": "39"
+										},
+										{
+											"key": "format",
+											"value": "csv"
+										}
+									]
 								}
-							]
+							},
+							"response": []
+						},
+						{
+							"name": "GetLowStockReport-XLSX",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/low-stock?threshold=39&format=xlsx",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"low-stock"
+									],
+									"query": [
+										{
+											"key": "threshold",
+											"value": "39"
+										},
+										{
+											"key": "format",
+											"value": "xlsx"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetLowStockReport-CSVZIP",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/low-stock?threshold=39&format=csvzip",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"low-stock"
+									],
+									"query": [
+										{
+											"key": "threshold",
+											"value": "39"
+										},
+										{
+											"key": "format",
+											"value": "csvzip"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetLowStockReport-XLSXZIP",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/low-stock?threshold=39&format=xlsxzip",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"low-stock"
+									],
+									"query": [
+										{
+											"key": "threshold",
+											"value": "39"
+										},
+										{
+											"key": "format",
+											"value": "xlsxzip"
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetSalesReport-XLSX",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
-									"type": "string"
+					"name": "SellerReport",
+					"item": [
+						{
+							"name": "GetSellerReport-JSON",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/sellers?format=json",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"sellers"
+									],
+									"query": [
+										{
+											"key": "format",
+											"value": "json"
+										}
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31&format=xlsx",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"reports",
-								"sales"
-							],
-							"query": [
-								{
-									"key": "start_date",
-									"value": "2024-01-01"
+						{
+							"name": "GetSellerReport-CSV",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
 								},
-								{
-									"key": "end_date",
-									"value": "2024-12-31"
-								},
-								{
-									"key": "format",
-									"value": "xlsx"
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/sellers?format=csv",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"sellers"
+									],
+									"query": [
+										{
+											"key": "format",
+											"value": "csv"
+										}
+									]
 								}
-							]
+							},
+							"response": []
+						},
+						{
+							"name": "GetSellerReport-XLSX",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/sellers?format=xlsx",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"sellers"
+									],
+									"query": [
+										{
+											"key": "format",
+											"value": "xlsx"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSellerReport-CSVZIP",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/sellers?format=csvzip",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"sellers"
+									],
+									"query": [
+										{
+											"key": "format",
+											"value": "csvzip"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSellerReport-XLSXZIP",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/sellers?format=xlsxzip",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"sellers"
+									],
+									"query": [
+										{
+											"key": "format",
+											"value": "xlsxzip"
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetSalesReport-CSVZIP",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
-									"type": "string"
+					"name": "SupplierReport",
+					"item": [
+						{
+							"name": "GetSupplierReport-JSON",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/suppliers?format=json",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"suppliers"
+									],
+									"query": [
+										{
+											"key": "format",
+											"value": "json"
+										}
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31&format=csvzip",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"reports",
-								"sales"
-							],
-							"query": [
-								{
-									"key": "start_date",
-									"value": "2024-01-01"
+						{
+							"name": "GetSupplierReport-CSV",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
 								},
-								{
-									"key": "end_date",
-									"value": "2024-12-31"
-								},
-								{
-									"key": "format",
-									"value": "csvzip"
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/suppliers?format=csv",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"suppliers"
+									],
+									"query": [
+										{
+											"key": "format",
+											"value": "csv"
+										}
+									]
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetSalesReport-XLSXZIP",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
-									"type": "string"
-								}
-							]
+							},
+							"response": []
 						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8585/reports/sales?start_date=2024-01-01&end_date=2024-12-31&format=xlsxzip",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"reports",
-								"sales"
-							],
-							"query": [
-								{
-									"key": "start_date",
-									"value": "2024-01-01"
+						{
+							"name": "GetSupplierReport-XLSX",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
 								},
-								{
-									"key": "end_date",
-									"value": "2024-12-31"
-								},
-								{
-									"key": "format",
-									"value": "xlsxzip"
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/suppliers?format=xlsx",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"suppliers"
+									],
+									"query": [
+										{
+											"key": "format",
+											"value": "xlsx"
+										}
+									]
 								}
-							]
+							},
+							"response": []
+						},
+						{
+							"name": "GetSupplierReport-CSV_ZIP",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/suppliers?format=csv_zip",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"suppliers"
+									],
+									"query": [
+										{
+											"key": "format",
+											"value": "csv_zip"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSupplierReport-XLSX_ZIP",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY3ODI5MTUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.uipZjqTIsKAsmyek70YWE-lZ97T25N5G9SSowkH_dJ0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8585/reports/suppliers?format=xlsx_zip",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8585",
+									"path": [
+										"reports",
+										"suppliers"
+									],
+									"query": [
+										{
+											"key": "format",
+											"value": "xlsx_zip"
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
