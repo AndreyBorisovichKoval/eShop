@@ -701,6 +701,7 @@ package service
 import (
 	"archive/zip"
 	"bytes"
+	"eShop/logger"
 	"eShop/models"
 	"eShop/pkg/repository"
 	"encoding/csv"
@@ -813,6 +814,14 @@ func generateCSVOrXLSXFile(report interface{}, headers []string, rows [][]string
 		excelFile := excelize.NewFile()
 		sheetName := "Report"
 		excelFile.NewSheet(sheetName)
+
+		// // Удаляем лист "Sheet1", созданный по умолчанию
+		// excelFile.DeleteSheet("Sheet1")
+		// Удаляем лист "Sheet1", созданный по умолчанию
+		if err := excelFile.DeleteSheet("Sheet1"); err != nil {
+			logger.Error.Printf("Error deleting default sheet: %v", err)
+			// return nil, "", fmt.Errorf("failed to delete default sheet: %v", err) // Не возвращаем ошибку, продолжаем выполнение...
+		}
 
 		// Заголовки
 		for i, header := range headers {
