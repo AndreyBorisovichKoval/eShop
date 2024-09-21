@@ -106,6 +106,18 @@ func InitRoutes() *gin.Engine {
 		orderG.GET("/:id", GetOrderByID)                      // Получение заказа по ID...
 	}
 
+	returnG := router.Group("/returns", checkUserAuthentication, checkUserBlocked())
+	{
+		returnG.POST("", AddReturnProduct) // Добавление возврата товара...
+		returnG.GET("", GetAllReturns)     // Получение списка всех возвратов...
+		returnG.GET("/:id", GetReturnByID) // Получение возврата по ID...
+	}
+
+	barcodeG := router.Group("/barcode", checkUserAuthentication, checkUserBlocked())
+	{
+		barcodeG.GET("/generate", GenerateBarcode) // Генерация штрих-кода
+	}
+
 	// // reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked())
 	// reportG := router.Group("/reports")
 	// {
@@ -118,17 +130,9 @@ func InitRoutes() *gin.Engine {
 	// }
 
 	// Маршруты для отчетов
-	// reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked())
-	reportG := router.Group("/reports")
+	reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked())
 	{
 		reportG.GET("/:report_type", GetReport) // Универсальный маршрут для всех отчётов
-	}
-
-	returnG := router.Group("/returns", checkUserAuthentication, checkUserBlocked())
-	{
-		returnG.POST("", AddReturnProduct) // Добавление возврата товара...
-		returnG.GET("", GetAllReturns)     // Получение списка всех возвратов...
-		returnG.GET("/:id", GetReturnByID) // Получение возврата по ID...
 	}
 
 	router.POST("/insert-test-data", InsertTestData)

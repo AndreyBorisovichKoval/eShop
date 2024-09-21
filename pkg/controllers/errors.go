@@ -141,6 +141,10 @@ func handleError(c *gin.Context, err error) {
 		// Ошибка "Заказ уже оплачен"...
 		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
 
+	case errors.Is(err, errs.ErrProductNotWeightBased):
+		// Ошибка "Заказ уже оплачен"...
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+
 	// /
 	default:
 		// Внутренняя ошибка сервера...

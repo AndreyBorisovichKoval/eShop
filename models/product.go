@@ -27,6 +27,7 @@ type Product struct {
 	UpdatedAt          *time.Time `json:"updated_at"`                                  // Время последнего обновления записи.
 	DeletedAt          *time.Time `json:"deleted_at"`                                  // Время удаления записи.
 	IsDeleted          bool       `gorm:"default:false" json:"is_deleted"`             // Флаг удаления товара.
+	// WeightBased        bool       `gorm:"default:false" json:"weight_based"`           // Товар взвешиваемый или нет.
 
 	// Связи
 	Supplier   Supplier    `gorm:"foreignKey:SupplierID" json:"supplier"`   // Связь с таблицей поставщиков.
