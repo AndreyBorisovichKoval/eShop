@@ -4333,6 +4333,51 @@
 			]
 		},
 		{
+			"name": "GenerateWeightBarcode",
+			"item": [
+				{
+					"name": "GenerateWeightBarcode",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY5MzMwMjgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.J_kJZL95k-PgxP0PsYo4iJ6A4nqG6b3qBJWAr_DCdpc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/barcode/generate?product_id=15&weight=1.23",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"barcode",
+								"generate"
+							],
+							"query": [
+								{
+									"key": "product_id",
+									"value": "15"
+								},
+								{
+									"key": "weight",
+									"value": "1.23"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "PingServer",
 			"request": {
 				"method": "GET",
