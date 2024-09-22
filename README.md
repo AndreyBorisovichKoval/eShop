@@ -1,6 +1,4 @@
-![eShop](images/eShop.webp)
-
-##### _____________________________________
+![eShop](images/eShop.jpg)
 
 ## Приложение:
 
@@ -174,3 +172,5 @@ eShop.postman_collection.json
 **Version**: 01.00
 
 ##### _____________________________________
+
+![eShop](images/eShop.webp)
