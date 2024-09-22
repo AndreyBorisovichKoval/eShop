@@ -137,6 +137,11 @@ func InitRoutes() *gin.Engine {
 		reportG.GET("/:report_type", GetReport) // Универсальный маршрут для всех отчётов
 	}
 
+	ktuG := router.Group("/ktu", checkUserAuthentication, checkUserBlocked())
+	{
+		ktuG.GET("", GetKTU) // Маршрут для расчета КТУ
+	}
+
 	router.POST("/insert-test-data", InsertTestData)
 
 	return router

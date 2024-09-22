@@ -4432,6 +4432,50 @@
 			]
 		},
 		{
+			"name": "KTU",
+			"item": [
+				{
+					"name": "AllUsersKTU",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcwNzY4MjEsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.B_iNlM2al0NQiX7JvYmM9JNSU5f7qfZiMSEXL8B9PtQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/ktu?year=2024&month=9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"ktu"
+							],
+							"query": [
+								{
+									"key": "year",
+									"value": "2024"
+								},
+								{
+									"key": "month",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "PingServer",
 			"request": {
 				"method": "GET",
