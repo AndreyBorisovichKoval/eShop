@@ -1,3 +1,5 @@
+![eShop](images/eShop.webp)
+
 ##### _____________________________________
 
 ## Приложение:
@@ -162,9 +164,6 @@ eShop.postman_collection.json
 ## Структура таблиц базы данных:
 
 ![Database](images/models.jpg)
-![eShop](images/eShop.webp)
-
-<!-- ![images\models.jpg](images\models.jpg) -->
 
 ##### _____________________________________
 
