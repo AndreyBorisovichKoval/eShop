@@ -4,6 +4,7 @@ package controllers
 
 import (
 	"eShop/errs"
+	"eShop/logger"
 	"eShop/pkg/service"
 	"net/http"
 	"strconv"
@@ -52,4 +53,46 @@ func GenerateBarcode(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"barcode": barcode})
+}
+
+// /
+
+// InsertProductByBarcode
+// @Summary Insert a product into the order by scanning the barcode
+// @Tags barcode
+// @Description Decodes a temporary barcode and inserts a product into the order based on the provided barcode
+// @ID insert-product-by-barcode
+// @Produce json
+// @Param barcode query string true "Scanned barcode"
+// @Param order_id query int true "Order ID"
+// @Success 200 {object} map[string]string "Product inserted into order"
+// @Failure 400 {object} ErrorResponse "Invalid barcode or order ID"
+// @Failure 404 {object} ErrorResponse "Product not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /orders/add-from-barcode [post]
+func InsertProductByBarcode(c *gin.Context) {
+	barcode := c.Query("barcode")
+	orderIDStr := c.Query("order_id")
+
+	logger.Info.Printf("Received barcode: %s, order_id: %s", barcode, orderIDStr)
+
+	if barcode == "" || orderIDStr == "" {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	orderID, err := strconv.Atoi(orderIDStr)
+	if err != nil || orderID <= 0 {
+		logger.Error.Printf("Invalid order_id: %v", err)
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	err = service.InsertProductToOrder(barcode, uint(orderID))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Product inserted into order"})
 }

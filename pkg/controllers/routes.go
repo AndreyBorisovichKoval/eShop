@@ -104,6 +104,8 @@ func InitRoutes() *gin.Engine {
 		orderG.DELETE("/:id", DeleteOrder)                    // Маршрут для удаления заказа
 		orderG.DELETE("/:id/items/:item_id", DeleteOrderItem) // Удаление товара из заказа...
 		orderG.GET("/:id", GetOrderByID)                      // Получение заказа по ID...
+
+		orderG.POST("/add-from-barcode", InsertProductByBarcode)
 	}
 
 	returnG := router.Group("/returns", checkUserAuthentication, checkUserBlocked())
