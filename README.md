@@ -161,7 +161,7 @@ eShop.postman_collection.json
 ##### _____________________________________
 
 
-### Структура базы данных:
+### Структура таблиц базы данных:
 
 ![Database](images/models.jpg)
 <!-- ![images\models.jpg](images\models.jpg) -->
