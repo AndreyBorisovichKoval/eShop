@@ -145,6 +145,12 @@ func handleError(c *gin.Context, err error) {
 		// Ошибка "Заказ уже оплачен"...
 		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
 
+	case errors.Is(err, errs.ErrCannotDeletePaidOrder):
+		c.JSON(http.StatusConflict, newErrorResponse("Cannot delete a paid order"))
+
+	case errors.Is(err, errs.ErrCannotDeletePaidOrderItem):
+		c.JSON(http.StatusConflict, newErrorResponse("Cannot delete items from a paid order"))
+
 	// /
 	default:
 		// Внутренняя ошибка сервера...

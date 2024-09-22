@@ -113,6 +113,48 @@ func MarkOrderAsPaid(orderID uint) error {
 	return nil
 }
 
+// GetOrderByID получает заказ по ID с нужными полями
+func GetOrderByID(orderID uint) (map[string]interface{}, error) {
+	// Получаем заказ через репозиторий
+	order, err := repository.GetOrderByID(orderID)
+	if err != nil {
+		if err == errs.ErrRecordNotFound {
+			logger.Warning.Printf("[service.GetOrderByID] order with ID [%d] not found\n", orderID)
+			return nil, errs.ErrOrderNotFound
+		}
+		return nil, err
+	}
+
+	// Получаем связанные товары (items) через репозиторий
+	orderItems, err := repository.GetOrderItemsByOrderID(orderID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Составляем минимизированный ответ с нужными полями
+	var items []map[string]interface{}
+	for _, item := range orderItems {
+		product, err := repository.GetProductByID(item.ProductID)
+		if err != nil {
+			return nil, err
+		}
+		items = append(items, map[string]interface{}{
+			"product_title": product.Title,
+			"quantity":      item.Quantity,
+			"price":         item.Price,
+			"total":         item.Total,
+		})
+	}
+
+	result := map[string]interface{}{
+		"order_id":     order.ID,
+		"total_amount": order.TotalAmount,
+		"order_items":  items,
+	}
+
+	return result, nil
+}
+
 func DeleteOrderItem(orderID, itemID uint) error {
 	orderItem, err := repository.GetOrderItemByID(orderID, itemID)
 	if err != nil {
@@ -189,44 +231,106 @@ func DeleteOrder(orderID uint) error {
 	return nil
 }
 
-// GetOrderByID получает заказ по ID с нужными полями
-func GetOrderByID(orderID uint) (map[string]interface{}, error) {
+// func DeleteOrderItem(orderID, itemID uint) error {
+// 	orderItem, err := repository.GetOrderItemByID(orderID, itemID)
+// 	if err != nil {
+// 		if err == errs.ErrRecordNotFound {
+// 			return errs.ErrOrderItemNotFound
+// 		}
+// 		return err
+// 	}
+
+// 	// Получаем заказ перед проверкой статуса оплаты
+// 	order, err := repository.GetOrderByID(orderID)
+// 	if err != nil {
+// 		if err == errs.ErrRecordNotFound {
+// 			return errs.ErrOrderNotFound
+// 		}
+// 		return err
+// 	}
+
+// 	// Проверяем, оплачен ли заказ
+// 	if order.IsPaid {
+// 		return errs.ErrCannotDeletePaidOrderItem
+// 	}
+
+// 	// Возвращаем товар на склад
+// 	product, err := repository.GetProductByID(orderItem.ProductID)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	product.Stock += float64(orderItem.Quantity)
+
+// 	// Обновляем количество товара на складе
+// 	err = repository.UpdateProduct(product)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	// Удаляем товар из заказа
+// 	err = repository.DeleteOrderItem(orderItem)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	// Обновляем общую сумму заказа
+// 	order.TotalAmount -= orderItem.Total
+// 	err = repository.UpdateOrder(order)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	logger.Info.Printf("Order item ID [%d] deleted from order ID [%d]\n", itemID, orderID)
+// 	return nil
+// }
+
+// func DeleteOrder(orderID uint) error {
+// 	logger.Info.Printf("[service.DeleteOrder] Attempting to delete order ID: %d", orderID)
+
+// 	// Получаем заказ перед проверкой статуса оплаты
+// 	order, err := repository.GetOrderByID(orderID)
+// 	if err != nil {
+// 		if err == errs.ErrRecordNotFound {
+// 			logger.Warning.Printf("[service.DeleteOrder] Order with ID [%d] not found", orderID)
+// 			return errs.ErrOrderNotFound
+// 		}
+// 		return err
+// 	}
+
+// 	// Проверяем, оплачен ли заказ
+// 	if order.IsPaid {
+// 		return errs.ErrCannotDeletePaidOrder
+// 	}
+
+// 	// Удаление всех товаров в заказе
+// 	err = repository.DeleteOrderItemsByOrderID(orderID)
+// 	if err != nil {
+// 		logger.Error.Printf("[service.DeleteOrder] Error deleting order items for order ID [%d]: %v", orderID, err)
+// 		return err
+// 	}
+
+// 	// Удаление самого заказа
+// 	err = repository.DeleteOrder(orderID)
+// 	if err != nil {
+// 		logger.Error.Printf("[service.DeleteOrder] Error deleting order with ID [%d]: %v", orderID, err)
+// 		return err
+// 	}
+
+// 	logger.Info.Printf("Order with ID [%d] and all its items have been deleted\n", orderID)
+// 	return nil
+// }
+
+func GetOrderByIDObject(orderID uint) (models.Order, error) {
 	// Получаем заказ через репозиторий
 	order, err := repository.GetOrderByID(orderID)
 	if err != nil {
 		if err == errs.ErrRecordNotFound {
-			logger.Warning.Printf("[service.GetOrderByID] order with ID [%d] not found\n", orderID)
-			return nil, errs.ErrOrderNotFound
+			logger.Warning.Printf("[service.GetOrderByIDObject] order with ID [%d] not found\n", orderID)
+			return models.Order{}, errs.ErrOrderNotFound
 		}
-		return nil, err
+		return models.Order{}, err
 	}
 
-	// Получаем связанные товары (items) через репозиторий
-	orderItems, err := repository.GetOrderItemsByOrderID(orderID)
-	if err != nil {
-		return nil, err
-	}
-
-	// Составляем минимизированный ответ с нужными полями
-	var items []map[string]interface{}
-	for _, item := range orderItems {
-		product, err := repository.GetProductByID(item.ProductID)
-		if err != nil {
-			return nil, err
-		}
-		items = append(items, map[string]interface{}{
-			"product_title": product.Title,
-			"quantity":      item.Quantity,
-			"price":         item.Price,
-			"total":         item.Total,
-		})
-	}
-
-	result := map[string]interface{}{
-		"order_id":     order.ID,
-		"total_amount": order.TotalAmount,
-		"order_items":  items,
-	}
-
-	return result, nil
+	return order, nil
 }

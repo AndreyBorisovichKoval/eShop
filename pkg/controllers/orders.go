@@ -97,6 +97,112 @@ func MarkOrderAsPaid(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Order marked as paid successfully"})
 }
 
+// GetOrderByID
+// @Summary Get order by ID
+// @Tags orders
+// @Description Retrieves a specific order by ID, including its items with product names, quantities, price, and total
+// @ID get-order-by-id
+// @Param id path int true "Order ID"
+// @Success 200 {object} map[string]interface{} "Order with product names, quantities, price, and total"
+// @Failure 404 {object} ErrorResponse "Order not found"
+// @Failure 500 {object} ErrorResponse "Server error"
+// @Router /orders/{id} [get]
+func GetOrderByID(c *gin.Context) {
+	orderIDStr := c.Param("id")
+	orderID, err := strconv.Atoi(orderIDStr)
+	if err != nil {
+		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	logger.Info.Printf("[controllers.GetOrderByID] Request to get order with ID: %d", orderID)
+
+	// Получаем заказ через сервис
+	order, err := service.GetOrderByID(uint(orderID))
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	logger.Info.Printf("Successfully retrieved order with ID: %d\n", orderID)
+	c.JSON(http.StatusOK, order)
+}
+
+// // DeleteOrderItem
+// // @Summary Remove item from the order
+// // @Tags orders
+// // @Description Removes a specific item from an order
+// // @ID delete-order-item
+// // @Param order_id path int true "Order ID"
+// // @Param item_id path int true "Order Item ID"
+// // @Success 200 {string} string "Order item deleted successfully"
+// // @Failure 404 {object} ErrorResponse "Order item not found"
+// // @Failure 500 {object} ErrorResponse "Server error"
+// // @Router /orders/{order_id}/items/{item_id} [delete]
+// func DeleteOrderItem(c *gin.Context) {
+// 	// orderID, err := strconv.Atoi(c.Param("order_id"))
+// 	orderID, err := strconv.Atoi(c.Param("id"))
+// 	if err != nil {
+// 		handleError(c, errs.ErrValidationFailed)
+// 		return
+// 	}
+
+// 	itemID, err := strconv.Atoi(c.Param("item_id"))
+// 	if err != nil {
+// 		handleError(c, errs.ErrValidationFailed)
+// 		return
+// 	}
+
+// 	logger.Info.Printf("User requested to delete item ID [%d] from order ID [%d]\n", itemID, orderID)
+
+// 	err = service.DeleteOrderItem(uint(orderID), uint(itemID))
+// 	if err != nil {
+// 		handleError(c, err)
+// 		return
+// 	}
+
+// 	logger.Info.Printf("Successfully deleted item ID [%d] from order ID [%d]\n", itemID, orderID)
+// 	c.JSON(http.StatusOK, gin.H{"message": "Order item deleted successfully"})
+// }
+
+// // DeleteOrder
+// // @Summary Delete an order and all its items
+// // @Tags orders
+// // @Description Deletes an order and all its items if the customer cancels the order
+// // @ID delete-order
+// // @Param id path int true "Order ID"
+// // @Success 200 {string} string "Order deleted successfully"
+// // @Failure 404 {object} ErrorResponse "Order not found"
+// // @Failure 500 {object} ErrorResponse "Server error"
+// // @Router /orders/{id} [delete]
+// func DeleteOrder(c *gin.Context) {
+// 	orderIDStr := c.Param("id")
+// 	if orderIDStr == "" {
+// 		logger.Error.Println("[controllers.DeleteOrder] Missing order ID in the request")
+// 		handleError(c, errs.ErrValidationFailed)
+// 		return
+// 	}
+
+// 	orderID, err := strconv.Atoi(orderIDStr)
+// 	if err != nil {
+// 		logger.Error.Printf("[controllers.DeleteOrder] Invalid order ID: %s, error: %v\n", orderIDStr, err)
+// 		handleError(c, errs.ErrValidationFailed)
+// 		return
+// 	}
+
+// 	logger.Info.Printf("[controllers.DeleteOrder] Request to delete order ID: %d", orderID)
+// 	err = service.DeleteOrder(uint(orderID))
+// 	if err != nil {
+// 		handleError(c, err)
+// 		return
+// 	}
+
+// 	logger.Info.Printf("Order with ID [%d] deleted successfully\n", orderID)
+// 	c.JSON(http.StatusOK, gin.H{"message": "Order deleted successfully"})
+// }
+
+// /
+
 // DeleteOrderItem
 // @Summary Remove item from the order
 // @Tags orders
@@ -119,6 +225,19 @@ func DeleteOrderItem(c *gin.Context) {
 	itemID, err := strconv.Atoi(c.Param("item_id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
+		return
+	}
+
+	// Получаем заказ через сервис
+	order, err := service.GetOrderByIDObject(uint(orderID)) // Изменение: получаем объект заказа
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	// Проверяем, оплачен ли заказ
+	if order.IsPaid { // Проверка статуса оплаты
+		handleError(c, errs.ErrCannotDeletePaidOrderItem) // Ошибка, если заказ оплачен
 		return
 	}
 
@@ -159,6 +278,19 @@ func DeleteOrder(c *gin.Context) {
 		return
 	}
 
+	// Получаем заказ через сервис
+	order, err := service.GetOrderByIDObject(uint(orderID)) // Изменение: получаем объект заказа
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	// Проверяем, оплачен ли заказ
+	if order.IsPaid { // Проверка статуса оплаты
+		handleError(c, errs.ErrCannotDeletePaidOrder) // Ошибка, если заказ оплачен
+		return
+	}
+
 	logger.Info.Printf("[controllers.DeleteOrder] Request to delete order ID: %d", orderID)
 	err = service.DeleteOrder(uint(orderID))
 	if err != nil {
@@ -170,33 +302,4 @@ func DeleteOrder(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Order deleted successfully"})
 }
 
-// GetOrderByID
-// @Summary Get order by ID
-// @Tags orders
-// @Description Retrieves a specific order by ID, including its items with product names, quantities, price, and total
-// @ID get-order-by-id
-// @Param id path int true "Order ID"
-// @Success 200 {object} map[string]interface{} "Order with product names, quantities, price, and total"
-// @Failure 404 {object} ErrorResponse "Order not found"
-// @Failure 500 {object} ErrorResponse "Server error"
-// @Router /orders/{id} [get]
-func GetOrderByID(c *gin.Context) {
-	orderIDStr := c.Param("id")
-	orderID, err := strconv.Atoi(orderIDStr)
-	if err != nil {
-		handleError(c, errs.ErrValidationFailed)
-		return
-	}
-
-	logger.Info.Printf("[controllers.GetOrderByID] Request to get order with ID: %d", orderID)
-
-	// Получаем заказ через сервис
-	order, err := service.GetOrderByID(uint(orderID))
-	if err != nil {
-		handleError(c, err)
-		return
-	}
-
-	logger.Info.Printf("Successfully retrieved order with ID: %d\n", orderID)
-	c.JSON(http.StatusOK, order)
-}
+// /
