@@ -23,6 +23,14 @@ func GetSalesDataByMonth(year, month int) ([]SalesData, error) {
 		WHERE EXTRACT(YEAR FROM o.created_at) = ? AND EXTRACT(MONTH FROM o.created_at) = ?
 		GROUP BY u.full_name
 	`
+	// 	query := `
+	//     SELECT u.full_name, u.role, ROUND(COALESCE(SUM(o.total_amount), 0), 2) as total_sales
+	//     FROM orders o
+	//     JOIN users u ON o.user_id = u.id
+	//     WHERE EXTRACT(YEAR FROM o.created_at) = ? AND EXTRACT(MONTH FROM o.created_at) = ?
+	//     GROUP BY u.full_name, u.role
+	//     ORDER BY total_sales DESC
+	// `
 
 	err := db.GetDBConn().Raw(query, year, month).Scan(&salesData).Error
 	if err != nil {
