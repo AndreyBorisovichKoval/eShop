@@ -167,7 +167,7 @@ eShop.postman_collection.json
 
 **Create** by: **Andrey Koval** (57)
 
-**Date**: 2024-09-25
+**Date**: 2024-09-22
 
 **Version**: 01.00
 
