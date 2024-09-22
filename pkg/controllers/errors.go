@@ -151,6 +151,9 @@ func handleError(c *gin.Context, err error) {
 	case errors.Is(err, errs.ErrCannotDeletePaidOrderItem):
 		c.JSON(http.StatusConflict, newErrorResponse("Cannot delete items from a paid order"))
 
+	case errors.Is(err, errs.ErrCannotAddToPaidOrder):
+		c.JSON(http.StatusConflict, newErrorResponse("Cannot add products to a paid order"))
+
 	// /
 	default:
 		// Внутренняя ошибка сервера...

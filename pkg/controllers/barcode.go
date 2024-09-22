@@ -88,6 +88,19 @@ func InsertProductByBarcode(c *gin.Context) {
 		return
 	}
 
+	// Получаем заказ через сервис
+	order, err := service.GetOrderByIDObject(uint(orderID)) // Изменение: получаем объект заказа
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	// Проверяем, оплачен ли заказ
+	if order.IsPaid { // Проверка статуса оплаты
+		handleError(c, errs.ErrCannotAddToPaidOrder) // Ошибка, если заказ оплачен
+		return
+	}
+
 	err = service.InsertProductToOrder(barcode, uint(orderID))
 	if err != nil {
 		handleError(c, err)
