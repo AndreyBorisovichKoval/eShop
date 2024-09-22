@@ -15,42 +15,48 @@ definitions:
   models.Category:
     properties:
       created_at:
+        description: Дата создания
         type: string
       deleted_at:
+        description: Дата удаления
+        type: string
+      description:
+        description: Описание категории
         type: string
       id:
-        description: Уникальный идентификатор категории товара.
         type: integer
       is_deleted:
+        description: Флаг мягкого удаления
         type: boolean
+      products:
+        description: Связи
+        items:
+          $ref: '#/definitions/models.Product'
+        type: array
       title:
-        description: Название категории товара.
+        description: Название категории
         type: string
       updated_at:
+        description: Дата последнего обновления
         type: string
     type: object
   models.Order:
     properties:
       created_at:
         type: string
-      deleted_at:
-        type: string
       id:
         type: integer
-      is_deleted:
+      is_paid:
+        description: Статус оплаты.
         type: boolean
       order_items:
+        description: Связь с OrderItem
         items:
           $ref: '#/definitions/models.OrderItem'
         type: array
-      payment_status:
-        description: Статус оплаты.
-        type: string
       total_amount:
-        description: Общая сумма заказа.
+        description: Общая сумма всех заказов.
         type: number
-      updated_at:
-        type: string
       user:
         allOf:
         - $ref: '#/definitions/models.User'
@@ -63,12 +69,8 @@ definitions:
     properties:
       created_at:
         type: string
-      deleted_at:
-        type: string
       id:
         type: integer
-      is_deleted:
-        type: boolean
       order:
         allOf:
         - $ref: '#/definitions/models.Order'
@@ -86,9 +88,10 @@ definitions:
         type: integer
       quantity:
         description: Количество товара в заказе.
-        type: integer
-      updated_at:
-        type: string
+        type: number
+      total:
+        description: Общая сумма.
+        type: number
     type: object
   models.Product:
     properties:
@@ -132,8 +135,8 @@ definitions:
       is_vat_applicable:
         description: Применяется ли НДС.
         type: boolean
-      orders:
-        description: Связь с таблицей заказов.
+      order_items:
+        description: Связь с OrderItem
         items:
           $ref: '#/definitions/models.OrderItem'
         type: array
@@ -172,6 +175,54 @@ definitions:
         description: Время последнего обновления записи.
         type: string
     type: object
+  models.ReturnResponse:
+    properties:
+      id:
+        description: ID записи возврата
+        type: integer
+      product_name:
+        description: Название товара
+        type: string
+      quantity:
+        description: Количество
+        type: number
+      return_reason:
+        description: Причина возврата
+        type: string
+      returned_at:
+        description: Дата возврата
+        type: string
+      supplier_name:
+        description: Название поставщика
+        type: string
+    type: object
+  models.ReturnsProduct:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      is_deleted:
+        type: boolean
+      product:
+        $ref: '#/definitions/models.Product'
+      product_id:
+        type: integer
+      quantity:
+        type: number
+      return_reason:
+        type: string
+      returned_at:
+        type: string
+      supplier:
+        $ref: '#/definitions/models.Supplier'
+      supplier_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
   models.SignInInput:
     properties:
       password:
@@ -186,23 +237,25 @@ definitions:
       deleted_at:
         type: string
       email:
-        description: Электронная почта поставщика...
+        description: Электронная почта поставщика (уникальная)...
         type: string
       id:
         type: integer
       is_deleted:
         type: boolean
-      name:
-        description: Название или имя поставщика...
-        type: string
       phone:
-        description: Телефон поставщика...
+        description: |-
+          Title     string     `gorm:"size:255;not null" json:"title"` // Название или имя поставщика...
+          Email     string     `gorm:"size:255" json:"email"`          // Электронная почта поставщика...
         type: string
       products:
         description: Связи
         items:
           $ref: '#/definitions/models.Product'
         type: array
+      title:
+        description: Название или имя поставщика (уникальное)...
+        type: string
       updated_at:
         type: string
     type: object
@@ -219,6 +272,21 @@ definitions:
         type: string
       username:
         description: Логин для входа в систему...
+        type: string
+    type: object
+  models.Taxes:
+    properties:
+      apply_to:
+        description: 'Применяется к: ''final_price'' или ''profit''.'
+        type: string
+      id:
+        description: Уникальный идентификатор налога.
+        type: integer
+      rate:
+        description: Процентная ставка налога.
+        type: number
+      title:
+        description: 'Название налога (например: НДС, акциз).'
         type: string
     type: object
   models.User:
@@ -267,9 +335,64 @@ definitions:
       updated_at:
         description: Время последнего обновления записи...
         type: string
+      user_settings:
+        allOf:
+        - $ref: '#/definitions/models.UserSettings'
+        description: Связь с таблицей настроек пользователя...
       username:
         description: Логин продавца...
         type: string
+    type: object
+  models.UserSettings:
+    properties:
+      accessibility_options:
+        description: Опции доступности.
+        type: string
+      add_confirmation:
+        description: Подтверждение добавления.
+        type: boolean
+      created_at:
+        description: Дата создания настроек.
+        type: string
+      dark_mode_theme:
+        description: Темная тема.
+        type: boolean
+      delete_confirmation:
+        description: Подтверждение удаления.
+        type: boolean
+      desktop_theme:
+        description: Тема рабочего стола.
+        type: string
+      display_language:
+        description: Язык отображения.
+        type: string
+      email_notifications:
+        description: Email уведомления.
+        type: boolean
+      font:
+        description: Шрифт.
+        type: string
+      font_size:
+        description: Размер шрифта.
+        type: integer
+      id:
+        description: Уникальный идентификатор настроек пользователя.
+        type: integer
+      notification_frequency:
+        description: Частота уведомлений.
+        type: string
+      notification_sound:
+        description: Звук уведомлений.
+        type: boolean
+      update_confirmation:
+        description: Подтверждение обновления.
+        type: boolean
+      updated_at:
+        description: Дата последнего обновления настроек.
+        type: string
+      user_id:
+        description: Связь с пользователем.
+        type: integer
     type: object
 host: localhost:8585
 info:
@@ -313,6 +436,895 @@ paths:
       summary: Log in user
       tags:
       - auth
+  /barcode/generate:
+    get:
+      description: Generates a barcode based on product ID, weight, and price per
+        unit
+      operationId: generate-barcode
+      parameters:
+      - description: Product ID
+        in: query
+        name: product_id
+        required: true
+        type: integer
+      - description: Weight of the product
+        in: query
+        name: weight
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Barcode generated
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Generate barcode for a weighted product
+      tags:
+      - barcode
+  /categories:
+    get:
+      description: Get a list of all active categories (Admin/Manager only)
+      operationId: get-all-categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of active categories
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve all active categories
+      tags:
+      - categories
+    post:
+      consumes:
+      - application/json
+      description: Register a new category (Admin/Manager only)
+      operationId: create-category
+      parameters:
+      - description: Category data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Category'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Category created successfully!!!
+          schema:
+            type: string
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "409":
+          description: Category already exists
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new category
+      tags:
+      - categories
+  /categories/{id}:
+    get:
+      description: Get category information by ID (Admin/Manager only)
+      operationId: get-category-by-id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category information
+          schema:
+            $ref: '#/definitions/models.Category'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve category by ID
+      tags:
+      - categories
+    patch:
+      consumes:
+      - application/json
+      description: Update category information by ID (Admin/Manager only)
+      operationId: update-category-by-id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated category information
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Category'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated category
+          schema:
+            $ref: '#/definitions/models.Category'
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update category by ID
+      tags:
+      - categories
+  /categories/{id}/hard:
+    delete:
+      description: Permanently delete category by ID (Admin/Manager only)
+      operationId: hard-delete-category-by-id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Category permanently deleted successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "409":
+          description: Category already deleted
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Permanently delete category by ID
+      tags:
+      - categories
+  /categories/{id}/restore:
+    patch:
+      description: Restore a soft deleted category by ID (Admin/Manager only)
+      operationId: restore-category-by-id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Category restored successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "409":
+          description: Category not deleted
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Restore soft deleted category by ID
+      tags:
+      - categories
+  /categories/{id}/soft:
+    delete:
+      description: Soft delete category by ID (Admin/Manager only)
+      operationId: soft-delete-category-by-id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Category soft deleted successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Soft delete category by ID
+      tags:
+      - categories
+  /categories/deleted:
+    get:
+      description: Get a list of all soft deleted categories (Admin/Manager only)
+      operationId: get-all-deleted-categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of deleted categories
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve all deleted categories
+      tags:
+      - categories
+  /orders:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new order and adds items to it (Seller only)
+      operationId: add-order
+      parameters:
+      - description: List of order items
+        in: body
+        name: input
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/models.OrderItem'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Order created successfully!!!
+          schema:
+            type: string
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Create a new order and add items to it
+      tags:
+      - orders
+  /orders/{id}:
+    delete:
+      description: Deletes an order and all its items if the customer cancels the
+        order
+      operationId: delete-order
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Order deleted successfully
+          schema:
+            type: string
+        "404":
+          description: Order not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Delete an order and all its items
+      tags:
+      - orders
+    get:
+      description: Retrieves a specific order by ID, including its items with product
+        names, quantities, price, and total
+      operationId: get-order-by-id
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Order with product names, quantities, price, and total
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Order not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Get order by ID
+      tags:
+      - orders
+  /orders/{id}/pay:
+    patch:
+      description: Mark a specific order as paid
+      operationId: mark-order-as-paid
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Order marked as paid successfully
+          schema:
+            type: string
+        "404":
+          description: Order not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "409":
+          description: Order already paid
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Mark an order as paid
+      tags:
+      - orders
+  /orders/{order_id}/items/{item_id}:
+    delete:
+      description: Removes a specific item from an order
+      operationId: delete-order-item
+      parameters:
+      - description: Order ID
+        in: path
+        name: order_id
+        required: true
+        type: integer
+      - description: Order Item ID
+        in: path
+        name: item_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Order item deleted successfully
+          schema:
+            type: string
+        "404":
+          description: Order item not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Remove item from the order
+      tags:
+      - orders
+  /orders/add-from-barcode:
+    post:
+      description: Decodes a temporary barcode and inserts a product into the order
+        based on the provided barcode
+      operationId: insert-product-by-barcode
+      parameters:
+      - description: Scanned barcode
+        in: query
+        name: barcode
+        required: true
+        type: string
+      - description: Order ID
+        in: query
+        name: order_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product inserted into order
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid barcode or order ID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Insert a product into the order by scanning the barcode
+      tags:
+      - barcode
+  /products:
+    get:
+      description: Get a list of all active products
+      operationId: get-all-products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of active products
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve all products
+      tags:
+      - products
+    post:
+      consumes:
+      - application/json
+      description: Add a new product with calculated taxes  (Admin/Manager only)
+      operationId: add-product
+      parameters:
+      - description: Product data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Product'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Product added successfully!
+          schema:
+            type: string
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "409":
+          description: Product already exists
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Add a new product
+      tags:
+      - products
+  /products/{id}:
+    delete:
+      description: Soft delete a product by ID (Admin/Manager only)
+      operationId: soft-delete-product-by-id
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Product soft deleted successfully!
+          schema:
+            type: string
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Soft delete a product by ID
+      tags:
+      - products
+    get:
+      description: Get product information by ID
+      operationId: get-product-by-id
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product information
+          schema:
+            $ref: '#/definitions/models.Product'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Retrieve a product by ID
+      tags:
+      - products
+    patch:
+      consumes:
+      - application/json
+      description: Update a product's information by ID (Admin/Manager only)
+      operationId: update-product-by-id
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated product information
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated product
+          schema:
+            $ref: '#/definitions/models.Product'
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Update a product by ID
+      tags:
+      - products
+  /products/{id}/hard:
+    delete:
+      description: Permanently delete a product by ID (Admin/Manager only)
+      operationId: hard-delete-product-by-id
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Product permanently deleted successfully!
+          schema:
+            type: string
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "409":
+          description: Product already deleted
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Permanently delete a product by ID
+      tags:
+      - products
+  /products/{id}/restore:
+    put:
+      description: Restore a soft deleted product by ID (Admin/Manager only)
+      operationId: restore-product-by-id
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Product restored successfully!
+          schema:
+            type: string
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Restore a soft deleted product by ID
+      tags:
+      - products
+  /products/barcode/{barcode}:
+    get:
+      description: Get product information by barcode
+      operationId: get-product-by-barcode
+      parameters:
+      - description: Product barcode
+        in: path
+        name: barcode
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product information
+          schema:
+            $ref: '#/definitions/models.Product'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Retrieve a product by barcode
+      tags:
+      - products
+  /reports/{report_type}:
+    get:
+      description: Get a report in JSON, CSV, XLSX, or ZIP format
+      operationId: get-report
+      parameters:
+      - description: Report type (sales, low-stock, seller, supplier, category-sales)
+        in: path
+        name: report_type
+        required: true
+        type: string
+      - description: Start date in format YYYY-MM-DD (for reports requiring a period)
+        in: query
+        name: start_date
+        type: string
+      - description: End date in format YYYY-MM-DD (for reports requiring a period)
+        in: query
+        name: end_date
+        type: string
+      - description: Minimum stock threshold (for low stock report)
+        in: query
+        name: threshold
+        type: number
+      - description: File format (json, csv, xlsx, csvzip, or xlsxzip)
+        in: query
+        name: format
+        type: string
+      produces:
+      - application/json
+      - ' application/octet-stream'
+      - ' application/zip'
+      responses:
+        "200":
+          description: Report
+          schema:
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Retrieve a report for a given type (sales, low-stock, seller, supplier,
+        category-sales)
+      tags:
+      - reports
+  /returns:
+    get:
+      description: Retrieve a list of all product returns
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of returns
+          schema:
+            items:
+              $ref: '#/definitions/models.ReturnResponse'
+            type: array
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Get all returns
+      tags:
+      - returns
+    post:
+      consumes:
+      - application/json
+      description: Add a new record for a product return
+      parameters:
+      - description: Product return information
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.ReturnsProduct'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Return added successfully!
+          schema:
+            type: string
+        "400":
+          description: Input error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Add a product return
+      tags:
+      - returns
+  /returns/{id}:
+    get:
+      description: Retrieve product return information by ID
+      parameters:
+      - description: Return ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Return information
+          schema:
+            $ref: '#/definitions/models.ReturnResponse'
+        "404":
+          description: Return not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Get a return by ID
+      tags:
+      - returns
   /suppliers:
     get:
       description: Get a list of all active suppliers (Admin/Manager only)
@@ -600,6 +1612,70 @@ paths:
       summary: Retrieve all deleted suppliers
       tags:
       - suppliers
+  /taxes:
+    get:
+      description: Get a list of all current taxes
+      operationId: get-all-taxes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of taxes
+          schema:
+            items:
+              $ref: '#/definitions/models.Taxes'
+            type: array
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve all current tax rates
+      tags:
+      - taxes
+  /taxes/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update tax rate (Admin only)
+      operationId: update-tax-by-id
+      parameters:
+      - description: Tax ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated tax information
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Taxes'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated tax
+          schema:
+            $ref: '#/definitions/models.Taxes'
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Tax not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update tax rate by ID
+      tags:
+      - taxes
   /users:
     get:
       description: Get a list of all registered users
@@ -1024,6 +2100,71 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Change own password
+      tags:
+      - users
+  /users/settings:
+    get:
+      description: Get user settings by user ID (only the owner can get their own
+        settings)
+      operationId: get-user-settings
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User settings
+          schema:
+            $ref: '#/definitions/models.UserSettings'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: User settings not found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user settings
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: Update user settings (only the owner can update their own settings)
+      operationId: update-user-settings
+      parameters:
+      - description: Updated user settings
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserSettings'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User settings updated successfully!!!
+          schema:
+            type: string
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "403":
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update user settings
       tags:
       - users
 securityDefinitions:

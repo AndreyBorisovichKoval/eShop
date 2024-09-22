@@ -1835,6 +1835,45 @@
 					"response": []
 				},
 				{
+					"name": "DeleteOrder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjY1MDQ1OSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.DqL5Xtz1htGxJYvBjU3vr1_shwOoFlJRypgIzDuOR1c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/orders/13",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"orders",
+								"13"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "MarkOrderAsPaid",
 					"request": {
 						"auth": {
@@ -1869,45 +1908,6 @@
 								"orders",
 								"13",
 								"paid"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DeleteOrder",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjY1MDQ1OSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.DqL5Xtz1htGxJYvBjU3vr1_shwOoFlJRypgIzDuOR1c",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8585/orders/13",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"orders",
-								"13"
 							]
 						}
 					},
@@ -2170,7 +2170,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2NzE1MDIsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.XF1QjWmie7-AUfStzh8ix1xlv0gwrJbyAY5fQTyU988",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY5NDQwNzMsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.nrnBqnF9KLMXWA_6jr38u3UUNUb0Pnx1I7jtu4S5KPg",
 									"type": "string"
 								}
 							]
@@ -2178,7 +2178,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8585/reports/sellers",
+							"raw": "http://localhost:8585/reports/seller",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -2186,7 +2186,7 @@
 							"port": "8585",
 							"path": [
 								"reports",
-								"sellers"
+								"seller"
 							]
 						}
 					},
@@ -2200,7 +2200,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2NzE1MDIsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.XF1QjWmie7-AUfStzh8ix1xlv0gwrJbyAY5fQTyU988",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY5NDQwNzMsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.nrnBqnF9KLMXWA_6jr38u3UUNUb0Pnx1I7jtu4S5KPg",
 									"type": "string"
 								}
 							]
@@ -2208,7 +2208,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8585/reports/suppliers",
+							"raw": "http://localhost:8585/reports/supplier",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -2216,7 +2216,7 @@
 							"port": "8585",
 							"path": [
 								"reports",
-								"suppliers"
+								"supplier"
 							]
 						}
 					},
@@ -4369,6 +4369,60 @@
 								{
 									"key": "weight",
 									"value": "1.23"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OrderAddFromBarcode",
+			"item": [
+				{
+					"name": "AddToOrderBarcode",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcwNDMwMjYsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.XBLVqBDnAj4TezIjx0ObvCkSJpe7ZAqBZvRnVDS92hE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/orders/add-from-barcode?barcode=200001502250202505&order_id=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"orders",
+								"add-from-barcode"
+							],
+							"query": [
+								{
+									"key": "barcode",
+									"value": "200001502250202505"
+								},
+								{
+									"key": "order_id",
+									"value": "2"
 								}
 							]
 						}

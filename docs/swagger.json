@@ -62,6 +62,1347 @@
                 }
             }
         },
+        "/barcode/generate": {
+            "get": {
+                "description": "Generates a barcode based on product ID, weight, and price per unit",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "barcode"
+                ],
+                "summary": "Generate barcode for a weighted product",
+                "operationId": "generate-barcode",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "product_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Weight of the product",
+                        "name": "weight",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Barcode generated",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a list of all active categories (Admin/Manager only)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Retrieve all active categories",
+                "operationId": "get-all-categories",
+                "responses": {
+                    "200": {
+                        "description": "List of active categories",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Category"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Register a new category (Admin/Manager only)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Create a new category",
+                "operationId": "create-category",
+                "parameters": [
+                    {
+                        "description": "Category data",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Category"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Category created successfully!!!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Category already exists",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/deleted": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a list of all soft deleted categories (Admin/Manager only)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Retrieve all deleted categories",
+                "operationId": "get-all-deleted-categories",
+                "responses": {
+                    "200": {
+                        "description": "List of deleted categories",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Category"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get category information by ID (Admin/Manager only)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Retrieve category by ID",
+                "operationId": "get-category-by-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category information",
+                        "schema": {
+                            "$ref": "#/definitions/models.Category"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update category information by ID (Admin/Manager only)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Update category by ID",
+                "operationId": "update-category-by-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated category information",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Category"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated category",
+                        "schema": {
+                            "$ref": "#/definitions/models.Category"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{id}/hard": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Permanently delete category by ID (Admin/Manager only)",
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Permanently delete category by ID",
+                "operationId": "hard-delete-category-by-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category permanently deleted successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Category already deleted",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{id}/restore": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Restore a soft deleted category by ID (Admin/Manager only)",
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Restore soft deleted category by ID",
+                "operationId": "restore-category-by-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category restored successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Category not deleted",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{id}/soft": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Soft delete category by ID (Admin/Manager only)",
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Soft delete category by ID",
+                "operationId": "soft-delete-category-by-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category soft deleted successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "post": {
+                "description": "Creates a new order and adds items to it (Seller only)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Create a new order and add items to it",
+                "operationId": "add-order",
+                "parameters": [
+                    {
+                        "description": "List of order items",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.OrderItem"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Order created successfully!!!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/add-from-barcode": {
+            "post": {
+                "description": "Decodes a temporary barcode and inserts a product into the order based on the provided barcode",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "barcode"
+                ],
+                "summary": "Insert a product into the order by scanning the barcode",
+                "operationId": "insert-product-by-barcode",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Scanned barcode",
+                        "name": "barcode",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Order ID",
+                        "name": "order_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product inserted into order",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid barcode or order ID",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}": {
+            "get": {
+                "description": "Retrieves a specific order by ID, including its items with product names, quantities, price, and total",
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Get order by ID",
+                "operationId": "get-order-by-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Order ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order with product names, quantities, price, and total",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "Order not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes an order and all its items if the customer cancels the order",
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Delete an order and all its items",
+                "operationId": "delete-order",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Order ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Order not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}/pay": {
+            "patch": {
+                "description": "Mark a specific order as paid",
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Mark an order as paid",
+                "operationId": "mark-order-as-paid",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Order ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order marked as paid successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Order not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Order already paid",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{order_id}/items/{item_id}": {
+            "delete": {
+                "description": "Removes a specific item from an order",
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Remove item from the order",
+                "operationId": "delete-order-item",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Order ID",
+                        "name": "order_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Order Item ID",
+                        "name": "item_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order item deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Order item not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a list of all active products",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Retrieve all products",
+                "operationId": "get-all-products",
+                "responses": {
+                    "200": {
+                        "description": "List of active products",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Product"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add a new product with calculated taxes  (Admin/Manager only)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Add a new product",
+                "operationId": "add-product",
+                "parameters": [
+                    {
+                        "description": "Product data",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Product"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Product added successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Product already exists",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/barcode/{barcode}": {
+            "get": {
+                "description": "Get product information by barcode",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Retrieve a product by barcode",
+                "operationId": "get-product-by-barcode",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product barcode",
+                        "name": "barcode",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product information",
+                        "schema": {
+                            "$ref": "#/definitions/models.Product"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "description": "Get product information by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Retrieve a product by ID",
+                "operationId": "get-product-by-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product information",
+                        "schema": {
+                            "$ref": "#/definitions/models.Product"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Soft delete a product by ID (Admin/Manager only)",
+                "tags": [
+                    "products"
+                ],
+                "summary": "Soft delete a product by ID",
+                "operationId": "soft-delete-product-by-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product soft deleted successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Update a product's information by ID (Admin/Manager only)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Update a product by ID",
+                "operationId": "update-product-by-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated product information",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Product"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated product",
+                        "schema": {
+                            "$ref": "#/definitions/models.Product"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}/hard": {
+            "delete": {
+                "description": "Permanently delete a product by ID (Admin/Manager only)",
+                "tags": [
+                    "products"
+                ],
+                "summary": "Permanently delete a product by ID",
+                "operationId": "hard-delete-product-by-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product permanently deleted successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Product already deleted",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}/restore": {
+            "put": {
+                "description": "Restore a soft deleted product by ID (Admin/Manager only)",
+                "tags": [
+                    "products"
+                ],
+                "summary": "Restore a soft deleted product by ID",
+                "operationId": "restore-product-by-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product restored successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/reports/{report_type}": {
+            "get": {
+                "description": "Get a report in JSON, CSV, XLSX, or ZIP format",
+                "produces": [
+                    "application/json",
+                    " application/octet-stream",
+                    " application/zip"
+                ],
+                "tags": [
+                    "reports"
+                ],
+                "summary": "Retrieve a report for a given type (sales, low-stock, seller, supplier, category-sales)",
+                "operationId": "get-report",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Report type (sales, low-stock, seller, supplier, category-sales)",
+                        "name": "report_type",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start date in format YYYY-MM-DD (for reports requiring a period)",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "End date in format YYYY-MM-DD (for reports requiring a period)",
+                        "name": "end_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "description": "Minimum stock threshold (for low stock report)",
+                        "name": "threshold",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "File format (json, csv, xlsx, csvzip, or xlsxzip)",
+                        "name": "format",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Report",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/returns": {
+            "get": {
+                "description": "Retrieve a list of all product returns",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "returns"
+                ],
+                "summary": "Get all returns",
+                "responses": {
+                    "200": {
+                        "description": "List of returns",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ReturnResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add a new record for a product return",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "returns"
+                ],
+                "summary": "Add a product return",
+                "parameters": [
+                    {
+                        "description": "Product return information",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ReturnsProduct"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Return added successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Input error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/returns/{id}": {
+            "get": {
+                "description": "Retrieve product return information by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "returns"
+                ],
+                "summary": "Get a return by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Return ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return information",
+                        "schema": {
+                            "$ref": "#/definitions/models.ReturnResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Return not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/suppliers": {
             "get": {
                 "security": [
@@ -508,6 +1849,106 @@
                 }
             }
         },
+        "/taxes": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a list of all current taxes",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "taxes"
+                ],
+                "summary": "Retrieve all current tax rates",
+                "operationId": "get-all-taxes",
+                "responses": {
+                    "200": {
+                        "description": "List of taxes",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Taxes"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/taxes/{id}": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update tax rate (Admin only)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "taxes"
+                ],
+                "summary": "Update tax rate by ID",
+                "operationId": "update-tax-by-id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Tax ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated tax information",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Taxes"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated tax",
+                        "schema": {
+                            "$ref": "#/definitions/models.Taxes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Tax not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "security": [
@@ -685,6 +2126,106 @@
                     },
                     "403": {
                         "description": "Unauthorized password change",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/settings": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get user settings by user ID (only the owner can get their own settings)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get user settings",
+                "operationId": "get-user-settings",
+                "responses": {
+                    "200": {
+                        "description": "User settings",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSettings"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User settings not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update user settings (only the owner can update their own settings)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update user settings",
+                "operationId": "update-user-settings",
+                "parameters": [
+                    {
+                        "description": "Updated user settings",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSettings"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User settings updated successfully!!!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Permission denied",
                         "schema": {
                             "$ref": "#/definitions/controllers.ErrorResponse"
                         }
@@ -1195,23 +2736,37 @@
             "type": "object",
             "properties": {
                 "created_at": {
+                    "description": "Дата создания",
                     "type": "string"
                 },
                 "deleted_at": {
+                    "description": "Дата удаления",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Описание категории",
                     "type": "string"
                 },
                 "id": {
-                    "description": "Уникальный идентификатор категории товара.",
                     "type": "integer"
                 },
                 "is_deleted": {
+                    "description": "Флаг мягкого удаления",
                     "type": "boolean"
                 },
+                "products": {
+                    "description": "Связи",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Product"
+                    }
+                },
                 "title": {
-                    "description": "Название категории товара.",
+                    "description": "Название категории",
                     "type": "string"
                 },
                 "updated_at": {
+                    "description": "Дата последнего обновления",
                     "type": "string"
                 }
             }
@@ -1222,31 +2777,23 @@
                 "created_at": {
                     "type": "string"
                 },
-                "deleted_at": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
                 },
-                "is_deleted": {
+                "is_paid": {
+                    "description": "Статус оплаты.",
                     "type": "boolean"
                 },
                 "order_items": {
+                    "description": "Связь с OrderItem",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.OrderItem"
                     }
                 },
-                "payment_status": {
-                    "description": "Статус оплаты.",
-                    "type": "string"
-                },
                 "total_amount": {
-                    "description": "Общая сумма заказа.",
+                    "description": "Общая сумма всех заказов.",
                     "type": "number"
-                },
-                "updated_at": {
-                    "type": "string"
                 },
                 "user": {
                     "description": "Связи",
@@ -1268,14 +2815,8 @@
                 "created_at": {
                     "type": "string"
                 },
-                "deleted_at": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
-                },
-                "is_deleted": {
-                    "type": "boolean"
                 },
                 "order": {
                     "description": "Связи",
@@ -1302,10 +2843,11 @@
                 },
                 "quantity": {
                     "description": "Количество товара в заказе.",
-                    "type": "integer"
+                    "type": "number"
                 },
-                "updated_at": {
-                    "type": "string"
+                "total": {
+                    "description": "Общая сумма.",
+                    "type": "number"
                 }
             }
         },
@@ -1368,8 +2910,8 @@
                     "description": "Применяется ли НДС.",
                     "type": "boolean"
                 },
-                "orders": {
-                    "description": "Связь с таблицей заказов.",
+                "order_items": {
+                    "description": "Связь с OrderItem",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.OrderItem"
@@ -1425,6 +2967,76 @@
                 }
             }
         },
+        "models.ReturnResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID записи возврата",
+                    "type": "integer"
+                },
+                "product_name": {
+                    "description": "Название товара",
+                    "type": "string"
+                },
+                "quantity": {
+                    "description": "Количество",
+                    "type": "number"
+                },
+                "return_reason": {
+                    "description": "Причина возврата",
+                    "type": "string"
+                },
+                "returned_at": {
+                    "description": "Дата возврата",
+                    "type": "string"
+                },
+                "supplier_name": {
+                    "description": "Название поставщика",
+                    "type": "string"
+                }
+            }
+        },
+        "models.ReturnsProduct": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_deleted": {
+                    "type": "boolean"
+                },
+                "product": {
+                    "$ref": "#/definitions/models.Product"
+                },
+                "product_id": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "number"
+                },
+                "return_reason": {
+                    "type": "string"
+                },
+                "returned_at": {
+                    "type": "string"
+                },
+                "supplier": {
+                    "$ref": "#/definitions/models.Supplier"
+                },
+                "supplier_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
         "models.SignInInput": {
             "type": "object",
             "properties": {
@@ -1446,7 +3058,7 @@
                     "type": "string"
                 },
                 "email": {
-                    "description": "Электронная почта поставщика...",
+                    "description": "Электронная почта поставщика (уникальная)...",
                     "type": "string"
                 },
                 "id": {
@@ -1455,12 +3067,8 @@
                 "is_deleted": {
                     "type": "boolean"
                 },
-                "name": {
-                    "description": "Название или имя поставщика...",
-                    "type": "string"
-                },
                 "phone": {
-                    "description": "Телефон поставщика...",
+                    "description": "Title     string     `gorm:\"size:255;not null\" json:\"title\"` // Название или имя поставщика...\nEmail     string     `gorm:\"size:255\" json:\"email\"`          // Электронная почта поставщика...",
                     "type": "string"
                 },
                 "products": {
@@ -1469,6 +3077,10 @@
                     "items": {
                         "$ref": "#/definitions/models.Product"
                     }
+                },
+                "title": {
+                    "description": "Название или имя поставщика (уникальное)...",
+                    "type": "string"
                 },
                 "updated_at": {
                     "type": "string"
@@ -1492,6 +3104,27 @@
                 },
                 "username": {
                     "description": "Логин для входа в систему...",
+                    "type": "string"
+                }
+            }
+        },
+        "models.Taxes": {
+            "type": "object",
+            "properties": {
+                "apply_to": {
+                    "description": "Применяется к: 'final_price' или 'profit'.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Уникальный идентификатор налога.",
+                    "type": "integer"
+                },
+                "rate": {
+                    "description": "Процентная ставка налога.",
+                    "type": "number"
+                },
+                "title": {
+                    "description": "Название налога (например: НДС, акциз).",
                     "type": "string"
                 }
             }
@@ -1558,9 +3191,86 @@
                     "description": "Время последнего обновления записи...",
                     "type": "string"
                 },
+                "user_settings": {
+                    "description": "Связь с таблицей настроек пользователя...",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.UserSettings"
+                        }
+                    ]
+                },
                 "username": {
                     "description": "Логин продавца...",
                     "type": "string"
+                }
+            }
+        },
+        "models.UserSettings": {
+            "type": "object",
+            "properties": {
+                "accessibility_options": {
+                    "description": "Опции доступности.",
+                    "type": "string"
+                },
+                "add_confirmation": {
+                    "description": "Подтверждение добавления.",
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "description": "Дата создания настроек.",
+                    "type": "string"
+                },
+                "dark_mode_theme": {
+                    "description": "Темная тема.",
+                    "type": "boolean"
+                },
+                "delete_confirmation": {
+                    "description": "Подтверждение удаления.",
+                    "type": "boolean"
+                },
+                "desktop_theme": {
+                    "description": "Тема рабочего стола.",
+                    "type": "string"
+                },
+                "display_language": {
+                    "description": "Язык отображения.",
+                    "type": "string"
+                },
+                "email_notifications": {
+                    "description": "Email уведомления.",
+                    "type": "boolean"
+                },
+                "font": {
+                    "description": "Шрифт.",
+                    "type": "string"
+                },
+                "font_size": {
+                    "description": "Размер шрифта.",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "Уникальный идентификатор настроек пользователя.",
+                    "type": "integer"
+                },
+                "notification_frequency": {
+                    "description": "Частота уведомлений.",
+                    "type": "string"
+                },
+                "notification_sound": {
+                    "description": "Звук уведомлений.",
+                    "type": "boolean"
+                },
+                "update_confirmation": {
+                    "description": "Подтверждение обновления.",
+                    "type": "boolean"
+                },
+                "updated_at": {
+                    "description": "Дата последнего обновления настроек.",
+                    "type": "string"
+                },
+                "user_id": {
+                    "description": "Связь с пользователем.",
+                    "type": "integer"
                 }
             }
         }
