@@ -120,26 +120,15 @@ func InitRoutes() *gin.Engine {
 		barcodeG.GET("/generate", GenerateBarcode) // Генерация штрих-кода
 	}
 
-	// // reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked())
-	// reportG := router.Group("/reports")
-	// {
-	// 	reportG.GET("/sales", GetSalesReport)                  // Маршрут для получения отчета по продажам за указанный период...
-	// 	reportG.GET("/low-stock", GetLowStockReport)           // Маршрут для получения отчета по товарам с низким запасом...
-	// 	reportG.GET("/sellers", GetSellerReport)               // Маршрут для получения отчета по продавцам...
-	// 	reportG.GET("/suppliers", GetSupplierReport)           // Маршрут для получения отчета по поставщикам...
-	// 	reportG.GET("/category-sales", GetCategorySalesReport) // Маршрут для отчета по категориям товаров...
-
-	// }
-
-	// Маршруты для отчетов
-	reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked)
-	{
-		reportG.GET("/:report_type", GetReport) // Универсальный маршрут для всех отчётов
-	}
-
 	ktuG := router.Group("/ktu", checkUserAuthentication, checkUserBlocked)
 	{
 		ktuG.GET("", GetKTU) // Маршрут для расчета КТУ
+	}
+
+	// Маршрут для отчетов...
+	reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked)
+	{
+		reportG.GET("/:report_type", GetReport) // Универсальный маршрут для всех отчётов
 	}
 
 	router.POST("/insert-test-data", InsertTestData)
