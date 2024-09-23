@@ -566,6 +566,58 @@ const docTemplate = `{
                 }
             }
         },
+        "/ktu": {
+            "get": {
+                "description": "Calculates KTU for each employee based on monthly sales (admin, managers, sellers)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ktu"
+                ],
+                "summary": "Calculate KTU for all employees",
+                "operationId": "get-ktu",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Year for KTU calculation",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Month for KTU calculation",
+                        "name": "month",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "KTU calculated",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "number"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/orders": {
             "post": {
                 "description": "Creates a new order and adds items to it (Seller only)",
@@ -661,6 +713,48 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/generate-random/{count}": {
+            "post": {
+                "description": "Generates a specified number of random orders with random items for testing",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "orders_test"
+                ],
+                "summary": "Generate random orders for testing",
+                "operationId": "generate-random-orders",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Number of orders to generate",
+                        "name": "count",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Random orders generated",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
                         "schema": {
                             "$ref": "#/definitions/controllers.ErrorResponse"
                         }

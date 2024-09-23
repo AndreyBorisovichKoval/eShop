@@ -759,6 +759,42 @@ paths:
       summary: Retrieve all deleted categories
       tags:
       - categories
+  /ktu:
+    get:
+      description: Calculates KTU for each employee based on monthly sales (admin,
+        managers, sellers)
+      operationId: get-ktu
+      parameters:
+      - description: Year for KTU calculation
+        in: query
+        name: year
+        required: true
+        type: integer
+      - description: Month for KTU calculation
+        in: query
+        name: month
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: KTU calculated
+          schema:
+            additionalProperties:
+              type: number
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Calculate KTU for all employees
+      tags:
+      - ktu
   /orders:
     post:
       consumes:
@@ -947,6 +983,35 @@ paths:
       summary: Insert a product into the order by scanning the barcode
       tags:
       - barcode
+  /orders/generate-random/{count}:
+    post:
+      description: Generates a specified number of random orders with random items
+        for testing
+      operationId: generate-random-orders
+      parameters:
+      - description: Number of orders to generate
+        in: path
+        name: count
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Random orders generated
+          schema:
+            type: string
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Generate random orders for testing
+      tags:
+      - orders_test
   /products:
     get:
       description: Get a list of all active products
