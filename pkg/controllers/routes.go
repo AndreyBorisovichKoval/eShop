@@ -37,7 +37,7 @@ func InitRoutes() *gin.Engine {
 	}
 
 	// userG := router.Group("/users")
-	userG := router.Group("/users", checkUserAuthentication, checkUserBlocked())
+	userG := router.Group("/users", checkUserAuthentication, checkUserBlocked)
 	{
 		userG.POST("", CreateUser)                        // Регистрация нового пользователя...
 		userG.GET("", GetAllUsers)                        // Получение списка всех активных пользователей...
@@ -55,13 +55,13 @@ func InitRoutes() *gin.Engine {
 		userG.PATCH("/settings", UpdateUserSettings)      // Обновление настроек пользователя...
 	}
 
-	taxesG := router.Group("/taxes", checkUserAuthentication, checkUserBlocked())
+	taxesG := router.Group("/taxes", checkUserAuthentication, checkUserBlocked)
 	{
 		taxesG.GET("", GetAllTaxes)         // Получение списка всех текущих налогов...
 		taxesG.PATCH("/:id", UpdateTaxByID) // Обновление налоговой ставки по ID...
 	}
 
-	supplierG := router.Group("/suppliers", checkUserAuthentication, checkUserBlocked())
+	supplierG := router.Group("/suppliers", checkUserAuthentication, checkUserBlocked)
 	{
 		supplierG.POST("", CreateSupplier)                    // Регистрация нового поставщика...
 		supplierG.GET("", GetAllSuppliers)                    // Получение списка всех активных поставщиков...
@@ -73,7 +73,7 @@ func InitRoutes() *gin.Engine {
 		supplierG.DELETE("/:id/hard", HardDeleteSupplierByID) // Полное удаление поставщика...
 	}
 
-	categoryG := router.Group("/categories", checkUserAuthentication, checkUserBlocked())
+	categoryG := router.Group("/categories", checkUserAuthentication, checkUserBlocked)
 	{
 		categoryG.POST("", CreateCategory)                    // Регистрация новой категории...
 		categoryG.GET("", GetAllCategories)                   // Получение списка всех активных категорий...
@@ -85,7 +85,7 @@ func InitRoutes() *gin.Engine {
 		categoryG.DELETE("/:id/hard", HardDeleteCategoryByID) // Полное удаление категории...
 	}
 
-	productG := router.Group("/products", checkUserAuthentication, checkUserBlocked())
+	productG := router.Group("/products", checkUserAuthentication, checkUserBlocked)
 	{
 		productG.POST("", AddProduct)                          // Добавление нового товара...
 		productG.GET("", GetAllProducts)                       // Просмотр всех товаров...
@@ -97,7 +97,7 @@ func InitRoutes() *gin.Engine {
 		productG.DELETE("/:id/hard", HardDeleteProductByID)    // Полное удаление продукта...
 	}
 
-	orderG := router.Group("/orders", checkUserAuthentication, checkUserBlocked())
+	orderG := router.Group("/orders", checkUserAuthentication, checkUserBlocked)
 	{
 		orderG.POST("", AddOrder)                             // Создание нового заказа...
 		orderG.PATCH("/:id/paid", MarkOrderAsPaid)            // Отметка об оплате заказа...
@@ -108,14 +108,14 @@ func InitRoutes() *gin.Engine {
 		orderG.POST("/add-from-barcode", InsertProductByBarcode)
 	}
 
-	returnG := router.Group("/returns", checkUserAuthentication, checkUserBlocked())
+	returnG := router.Group("/returns", checkUserAuthentication, checkUserBlocked)
 	{
 		returnG.POST("", AddReturnProduct) // Добавление возврата товара...
 		returnG.GET("", GetAllReturns)     // Получение списка всех возвратов...
 		returnG.GET("/:id", GetReturnByID) // Получение возврата по ID...
 	}
 
-	barcodeG := router.Group("/barcode", checkUserAuthentication, checkUserBlocked())
+	barcodeG := router.Group("/barcode", checkUserAuthentication, checkUserBlocked)
 	{
 		barcodeG.GET("/generate", GenerateBarcode) // Генерация штрих-кода
 	}
@@ -132,12 +132,12 @@ func InitRoutes() *gin.Engine {
 	// }
 
 	// Маршруты для отчетов
-	reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked())
+	reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked)
 	{
 		reportG.GET("/:report_type", GetReport) // Универсальный маршрут для всех отчётов
 	}
 
-	ktuG := router.Group("/ktu", checkUserAuthentication, checkUserBlocked())
+	ktuG := router.Group("/ktu", checkUserAuthentication, checkUserBlocked)
 	{
 		ktuG.GET("", GetKTU) // Маршрут для расчета КТУ
 	}
