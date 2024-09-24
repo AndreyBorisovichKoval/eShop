@@ -13,150 +13,112 @@ import (
 // Добавляет статус код к ним и сразу возвращает клиенту...
 func handleError(c *gin.Context, err error) {
 	switch {
-	case errors.Is(err, errs.ErrUsernameUniquenessFailed):
-		// Ошибка уникальности или неверного пароля...
-		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
+	// Ошибки аутентификации
+	case errors.Is(err, errs.ErrEmptyAuthHeader):
+		c.JSON(http.StatusUnauthorized, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrInvalidAuthHeader):
+		c.JSON(http.StatusUnauthorized, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrTokenParsingFailed):
+		c.JSON(http.StatusUnauthorized, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrUserNotAuthenticated):
+		c.JSON(http.StatusUnauthorized, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrPasswordResetRequired):
+		c.JSON(http.StatusForbidden, newErrorResponse(err.Error()))
 
-	case errors.Is(err, errs.ErrIncorrectUsernameOrPassword):
-		// Ошибка неверного имени пользователя или пароля...
-		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrRecordNotFound):
-		// Ошибка "Запись не найдена"...
-		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
-
+	// Ошибки разрешений
 	case errors.Is(err, errs.ErrPermissionDenied):
-		// Ошибка "Доступ запрещен"...
+		c.JSON(http.StatusForbidden, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrPermissionDeniedOnlyForAdmin):
+		c.JSON(http.StatusForbidden, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrPermissionDeniedOnlyForAdminOrManager):
+		c.JSON(http.StatusForbidden, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrUserBlocked):
 		c.JSON(http.StatusForbidden, newErrorResponse(err.Error()))
 
-	case errors.Is(err, errs.ErrUserNotFound):
-		// Ошибка "Пользователь не найден"...
-		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrUsersNotFound):
-		// Ошибка "Пользователи не найдены"...
-		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrUserAlreadyDeleted):
-		// Ошибка "Пользователь уже удалён"...
-		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrUserNotDeleted):
-		// Ошибка "Пользователь не был удалён"...
+	// Ошибки валидации
+	case errors.Is(err, errs.ErrValidationFailed):
 		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrUserAlreadyBlocked):
-		// Ошибка "Пользователь уже заблокирован"...
-		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrUserNotBlocked):
-		// Ошибка "Пользователь не был заблокирован"...
+	case errors.Is(err, errs.ErrUsernameUniquenessFailed):
 		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrUnauthorizedPasswordChange):
-		// Ошибка "Попытка смены пароля без прав"...
-		c.JSON(http.StatusForbidden, newErrorResponse(err.Error()))
-
+	case errors.Is(err, errs.ErrIncorrectUsernameOrPassword):
+		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
 	case errors.Is(err, errs.ErrIncorrectPassword):
-		// Ошибка "Неверный старый пароль"...
 		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
 
+	// Ошибки пользователей
+	case errors.Is(err, errs.ErrRecordNotFound):
+		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrUserNotFound):
+		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrUsersNotFound):
+		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrUserAlreadyDeleted):
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrUserNotDeleted):
+		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrUserAlreadyBlocked):
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrUserNotBlocked):
+		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
+
+	// Ошибки поставщиков
 	case errors.Is(err, errs.ErrSupplierNotFound):
-		// Ошибка "Поставщик не найден"...
 		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
-
+	case errors.Is(err, errs.ErrSupplierAlreadyExists):
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
 	case errors.Is(err, errs.ErrSupplierAlreadyDeleted):
-		// Ошибка "Поставщик уже удалён"...
 		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
-
 	case errors.Is(err, errs.ErrSupplierNotDeleted):
-		// Ошибка "Поставщик не был удалён"...
 		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
 
-	case errors.Is(err, errs.ErrSupplierAlreadyExists):
-		// Ошибка "Поставщик уже существует"...
-		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
-
+	// Ошибки категорий
 	case errors.Is(err, errs.ErrCategoryNotFound):
-		// Ошибка "Категория не найдена"...
 		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrCategoryAlreadyDeleted):
-		// Ошибка "Категория уже удалена"...
+	case errors.Is(err, errs.ErrCategoryAlreadyExists):
 		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
-
+	case errors.Is(err, errs.ErrCategoryAlreadyDeleted):
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
 	case errors.Is(err, errs.ErrCategoryNotDeleted):
-		// Ошибка "Категория не была удалена"...
 		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
 
-	case errors.Is(err, errs.ErrCategoryAlreadyExists):
-		// Ошибка "Категория уже существует"...
-		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrSupplierAlreadyExists):
-		// Ошибка "Поставщик уже существует"...
-		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrCategoryAlreadyExists):
-		// Ошибка "Категория уже существует"...
-		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrUniquenessViolation):
-		// Ошибка нарушения уникальности...
-		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
-
+	// Ошибки продуктов
 	case errors.Is(err, errs.ErrProductNotFound):
-		// Ошибка "Продукт не найден"...
 		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
-
 	case errors.Is(err, errs.ErrProductAlreadyExists):
 		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
-
 	case errors.Is(err, errs.ErrProductAlreadyDeleted):
-		// Ошибка "Продукт уже удалён"...
 		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
-
 	case errors.Is(err, errs.ErrProductNotDeleted):
-		// Ошибка "Продукт не был удалён"...
 		c.JSON(http.StatusBadRequest, newErrorResponse(err.Error()))
-
-	// /
-	case errors.Is(err, errs.ErrOrderNotFound):
-		// Ошибка "Заказ не найден"...
-		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrOrderItemNotFound):
-		// Ошибка "Элемент заказа не найден"...
-		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrInsufficientStock):
-		// Ошибка "Недостаточно товара на складе"...
-		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrUnauthorized):
-		// Ошибка "Неавторизованный доступ"...
-		c.JSON(http.StatusUnauthorized, newErrorResponse(err.Error()))
-
-	case errors.Is(err, errs.ErrOrderAlreadyPaid):
-		// Ошибка "Заказ уже оплачен"...
-		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
-
 	case errors.Is(err, errs.ErrProductNotWeightBased):
-		// Ошибка "Заказ уже оплачен"...
 		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
 
+	// Ошибки заказов
+	case errors.Is(err, errs.ErrOrderNotFound):
+		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrOrderItemNotFound):
+		c.JSON(http.StatusNotFound, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrInsufficientStock):
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrOrderAlreadyPaid):
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
+
+	// Общие ошибки
+	case errors.Is(err, errs.ErrUnauthorized):
+		c.JSON(http.StatusUnauthorized, newErrorResponse(err.Error()))
+	case errors.Is(err, errs.ErrServerError):
+		c.JSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
+
+	// Ошибки, связанные с удалением заказов
 	case errors.Is(err, errs.ErrCannotDeletePaidOrder):
-		c.JSON(http.StatusConflict, newErrorResponse("Cannot delete a paid order"))
-
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
 	case errors.Is(err, errs.ErrCannotDeletePaidOrderItem):
-		c.JSON(http.StatusConflict, newErrorResponse("Cannot delete items from a paid order"))
-
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
 	case errors.Is(err, errs.ErrCannotAddToPaidOrder):
-		c.JSON(http.StatusConflict, newErrorResponse("Cannot add products to a paid order"))
+		c.JSON(http.StatusConflict, newErrorResponse(err.Error()))
 
-	// /
+	// Внутренняя ошибка сервера
 	default:
-		// Внутренняя ошибка сервера...
 		c.JSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 	}
 }

@@ -29,13 +29,6 @@ import (
 // @Router /categories [post]
 // @Security ApiKeyAuth
 func CreateCategory(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	var category models.Category
 	if err := c.BindJSON(&category); err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -70,13 +63,6 @@ func CreateCategory(c *gin.Context) {
 // @Router /categories/{id} [patch]
 // @Security ApiKeyAuth
 func UpdateCategoryByID(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -115,13 +101,6 @@ func UpdateCategoryByID(c *gin.Context) {
 // @Router /categories/{id}/soft [delete]
 // @Security ApiKeyAuth
 func SoftDeleteCategoryByID(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -154,13 +133,6 @@ func SoftDeleteCategoryByID(c *gin.Context) {
 // @Router /categories/{id}/restore [patch]
 // @Security ApiKeyAuth
 func RestoreCategoryByID(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -193,13 +165,6 @@ func RestoreCategoryByID(c *gin.Context) {
 // @Router /categories/{id}/hard [delete]
 // @Security ApiKeyAuth
 func HardDeleteCategoryByID(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -229,13 +194,6 @@ func HardDeleteCategoryByID(c *gin.Context) {
 // @Router /categories [get]
 // @Security ApiKeyAuth
 func GetAllCategories(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	logger.Info.Printf("IP: [%s] requested list of all active categories\n", c.ClientIP())
 
 	categories, err := service.GetAllCategories()
@@ -260,13 +218,6 @@ func GetAllCategories(c *gin.Context) {
 // @Router /categories/deleted [get]
 // @Security ApiKeyAuth
 func GetAllDeletedCategories(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	logger.Info.Printf("IP: [%s] requested list of all deleted categories\n", c.ClientIP())
 
 	categories, err := service.GetAllDeletedCategories()
@@ -293,13 +244,6 @@ func GetAllDeletedCategories(c *gin.Context) {
 // @Router /categories/{id} [get]
 // @Security ApiKeyAuth
 func GetCategoryByID(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)

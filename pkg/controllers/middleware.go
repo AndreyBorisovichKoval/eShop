@@ -6,7 +6,6 @@ import (
 	"eShop/errs"
 	"eShop/logger"
 	"eShop/pkg/service"
-	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -23,62 +22,56 @@ func checkUserAuthentication(c *gin.Context) {
 	header := c.GetHeader(authorizationHeader)
 
 	if header == "" {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": "empty auth header",
-		})
+		handleError(c, errs.ErrEmptyAuthHeader) // Используем кастомную ошибку
+		c.Abort()
 		return
 	}
 
 	headerParts := strings.Split(header, " ")
 	if len(headerParts) != 2 || headerParts[0] != "Bearer" {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": "invalid auth header",
-		})
+		handleError(c, errs.ErrInvalidAuthHeader) // Используем кастомную ошибку
+		c.Abort()
 		return
 	}
 
 	accessToken := headerParts[1]
-
 	claims, err := service.ParseToken(accessToken)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		handleError(c, errs.ErrTokenParsingFailed) // Используем кастомную ошибку
+		c.Abort()
 		return
 	}
 
-	// Проверяем наличие роли, если её нет, возвращаем ошибку валидации...
 	if claims.Role == "" {
-		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": errs.ErrPermissionDenied.Error()})
+		handleError(c, errs.ErrUserNotAuthenticated) // Используем кастомную ошибку
+		c.Abort()
 		return
 	}
 
-	// Устанавливаем идентификатор пользователя и роль в контекст...
 	c.Set(userIDCtx, claims.UserID)
 	c.Set(userRoleCtx, claims.Role)
-
 	c.Next()
 }
 
-// checkUserBlocked проверяет, заблокирован ли пользователь
+// checkUserBlocked проверяет, заблокирован ли пользователь...
 func checkUserBlocked(c *gin.Context) {
 	userID, exists := c.Get(userIDCtx)
 	if !exists {
-		logger.Warning.Println("User ID not found in context")
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized access"})
+		handleError(c, errs.ErrUserNotAuthenticated) // Используем кастомную ошибку
 		c.Abort()
 		return
 	}
 
 	user, err := service.GetUserByID(userID.(uint))
 	if err != nil {
-		logger.Error.Printf("Error getting user by ID: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving user information"})
+		handleError(c, err)
 		c.Abort()
 		return
 	}
 
 	if user.IsBlocked {
 		logger.Warning.Printf("Blocked user attempting to access: User ID: %d", userID)
-		c.JSON(http.StatusForbidden, gin.H{"error": "Access denied. User is blocked."})
+		handleError(c, errs.ErrUserBlocked) // Используем новую кастомную ошибку
 		c.Abort()
 		return
 	}
@@ -86,30 +79,51 @@ func checkUserBlocked(c *gin.Context) {
 	c.Next()
 }
 
-// CheckPasswordResetRequired проверяет, нужно ли пользователю сменить пароль
+// CheckPasswordResetRequired проверяет, нужно ли пользователю сменить пароль...
 func CheckPasswordResetRequired(c *gin.Context) {
 	userID, exists := c.Get(userIDCtx)
 	if !exists {
-		logger.Warning.Println("User ID not found in context")
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized access"})
+		handleError(c, errs.ErrUserNotAuthenticated) // Используем кастомную ошибку
 		c.Abort()
 		return
 	}
 
 	user, err := service.GetUserByID(userID.(uint))
 	if err != nil {
-		logger.Error.Printf("Error getting user by ID: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving user information"})
+		handleError(c, err)
 		c.Abort()
 		return
 	}
 
 	if user.PasswordResetRequired {
-		logger.Warning.Printf("User with ID %d is required to reset their password.", userID)
-		c.JSON(http.StatusForbidden, gin.H{"error": "Password reset required. Please change your password to continue."})
+		handleError(c, errs.ErrPasswordResetRequired) // Используем кастомную ошибку
 		c.Abort()
 		return
 	}
 
+	c.Next()
+}
+
+// Middleware для проверки роли администратора
+func checkAdminRole(c *gin.Context) {
+	userRole := c.GetString(userRoleCtx)          // Используем твой ключ для получения роли
+	logger.Info.Printf("User role: %s", userRole) // Логируем роль для отладки
+	if userRole != "Admin" {
+		handleError(c, errs.ErrPermissionDeniedOnlyForAdmin) // Используем кастомную ошибку
+		c.Abort()
+		return
+	}
+	c.Next()
+}
+
+// Middleware для проверки роли администратора или менеджера
+func checkManagerOrAdminRole(c *gin.Context) {
+	userRole := c.GetString(userRoleCtx)          // Используем твой ключ для получения роли
+	logger.Info.Printf("User role: %s", userRole) // Логируем роль для отладки
+	if userRole != "Manager" && userRole != "Admin" {
+		handleError(c, errs.ErrPermissionDeniedOnlyForAdminOrManager) // Используем кастомную ошибку
+		c.Abort()
+		return
+	}
 	c.Next()
 }

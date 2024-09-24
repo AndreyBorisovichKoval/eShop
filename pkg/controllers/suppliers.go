@@ -29,13 +29,6 @@ import (
 // @Router /suppliers [post]
 // @Security ApiKeyAuth
 func CreateSupplier(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	var supplier models.Supplier
 	if err := c.BindJSON(&supplier); err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -70,13 +63,6 @@ func CreateSupplier(c *gin.Context) {
 // @Router /suppliers/{id} [patch]
 // @Security ApiKeyAuth
 func UpdateSupplierByID(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -115,13 +101,6 @@ func UpdateSupplierByID(c *gin.Context) {
 // @Router /suppliers/{id}/soft [delete]
 // @Security ApiKeyAuth
 func SoftDeleteSupplierByID(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -154,13 +133,6 @@ func SoftDeleteSupplierByID(c *gin.Context) {
 // @Router /suppliers/{id}/restore [patch]
 // @Security ApiKeyAuth
 func RestoreSupplierByID(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -193,13 +165,6 @@ func RestoreSupplierByID(c *gin.Context) {
 // @Router /suppliers/{id}/hard [delete]
 // @Security ApiKeyAuth
 func HardDeleteSupplierByID(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -229,13 +194,6 @@ func HardDeleteSupplierByID(c *gin.Context) {
 // @Router /suppliers [get]
 // @Security ApiKeyAuth
 func GetAllSuppliers(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	logger.Info.Printf("IP: [%s] requested list of all active suppliers\n", c.ClientIP())
 
 	suppliers, err := service.GetAllSuppliers()
@@ -260,13 +218,6 @@ func GetAllSuppliers(c *gin.Context) {
 // @Router /suppliers/deleted [get]
 // @Security ApiKeyAuth
 func GetAllDeletedSuppliers(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	logger.Info.Printf("IP: [%s] requested list of all deleted suppliers\n", c.ClientIP())
 
 	suppliers, err := service.GetAllDeletedSuppliers()
@@ -293,13 +244,6 @@ func GetAllDeletedSuppliers(c *gin.Context) {
 // @Router /suppliers/{id} [get]
 // @Security ApiKeyAuth
 func GetSupplierByID(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)

@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"username\": \"Fred\",\r\n  \"password\": \"Fred_123\"\r\n}\r\n",
+							"raw": "{\r\n  \"username\": \"Fred\",\r\n  \"password\": \"Fred_1234\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -214,6 +214,44 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "CreateUserSellerTEST",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMDAyMDksImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.qHsH4BOR8ETHdp-c-FN-9LuA_mvziJzj9Zrm32qy_Lk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"full_name\": \"Vasiliy Fyodorov\",\r\n  \"username\": \"Vasya\",\r\n  \"email\": \"vasiliy.fyodorov@example.com\",\r\n  \"password\": \"Fred_123\",\r\n  \"role\": \"Seller\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -257,7 +295,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1LCJyb2xlIjoiU2VsbGVyIiwidXNlcm5hbWUiOiJNYXgiLCJleHAiOjE3MjYzMjk5MjUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.8kAPZOJzMW13vA_HRKbrtzLuQu8L8ii8n62ypTd0-Qo",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcxOTk5NzMsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ._UOirt9c8fSerDmD_-RPSQX9QCy2E2Wu6JGJhboiDvA",
 									"type": "string"
 								}
 							]
@@ -265,7 +303,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8585/users/6",
+							"raw": "http://localhost:8585/users/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -273,46 +311,7 @@
 							"port": "8585",
 							"path": [
 								"users",
-								"6"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "UpdateByID",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjU5OTg1NDMsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.Aq3IbOq8GZy6daOHUQdZYiLkJNau947BUztGNFnHUrQ",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"full_name\": \"Test Test3\",\r\n  \"username\": \"Test3\",\r\n  \"email\": \"test.test3@example.com\",\r\n  \"is_blocked\": false\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8585/users/6",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"users",
-								"6"
+								"3"
 							]
 						}
 					},
@@ -326,7 +325,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjYwODExMzgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.op2KNu6101ohPdcZ8-U4hfrloBCsZUq7g0hDzsPESw0",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMDAyMDksImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.qHsH4BOR8ETHdp-c-FN-9LuA_mvziJzj9Zrm32qy_Lk",
 									"type": "string"
 								}
 							]
@@ -343,7 +342,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/users/6",
+							"raw": "http://localhost:8585/users/4/soft",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -351,47 +350,8 @@
 							"port": "8585",
 							"path": [
 								"users",
-								"6"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "RestoreByID",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjYwODExMzgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.op2KNu6101ohPdcZ8-U4hfrloBCsZUq7g0hDzsPESw0",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"full_name\": \"Test Test3\",\r\n  \"username\": \"Test3\",\r\n  \"email\": \"test.test3@example.com\",\r\n  \"is_blocked\": false\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8585/users/6/restore",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"users",
-								"6",
-								"restore"
+								"4",
+								"soft"
 							]
 						}
 					},
@@ -405,7 +365,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjYwODExMzgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.op2KNu6101ohPdcZ8-U4hfrloBCsZUq7g0hDzsPESw0",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMDAyMDksImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.qHsH4BOR8ETHdp-c-FN-9LuA_mvziJzj9Zrm32qy_Lk",
 									"type": "string"
 								}
 							]
@@ -428,6 +388,85 @@
 					"response": []
 				},
 				{
+					"name": "RestoreByID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMDAyMDksImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.qHsH4BOR8ETHdp-c-FN-9LuA_mvziJzj9Zrm32qy_Lk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"full_name\": \"Test Test3\",\r\n  \"username\": \"Test3\",\r\n  \"email\": \"test.test3@example.com\",\r\n  \"is_blocked\": false\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/users/4/restore",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"users",
+								"4",
+								"restore"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateByID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMDAyMDksImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.qHsH4BOR8ETHdp-c-FN-9LuA_mvziJzj9Zrm32qy_Lk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"full_name\": \"Test Testovich\",\r\n  \"username\": \"Testovik\",\r\n  \"email\": \"test.testovuch@example.com\",\r\n  \"role\": \"Seller\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/users/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"users",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "HardDeleteByID",
 					"request": {
 						"auth": {
@@ -435,7 +474,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjYwODExMzgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.op2KNu6101ohPdcZ8-U4hfrloBCsZUq7g0hDzsPESw0",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMDAyMDksImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.qHsH4BOR8ETHdp-c-FN-9LuA_mvziJzj9Zrm32qy_Lk",
 									"type": "string"
 								}
 							]
@@ -452,7 +491,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/users/21/hard",
+							"raw": "http://localhost:8585/users/4/hard",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -460,7 +499,7 @@
 							"port": "8585",
 							"path": [
 								"users",
-								"21",
+								"4",
 								"hard"
 							]
 						}
@@ -475,7 +514,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjYxNjU3NTEsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.EH0PNBEQLSFuJd53hIR6Fty2OMk8c50cWnWao-kWI2A",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcxOTk5NzMsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ._UOirt9c8fSerDmD_-RPSQX9QCy2E2Wu6JGJhboiDvA",
 									"type": "string"
 								}
 							]
@@ -492,7 +531,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/users/6/block",
+							"raw": "http://localhost:8585/users/3/block",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -500,7 +539,7 @@
 							"port": "8585",
 							"path": [
 								"users",
-								"6",
+								"3",
 								"block"
 							]
 						}
@@ -548,45 +587,6 @@
 					"response": []
 				},
 				{
-					"name": "ChangeOwnPassword",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyMiwicm9sZSI6IlNlbGxlciIsInVzZXJuYW1lIjoiVGVzdDgiLCJleHAiOjE3MjYzMzgyODQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.wiwkcru9Tv-DuBtfMdAPpCrvmj28UhWs3WAZzUhHECA",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"old_password\": \"Fred_1234\",\r\n  \"new_password\": \"Fred_123\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8585/users/password",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"users",
-								"password"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "ResetPassword",
 					"request": {
 						"auth": {
@@ -621,6 +621,49 @@
 								"users",
 								"22",
 								"reset-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User-PSW",
+			"item": [
+				{
+					"name": "ChangeOwnPassword",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMDg4NTQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.qNDxa_gvImyMELqyvxJsIS0c0oZ8WNib6Bh9Xp5OM1w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"old_password\": \"Fred_123\",\r\n  \"new_password\": \"Fred_1234\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/change-passowrd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"change-passowrd"
 							]
 						}
 					},
@@ -894,7 +937,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMjA4OTgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.mPqZ9wIyaEBUEFpoDkOBLaL0anY_NKxxVaTGDLVs2ns",
 									"type": "string"
 								}
 							]
@@ -911,7 +954,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/suppliers/5/soft",
+							"raw": "http://localhost:8585/suppliers/11/soft",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -919,7 +962,7 @@
 							"port": "8585",
 							"path": [
 								"suppliers",
-								"5",
+								"11",
 								"soft"
 							]
 						}
@@ -991,7 +1034,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/suppliers/2/hard",
+							"raw": "http://localhost:8585/suppliers/11/hard",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -999,7 +1042,7 @@
 							"port": "8585",
 							"path": [
 								"suppliers",
-								"2",
+								"11",
 								"hard"
 							]
 						}
@@ -4476,6 +4519,61 @@
 			]
 		},
 		{
+			"name": "AddTestDATA",
+			"item": [
+				{
+					"name": "Insert-Test-Data",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/insert-test-data",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"insert-test-data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert-Test-Data-for-orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcxMTc0MDAsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.g0MDqFUGxOVkc4KG1-xCCKqVTT1ITirjljK9dvLq3I8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/orders/generate-random/100",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"orders",
+								"generate-random",
+								"100"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "PingServer",
 			"request": {
 				"method": "GET",
@@ -4489,56 +4587,6 @@
 					"port": "8585",
 					"path": [
 						"ping"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Insert-Test-Data",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8585/insert-test-data",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8585",
-					"path": [
-						"insert-test-data"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Insert-Test-Data-for-orders",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcxMTc0MDAsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.g0MDqFUGxOVkc4KG1-xCCKqVTT1ITirjljK9dvLq3I8",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8585/orders/generate-random/100",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8585",
-					"path": [
-						"orders",
-						"generate-random",
-						"100"
 					]
 				}
 			},

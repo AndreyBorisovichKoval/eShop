@@ -52,13 +52,6 @@ func GetAllTaxes(c *gin.Context) {
 // @Router /taxes/{id} [patch]
 // @Security ApiKeyAuth
 func UpdateTaxByID(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-
-	if userRole != "Admin" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)

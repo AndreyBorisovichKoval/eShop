@@ -51,13 +51,6 @@ func GetAllProducts(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /products [post]
 func AddProduct(c *gin.Context) {
-	// Проверка роли пользователя
-	userRole := c.GetString(userRoleCtx)
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	var product models.Product
 
 	if err := c.BindJSON(&product); err != nil {
@@ -148,13 +141,6 @@ func GetProductByBarcode(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /products/{id} [patch]
 func UpdateProductByID(c *gin.Context) {
-	// Проверка роли пользователя
-	userRole := c.GetString(userRoleCtx)
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -190,13 +176,6 @@ func UpdateProductByID(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /products/{id} [delete]
 func SoftDeleteProductByID(c *gin.Context) {
-	// Проверка роли пользователя
-	userRole := c.GetString(userRoleCtx)
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -225,13 +204,6 @@ func SoftDeleteProductByID(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /products/{id}/restore [put]
 func RestoreProductByID(c *gin.Context) {
-	// Проверка роли пользователя
-	userRole := c.GetString(userRoleCtx)
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
@@ -261,12 +233,6 @@ func RestoreProductByID(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /products/{id}/hard [delete]
 func HardDeleteProductByID(c *gin.Context) {
-	userRole := c.GetString(userRoleCtx)
-	if userRole != "Admin" && userRole != "Manager" {
-		handleError(c, errs.ErrPermissionDenied)
-		return
-	}
-
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		handleError(c, errs.ErrValidationFailed)
