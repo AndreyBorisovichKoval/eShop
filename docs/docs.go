@@ -3087,7 +3087,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "returned_at": {
-                    "description": "Дата возврата",
+                    "description": "Дата возврата (дата создания записи)",
                     "type": "string"
                 },
                 "supplier_name": {
@@ -3100,6 +3100,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "created_at": {
+                    "description": "ReturnedAt   time.Time  ` + "`" + `gorm:\"not null\" json:\"returned_at\"` + "`" + `",
                     "type": "string"
                 },
                 "deleted_at": {
@@ -3121,9 +3122,6 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "return_reason": {
-                    "type": "string"
-                },
-                "returned_at": {
                     "type": "string"
                 },
                 "supplier": {

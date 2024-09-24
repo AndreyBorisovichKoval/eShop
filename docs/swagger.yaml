@@ -190,7 +190,7 @@ definitions:
         description: Причина возврата
         type: string
       returned_at:
-        description: Дата возврата
+        description: Дата возврата (дата создания записи)
         type: string
       supplier_name:
         description: Название поставщика
@@ -199,6 +199,7 @@ definitions:
   models.ReturnsProduct:
     properties:
       created_at:
+        description: ReturnedAt   time.Time  `gorm:"not null" json:"returned_at"`
         type: string
       deleted_at:
         type: string
@@ -213,8 +214,6 @@ definitions:
       quantity:
         type: number
       return_reason:
-        type: string
-      returned_at:
         type: string
       supplier:
         $ref: '#/definitions/models.Supplier'
