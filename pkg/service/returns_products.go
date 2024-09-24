@@ -7,10 +7,43 @@ import (
 	"eShop/pkg/repository"
 )
 
+// // AddReturnProduct добавляет новый возврат товара
+// func AddReturnProduct(returnProduct models.ReturnsProduct) error {
+// 	return repository.AddReturnProduct(returnProduct)
+// }
+
 // AddReturnProduct добавляет новый возврат товара
 func AddReturnProduct(returnProduct models.ReturnsProduct) error {
+	// Получаем товар по его ID
+	product, err := repository.GetProductByID(returnProduct.ProductID)
+	if err != nil {
+		return err // Если товар не найден, возвращаем ошибку
+	}
+
+	// Устанавливаем SupplierID на основании товара
+	returnProduct.SupplierID = product.SupplierID
+
+	// Теперь добавляем возврат товара в базу данных
 	return repository.AddReturnProduct(returnProduct)
 }
+
+// func GetReturnByID(id uint) (models.ReturnResponse, error) {
+// 	// Получаем возврат через репозиторий
+// 	returnProduct, err := repository.GetReturnByID(id)
+// 	if err != nil {
+// 		return models.ReturnResponse{}, err
+// 	}
+
+// 	// Формируем ответ
+// 	return models.ReturnResponse{
+// 		ID:           returnProduct.ID, // Используем ID возврата
+// 		ProductName:  returnProduct.Product.Title,
+// 		SupplierName: returnProduct.Product.Supplier.Title,
+// 		Quantity:     returnProduct.Quantity,
+// 		ReturnReason: returnProduct.ReturnReason,
+// 		// ReturnedAt:   returnProduct.ReturnedAt.Format("2006-01-02T15:04:05Z"),
+// 	}, nil
+// }
 
 func GetReturnByID(id uint) (models.ReturnResponse, error) {
 	// Получаем возврат через репозиторий
@@ -26,9 +59,33 @@ func GetReturnByID(id uint) (models.ReturnResponse, error) {
 		SupplierName: returnProduct.Product.Supplier.Title,
 		Quantity:     returnProduct.Quantity,
 		ReturnReason: returnProduct.ReturnReason,
-		ReturnedAt:   returnProduct.ReturnedAt.Format("2006-01-02T15:04:05Z"),
+		ReturnedAt:   returnProduct.CreatedAt.Format("2006-01-02T15:04:05Z"), // Используем CreatedAt как дату возврата
 	}, nil
 }
+
+// func GetAllReturns() ([]models.ReturnResponse, error) {
+// 	// Получаем список всех возвратов через репозиторий
+// 	returnProducts, err := repository.GetAllReturns()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	// Формируем список для ответа
+// 	var returnResponses []models.ReturnResponse
+// 	for _, returnProduct := range returnProducts {
+// 		returnResponses = append(returnResponses, models.ReturnResponse{
+// 			ID:           returnProduct.ID, // Используем ID возврата
+// 			ProductName:  returnProduct.Product.Title,
+// 			SupplierName: returnProduct.Product.Supplier.Title,
+// 			Quantity:     returnProduct.Quantity,
+// 			ReturnReason: returnProduct.ReturnReason,
+
+// 			// ReturnedAt:   returnProduct.ReturnedAt.Format("2006-01-02T15:04:05Z"),
+// 		})
+// 	}
+
+// 	return returnResponses, nil
+// }
 
 func GetAllReturns() ([]models.ReturnResponse, error) {
 	// Получаем список всех возвратов через репозиторий
@@ -46,7 +103,7 @@ func GetAllReturns() ([]models.ReturnResponse, error) {
 			SupplierName: returnProduct.Product.Supplier.Title,
 			Quantity:     returnProduct.Quantity,
 			ReturnReason: returnProduct.ReturnReason,
-			ReturnedAt:   returnProduct.ReturnedAt.Format("2006-01-02T15:04:05Z"),
+			ReturnedAt:   returnProduct.CreatedAt.Format("2006-01-02T15:04:05Z"), // Используем CreatedAt как дату возврата
 		})
 	}
 

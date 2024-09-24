@@ -9,12 +9,22 @@ import (
 )
 
 // AddReturnProduct добавляет новую запись о возврате товара в базу данных
+// func AddReturnProduct(returnProduct models.ReturnsProduct) error {
+// 	if err := db.GetDBConn().Create(&returnProduct).Error; err != nil {
+// 		logger.Error.Printf("[repository.AddReturnProduct] error adding return: %v\n", err)
+// 		return translateError(err)
+// 	}
+// 	logger.Info.Printf("[repository.AddReturnProduct] return added successfully with ID: %d\n", returnProduct.ID) // Лог успешного добавления
+// 	return nil
+// }
+
 func AddReturnProduct(returnProduct models.ReturnsProduct) error {
+	logger.Info.Printf("Adding return product: %+v", returnProduct) // Логируем данные о возврате
 	if err := db.GetDBConn().Create(&returnProduct).Error; err != nil {
 		logger.Error.Printf("[repository.AddReturnProduct] error adding return: %v\n", err)
 		return translateError(err)
 	}
-	logger.Info.Printf("[repository.AddReturnProduct] return added successfully with ID: %d\n", returnProduct.ID) // Лог успешного добавления
+	logger.Info.Printf("[repository.AddReturnProduct] return added successfully with ID: %d\n", returnProduct.ID)
 	return nil
 }
 
@@ -39,4 +49,3 @@ func GetAllReturns() ([]models.ReturnsProduct, error) {
 	logger.Info.Printf("[repository.GetAllReturns] returns retrieved successfully\n") // Лог успешного получения всех возвратов
 	return returns, nil
 }
-
