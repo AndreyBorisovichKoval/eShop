@@ -251,7 +251,7 @@ export DB_PASSWORD=your_database_password
 
 ## Лицензия
 
-Этот проект распространяется под лицензией MIT.
+Этот проект распространяется под лицензией [MIT](https://opensource.org/licenses/MIT).
 
 ##### _____________________________________
 
