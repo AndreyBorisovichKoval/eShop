@@ -639,7 +639,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMDg4NTQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.qNDxa_gvImyMELqyvxJsIS0c0oZ8WNib6Bh9Xp5OM1w",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiU2VsbGVyIiwidXNlcm5hbWUiOiJNYXgiLCJleHAiOjE3MjcyMjgzNDYsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.bOxEDcqv6Ik7K3UmS4iMel37P5BppLkLNbN1V_4_nOA",
 									"type": "string"
 								}
 							]
@@ -656,14 +656,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/change-passowrd",
+							"raw": "http://localhost:8585/users/change-password",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8585",
 							"path": [
-								"change-passowrd"
+								"users",
+								"change-password"
 							]
 						}
 					},
@@ -1187,7 +1188,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjQzMjIxOSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.S3U97xcuTa86Z6q42o_4JflV3TbFcWWwGIWN6-JglWA",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMzY1MzUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.c9hGgCnvVGTv6lIgJWT-WCg_WukxAA2Fccl5Xr6CaZU",
 									"type": "string"
 								}
 							]
@@ -1196,7 +1197,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"title\": \"Beverages2\",\r\n  \"description\": \"All2 kinds of drinks\"\r\n}\r\n",
+							"raw": "{\r\n  \"title\": \"Beverages\",\r\n  \"description\": \"All kinds of drinks\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1543,7 +1544,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY1ODcxNjQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.QsXbomJh-nryJEZ6W3YuRh1LaffIPbrxGPMt8EJ9E0I",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMzY1MzUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.c9hGgCnvVGTv6lIgJWT-WCg_WukxAA2Fccl5Xr6CaZU",
 									"type": "string"
 								}
 							]
@@ -1552,7 +1553,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"barcode\": \"123456789996\",\r\n    \"category_id\": 1,\r\n    \"title\": \"Тестовый продукт 0003\",\r\n    \"supplier_id\": 1,\r\n    \"quantity\": 50.0,\r\n    \"stock\": 50.0,\r\n    \"supplier_price\": 100.0,\r\n    \"retail_price\": 150.0,\r\n    \"total_price\": 7500.0,\r\n    \"is_paid_to_supplier\": false,\r\n    \"is_vat_applicable\": true,\r\n    \"is_excise_applicable\": true,\r\n    \"expiration_date\": \"2024-12-31T00:00:00Z\",\r\n    \"discount\": 0.0,\r\n    \"discount_details\": \"Новогодняя скидка\",\r\n    \"unit\": \"шт\",\r\n    \"storage_location\": \"Склад 3\"\r\n}\r\n",
+							"raw": "{\r\n    \"barcode\": \"723456789106\",\r\n    \"category_id\": 1,\r\n    \"title\": \"Тестовый продукт 0006\",\r\n    \"supplier_id\": 1,\r\n    \"quantity\": 50.0,\r\n    \"supplier_price\": 100.0,\r\n    \"is_paid_to_supplier\": false,\r\n    \"is_vat_applicable\": true,\r\n    \"is_excise_applicable\": true,\r\n    \"expiration_date\": \"2024-12-31T00:00:00Z\",\r\n    \"discount\": 0.0,\r\n    \"discount_details\": \"Новогодняя скидка\",\r\n    \"unit\": \"шт\",\r\n    \"storage_location\": \"Склад 3\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1837,6 +1838,46 @@
 					"response": []
 				},
 				{
+					"name": "MarkOrderAsPaid",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjY1MDQ1OSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.DqL5Xtz1htGxJYvBjU3vr1_shwOoFlJRypgIzDuOR1c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/orders/13/paid",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"orders",
+								"13",
+								"paid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "DeleteOrderItem",
 					"request": {
 						"auth": {
@@ -1917,46 +1958,6 @@
 					"response": []
 				},
 				{
-					"name": "MarkOrderAsPaid",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiTWFuYWdlciIsInVzZXJuYW1lIjoiQWxleCIsImV4cCI6MTcyNjY1MDQ1OSwiaXNzIjoiZXNob3Bfc2VydmljZSJ9.DqL5Xtz1htGxJYvBjU3vr1_shwOoFlJRypgIzDuOR1c",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8585/orders/13/paid",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"orders",
-								"13",
-								"paid"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "GetOrderByID",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -2011,7 +2012,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2ODg0OTAsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.EmAbsKqmPOa3jedR06klkevb1IP_JtP3EywTw4gwErU",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMzY1MzUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.c9hGgCnvVGTv6lIgJWT-WCg_WukxAA2Fccl5Xr6CaZU",
 									"type": "string"
 								}
 							]
@@ -2020,7 +2021,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"product_id\": 1,\r\n  \"supplier_id\": 1,\r\n  \"quantity\": 10.5,\r\n  \"return_reason\": \"Бракованный товар\",\r\n  \"returned_at\": \"2024-09-18T15:00:00Z\"\r\n}\r\n",
+							"raw": "{\r\n  \"product_id\": 7,\r\n  \"quantity\": 10.5,\r\n  \"return_reason\": \"Бракованный товар\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2052,7 +2053,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2ODg0OTAsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.EmAbsKqmPOa3jedR06klkevb1IP_JtP3EywTw4gwErU",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyNDEwNzQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.euOCfsu_tCMVZHC_tfQhGueJ8u9wMII7gdPrr0e48bA",
 									"type": "string"
 								}
 							]
@@ -2093,7 +2094,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY2ODg0OTAsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.EmAbsKqmPOa3jedR06klkevb1IP_JtP3EywTw4gwErU",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyNDEwNzQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.euOCfsu_tCMVZHC_tfQhGueJ8u9wMII7gdPrr0e48bA",
 									"type": "string"
 								}
 							]
@@ -2110,7 +2111,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8585/returns/7",
+							"raw": "http://localhost:8585/returns/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -2118,7 +2119,106 @@
 							"port": "8585",
 							"path": [
 								"returns",
-								"7"
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GenerateWeightBarcode",
+			"item": [
+				{
+					"name": "GenerateWeightBarcode",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyNDEwNzQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.euOCfsu_tCMVZHC_tfQhGueJ8u9wMII7gdPrr0e48bA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8585/barcode/generate?product_id=15&weight=0.99",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"barcode",
+								"generate"
+							],
+							"query": [
+								{
+									"key": "product_id",
+									"value": "15"
+								},
+								{
+									"key": "weight",
+									"value": "0.99"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OrderAddFromBarcode",
+			"item": [
+				{
+					"name": "AddToOrderBarcode",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcwNDMwMjYsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.XBLVqBDnAj4TezIjx0ObvCkSJpe7ZAqBZvRnVDS92hE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8585/orders/add-from-barcode?barcode=200001502250202505&order_id=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8585",
+							"path": [
+								"orders",
+								"add-from-barcode"
+							],
+							"query": [
+								{
+									"key": "barcode",
+									"value": "200001502250202505"
+								},
+								{
+									"key": "order_id",
+									"value": "2"
+								}
 							]
 						}
 					},
@@ -4372,105 +4472,6 @@
 							"response": []
 						}
 					]
-				}
-			]
-		},
-		{
-			"name": "GenerateWeightBarcode",
-			"item": [
-				{
-					"name": "GenerateWeightBarcode",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjY5MzMwMjgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.J_kJZL95k-PgxP0PsYo4iJ6A4nqG6b3qBJWAr_DCdpc",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8585/barcode/generate?product_id=15&weight=1.23",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"barcode",
-								"generate"
-							],
-							"query": [
-								{
-									"key": "product_id",
-									"value": "15"
-								},
-								{
-									"key": "weight",
-									"value": "1.23"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "OrderAddFromBarcode",
-			"item": [
-				{
-					"name": "AddToOrderBarcode",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcwNDMwMjYsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.XBLVqBDnAj4TezIjx0ObvCkSJpe7ZAqBZvRnVDS92hE",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8585/orders/add-from-barcode?barcode=200001502250202505&order_id=2",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8585",
-							"path": [
-								"orders",
-								"add-from-barcode"
-							],
-							"query": [
-								{
-									"key": "barcode",
-									"value": "200001502250202505"
-								},
-								{
-									"key": "order_id",
-									"value": "2"
-								}
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},

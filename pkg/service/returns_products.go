@@ -7,52 +7,34 @@ import (
 	"eShop/pkg/repository"
 )
 
-// // AddReturnProduct добавляет новый возврат товара
-// func AddReturnProduct(returnProduct models.ReturnsProduct) error {
-// 	return repository.AddReturnProduct(returnProduct)
-// }
-
-// AddReturnProduct добавляет новый возврат товара
+// AddReturnProduct добавляет новый возврат товара в систему.
+// Входной параметр: returnProduct - структура, содержащая информацию о возврате.
+// Возвращает ошибку в случае неудачи.
 func AddReturnProduct(returnProduct models.ReturnsProduct) error {
-	// Получаем товар по его ID
+	// Получаем товар по его ID из репозитория
 	product, err := repository.GetProductByID(returnProduct.ProductID)
 	if err != nil {
 		return err // Если товар не найден, возвращаем ошибку
 	}
 
-	// Устанавливаем SupplierID на основании товара
+	// Устанавливаем SupplierID на основании найденного товара
 	returnProduct.SupplierID = product.SupplierID
 
-	// Теперь добавляем возврат товара в базу данных
+	// Добавляем возврат товара в базу данных через репозиторий
 	return repository.AddReturnProduct(returnProduct)
 }
 
-// func GetReturnByID(id uint) (models.ReturnResponse, error) {
-// 	// Получаем возврат через репозиторий
-// 	returnProduct, err := repository.GetReturnByID(id)
-// 	if err != nil {
-// 		return models.ReturnResponse{}, err
-// 	}
-
-// 	// Формируем ответ
-// 	return models.ReturnResponse{
-// 		ID:           returnProduct.ID, // Используем ID возврата
-// 		ProductName:  returnProduct.Product.Title,
-// 		SupplierName: returnProduct.Product.Supplier.Title,
-// 		Quantity:     returnProduct.Quantity,
-// 		ReturnReason: returnProduct.ReturnReason,
-// 		// ReturnedAt:   returnProduct.ReturnedAt.Format("2006-01-02T15:04:05Z"),
-// 	}, nil
-// }
-
+// GetReturnByID получает информацию о возврате по его ID.
+// Входной параметр: id - уникальный идентификатор возврата.
+// Возвращает структуру ReturnResponse с информацией о возврате и ошибку в случае неудачи.
 func GetReturnByID(id uint) (models.ReturnResponse, error) {
-	// Получаем возврат через репозиторий
+	// Получаем возврат через репозиторий по ID
 	returnProduct, err := repository.GetReturnByID(id)
 	if err != nil {
-		return models.ReturnResponse{}, err
+		return models.ReturnResponse{}, err // Возвращаем пустую структуру и ошибку в случае неудачи
 	}
 
-	// Формируем ответ
+	// Формируем ответ с информацией о возврате
 	return models.ReturnResponse{
 		ID:           returnProduct.ID, // Используем ID возврата
 		ProductName:  returnProduct.Product.Title,
@@ -63,35 +45,13 @@ func GetReturnByID(id uint) (models.ReturnResponse, error) {
 	}, nil
 }
 
-// func GetAllReturns() ([]models.ReturnResponse, error) {
-// 	// Получаем список всех возвратов через репозиторий
-// 	returnProducts, err := repository.GetAllReturns()
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	// Формируем список для ответа
-// 	var returnResponses []models.ReturnResponse
-// 	for _, returnProduct := range returnProducts {
-// 		returnResponses = append(returnResponses, models.ReturnResponse{
-// 			ID:           returnProduct.ID, // Используем ID возврата
-// 			ProductName:  returnProduct.Product.Title,
-// 			SupplierName: returnProduct.Product.Supplier.Title,
-// 			Quantity:     returnProduct.Quantity,
-// 			ReturnReason: returnProduct.ReturnReason,
-
-// 			// ReturnedAt:   returnProduct.ReturnedAt.Format("2006-01-02T15:04:05Z"),
-// 		})
-// 	}
-
-// 	return returnResponses, nil
-// }
-
+// GetAllReturns получает список всех возвратов в системе.
+// Возвращает срез структур ReturnResponse и ошибку в случае неудачи.
 func GetAllReturns() ([]models.ReturnResponse, error) {
 	// Получаем список всех возвратов через репозиторий
 	returnProducts, err := repository.GetAllReturns()
 	if err != nil {
-		return nil, err
+		return nil, err // Возвращаем nil и ошибку в случае неудачи
 	}
 
 	// Формируем список для ответа
@@ -107,5 +67,5 @@ func GetAllReturns() ([]models.ReturnResponse, error) {
 		})
 	}
 
-	return returnResponses, nil
+	return returnResponses, nil // Возвращаем сформированный список возвратов
 }
