@@ -37,34 +37,6 @@ func CreateCategory(category models.Category) error {
 	return nil
 }
 
-// // UpdateCategoryByID обновляет данные категории по её ID
-// func UpdateCategoryByID(id uint, updatedCategory models.Category) (category models.Category, err error) {
-// 	// Получаем существующую категорию
-// 	category, err = repository.GetCategoryByID(id)
-// 	if err != nil {
-// 		if errors.Is(err, errs.ErrRecordNotFound) {
-// 			return category, errs.ErrCategoryNotFound
-// 		}
-// 		return category, err
-// 	}
-
-// 	// Обновляем только изменённые поля
-// 	if updatedCategory.Title != "" {
-// 		category.Title = updatedCategory.Title
-// 	}
-// 	if updatedCategory.Description != "" {
-// 		category.Description = updatedCategory.Description
-// 	}
-
-// 	// Используем функцию обновления в репозитории
-// 	err = repository.UpdateCategoryByID(category)
-// 	if err != nil {
-// 		return category, err
-// 	}
-
-// 	return category, nil
-// }
-
 // UpdateCategoryByID обновляет данные категории по её ID
 func UpdateCategoryByID(id uint, updatedCategory models.Category) (category models.Category, err error) {
 	category, err = repository.GetCategoryByID(id)

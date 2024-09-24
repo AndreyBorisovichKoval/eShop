@@ -2162,7 +2162,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.User"
+                                "$ref": "#/definitions/models.UserResponse"
                             }
                         }
                     },
@@ -2368,7 +2368,7 @@ const docTemplate = `{
                     "200": {
                         "description": "User information",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.UserResponse"
                         }
                     },
                     "400": {
@@ -2431,7 +2431,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Updated user",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.UserResponse"
                         }
                     },
                     "400": {
@@ -3298,6 +3298,51 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.UserSettings"
                         }
                     ]
+                },
+                "username": {
+                    "description": "Логин продавца...",
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserResponse": {
+            "type": "object",
+            "properties": {
+                "blocked_at": {
+                    "description": "Время блокировки продавца...",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "Время создания записи...",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Email продавца...",
+                    "type": "string"
+                },
+                "full_name": {
+                    "description": "Полное имя продавца...",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Уникальный идентификатор продавца...",
+                    "type": "integer"
+                },
+                "is_blocked": {
+                    "description": "Заблокирован ли продавец...",
+                    "type": "boolean"
+                },
+                "password_reset_required": {
+                    "description": "Флаг обязательной смены пароля...",
+                    "type": "boolean"
+                },
+                "phone": {
+                    "description": "Телефон продавца...",
+                    "type": "string"
+                },
+                "role": {
+                    "description": "Роль продавца...",
+                    "type": "string"
                 },
                 "username": {
                     "description": "Логин продавца...",

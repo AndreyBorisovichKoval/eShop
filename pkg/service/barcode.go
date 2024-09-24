@@ -40,37 +40,6 @@ func calculateChecksum(productID int, weight float64) int {
 	return sum % 10 // Контрольная цифра
 }
 
-// /
-
-// // InsertProductToOrder декодирует штрих-код и добавляет продукт в заказ
-// func InsertProductToOrder(barcode string, orderID uint) error {
-// 	// Декодируем штрих-код
-// 	productID, weight, err := utils.ParseBarcode(barcode)
-// 	if err != nil {
-// 		logger.Error.Printf("Failed to parse barcode: %v", err)
-// 		return errs.ErrValidationFailed
-// 	}
-
-// 	// Получаем информацию о продукте
-// 	product, err := repository.FindProductByID(uint(productID))
-// 	if err != nil {
-// 		logger.Error.Printf("Product not found: %v", err)
-// 		return errs.ErrProductNotFound
-// 	}
-
-// 	// Рассчитываем количество на основе веса
-// 	quantity := weight
-
-// 	// Добавляем товар в заказ через репозиторий
-// 	err = repository.InsertProductIntoOrder(orderID, product.ID, quantity, product.RetailPrice)
-// 	if err != nil {
-// 		logger.Error.Printf("Failed to insert product into order: %v", err)
-// 		return err
-// 	}
-
-// 	return nil
-// }
-
 // InsertProductToOrder декодирует штрих-код и добавляет продукт в заказ
 func InsertProductToOrder(barcode string, orderID uint) error {
 	// Проверяем, существует ли заказ

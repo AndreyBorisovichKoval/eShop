@@ -343,6 +343,39 @@ definitions:
         description: Логин продавца...
         type: string
     type: object
+  models.UserResponse:
+    properties:
+      blocked_at:
+        description: Время блокировки продавца...
+        type: string
+      created_at:
+        description: Время создания записи...
+        type: string
+      email:
+        description: Email продавца...
+        type: string
+      full_name:
+        description: Полное имя продавца...
+        type: string
+      id:
+        description: Уникальный идентификатор продавца...
+        type: integer
+      is_blocked:
+        description: Заблокирован ли продавец...
+        type: boolean
+      password_reset_required:
+        description: Флаг обязательной смены пароля...
+        type: boolean
+      phone:
+        description: Телефон продавца...
+        type: string
+      role:
+        description: Роль продавца...
+        type: string
+      username:
+        description: Логин продавца...
+        type: string
+    type: object
   models.UserSettings:
     properties:
       accessibility_options:
@@ -1815,7 +1848,7 @@ paths:
         "200":
           description: User information
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/models.UserResponse'
         "400":
           description: Invalid ID
           schema:
@@ -1856,7 +1889,7 @@ paths:
         "200":
           description: Updated user
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/models.UserResponse'
         "400":
           description: Invalid input
           schema:
@@ -2115,7 +2148,7 @@ paths:
           description: List of deleted users
           schema:
             items:
-              $ref: '#/definitions/models.User'
+              $ref: '#/definitions/models.UserResponse'
             type: array
         "403":
           description: Permission denied

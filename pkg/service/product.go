@@ -211,35 +211,6 @@ func UpdateProductByID(id uint, updatedProduct models.Product) (models.Product, 
 	return product, nil
 }
 
-// // SoftDeleteProductByID мягко удаляет продукт
-// func SoftDeleteProductByID(id uint) error {
-// 	// Получаем продукт по его ID
-// 	product, err := repository.GetProductByID(id)
-// 	if err != nil {
-// 		if errors.Is(err, errs.ErrRecordNotFound) {
-// 			return errs.ErrProductNotFound
-// 		}
-// 		return err
-// 	}
-
-// 	// Проверяем, был ли продукт уже удалён
-// 	if product.IsDeleted {
-// 		return errs.ErrProductAlreadyDeleted
-// 	}
-
-// 	// Устанавливаем флаг удаления и время
-// 	product.IsDeleted = true
-// 	now := time.Now()
-// 	product.DeletedAt = &now
-
-// 	// Сохраняем изменения в базе данных
-// 	if err := repository.UpdateProduct(product); err != nil {
-// 		return err
-// 	}
-
-// 	return nil
-// }
-
 // SoftDeleteProductByID мягко удаляет продукт
 func SoftDeleteProductByID(id uint) error {
 	// Получаем продукт, включая мягко удалённые записи
