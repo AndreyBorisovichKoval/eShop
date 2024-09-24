@@ -58,38 +58,6 @@ func checkUserAuthentication(c *gin.Context) {
 	c.Next()
 }
 
-// // CheckUserBlocked проверяет, заблокирован ли пользователь
-// func checkUserBlocked() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		userID, exists := c.Get(userIDCtx) // Получаем ID пользователя из контекста
-// 		if !exists {
-// 			logger.Warning.Println("User ID not found in context")
-// 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized access"})
-// 			c.Abort()
-// 			return
-// 		}
-
-// 		// Получаем пользователя по ID
-// 		user, err := service.GetUserByID(userID.(uint))
-// 		if err != nil {
-// 			logger.Error.Printf("Error getting user by ID: %v", err)
-// 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving user information"})
-// 			c.Abort()
-// 			return
-// 		}
-
-// 		// Проверяем, заблокирован ли пользователь
-// 		if user.IsBlocked {
-// 			logger.Warning.Printf("Blocked user attempting to access: User ID: %d", userID)
-// 			c.JSON(http.StatusForbidden, gin.H{"error": "Access denied. User is blocked."})
-// 			c.Abort()
-// 			return
-// 		}
-
-// 		c.Next() // Если пользователь не заблокирован, продолжаем выполнение запроса
-// 	}
-// }
-
 // checkUserBlocked проверяет, заблокирован ли пользователь
 func checkUserBlocked(c *gin.Context) {
 	userID, exists := c.Get(userIDCtx)
@@ -111,6 +79,34 @@ func checkUserBlocked(c *gin.Context) {
 	if user.IsBlocked {
 		logger.Warning.Printf("Blocked user attempting to access: User ID: %d", userID)
 		c.JSON(http.StatusForbidden, gin.H{"error": "Access denied. User is blocked."})
+		c.Abort()
+		return
+	}
+
+	c.Next()
+}
+
+// CheckPasswordResetRequired проверяет, нужно ли пользователю сменить пароль
+func CheckPasswordResetRequired(c *gin.Context) {
+	userID, exists := c.Get(userIDCtx)
+	if !exists {
+		logger.Warning.Println("User ID not found in context")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized access"})
+		c.Abort()
+		return
+	}
+
+	user, err := service.GetUserByID(userID.(uint))
+	if err != nil {
+		logger.Error.Printf("Error getting user by ID: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving user information"})
+		c.Abort()
+		return
+	}
+
+	if user.PasswordResetRequired {
+		logger.Warning.Printf("User with ID %d is required to reset their password.", userID)
+		c.JSON(http.StatusForbidden, gin.H{"error": "Password reset required. Please change your password to continue."})
 		c.Abort()
 		return
 	}

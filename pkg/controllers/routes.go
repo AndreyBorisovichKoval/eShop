@@ -55,13 +55,13 @@ func InitRoutes() *gin.Engine {
 		userG.PATCH("/settings", UpdateUserSettings)      // Обновление настроек пользователя...
 	}
 
-	taxesG := router.Group("/taxes", checkUserAuthentication, checkUserBlocked)
+	taxesG := router.Group("/taxes", checkUserAuthentication, checkUserBlocked, CheckPasswordResetRequired)
 	{
 		taxesG.GET("", GetAllTaxes)         // Получение списка всех текущих налогов...
 		taxesG.PATCH("/:id", UpdateTaxByID) // Обновление налоговой ставки по ID...
 	}
 
-	supplierG := router.Group("/suppliers", checkUserAuthentication, checkUserBlocked)
+	supplierG := router.Group("/suppliers", checkUserAuthentication, checkUserBlocked, CheckPasswordResetRequired)
 	{
 		supplierG.POST("", CreateSupplier)                    // Регистрация нового поставщика...
 		supplierG.GET("", GetAllSuppliers)                    // Получение списка всех активных поставщиков...
@@ -73,7 +73,7 @@ func InitRoutes() *gin.Engine {
 		supplierG.DELETE("/:id/hard", HardDeleteSupplierByID) // Полное удаление поставщика...
 	}
 
-	categoryG := router.Group("/categories", checkUserAuthentication, checkUserBlocked)
+	categoryG := router.Group("/categories", checkUserAuthentication, checkUserBlocked, CheckPasswordResetRequired)
 	{
 		categoryG.POST("", CreateCategory)                    // Регистрация новой категории...
 		categoryG.GET("", GetAllCategories)                   // Получение списка всех активных категорий...
@@ -85,7 +85,7 @@ func InitRoutes() *gin.Engine {
 		categoryG.DELETE("/:id/hard", HardDeleteCategoryByID) // Полное удаление категории...
 	}
 
-	productG := router.Group("/products", checkUserAuthentication, checkUserBlocked)
+	productG := router.Group("/products", checkUserAuthentication, checkUserBlocked, CheckPasswordResetRequired)
 	{
 		productG.POST("", AddProduct)                          // Добавление нового товара...
 		productG.GET("", GetAllProducts)                       // Просмотр всех товаров...
@@ -97,7 +97,7 @@ func InitRoutes() *gin.Engine {
 		productG.DELETE("/:id/hard", HardDeleteProductByID)    // Полное удаление продукта...
 	}
 
-	orderG := router.Group("/orders", checkUserAuthentication, checkUserBlocked)
+	orderG := router.Group("/orders", checkUserAuthentication, checkUserBlocked, CheckPasswordResetRequired)
 	{
 		orderG.POST("", AddOrder)                             // Создание нового заказа...
 		orderG.PATCH("/:id/paid", MarkOrderAsPaid)            // Отметка об оплате заказа...
@@ -109,25 +109,26 @@ func InitRoutes() *gin.Engine {
 		orderG.POST("/generate-random/:count", GenerateRandomOrders) // Маршрут для генерации заказов
 	}
 
-	returnG := router.Group("/returns", checkUserAuthentication, checkUserBlocked)
+	returnG := router.Group("/returns", checkUserAuthentication, checkUserBlocked, CheckPasswordResetRequired)
 	{
 		returnG.POST("", AddReturnProduct) // Добавление возврата товара...
 		returnG.GET("", GetAllReturns)     // Получение списка всех возвратов...
 		returnG.GET("/:id", GetReturnByID) // Получение возврата по ID...
 	}
 
-	barcodeG := router.Group("/barcode", checkUserAuthentication, checkUserBlocked)
+	barcodeG := router.Group("/barcode", checkUserAuthentication, checkUserBlocked, CheckPasswordResetRequired)
 	{
 		barcodeG.GET("/generate", GenerateBarcode) // Генерация штрих-кода
 	}
 
-	ktuG := router.Group("/ktu", checkUserAuthentication, checkUserBlocked)
+	ktuG := router.Group("/ktu", checkUserAuthentication, checkUserBlocked, CheckPasswordResetRequired)
 	{
 		ktuG.GET("", GetKTU) // Маршрут для расчета КТУ
 	}
 
 	// Маршрут для отчетов...
-	reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked)
+	reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked, CheckPasswordResetRequired)
+	// reportG := router.Group("/reports")
 	{
 		reportG.GET("/:report_type", GetReport) // Универсальный маршрут для всех отчётов
 	}
