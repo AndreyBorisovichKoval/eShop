@@ -91,15 +91,21 @@ func UpdateProductByID(id uint, updatedProduct models.Product) (models.Product, 
 	if updatedProduct.ExpirationDate != nil {
 		product.ExpirationDate = updatedProduct.ExpirationDate
 	}
+	if updatedProduct.Markup != 0 {
+		product.Markup = updatedProduct.Markup
+	}
 
-	// Пересчёт цены с учётом налогов
+	// Пересчёт цены с учётом наценки и налогов
 	taxes, err := repository.GetAllTaxes()
 	if err != nil {
 		logger.Error.Printf("[service.UpdateProductByID] error fetching taxes: %v\n", err)
 		return product, err
 	}
 
-	product.RetailPrice = calculateRetailPrice(product.SupplierPrice, taxes, product.IsVATApplicable, product.IsExciseApplicable)
+	// Расчет розничной цены с учетом наценки и налогов
+	product.RetailPrice = calculateRetailPrice(product.SupplierPrice, product.Markup, taxes, product.IsVATApplicable, product.IsExciseApplicable)
+
+	// Общая стоимость товара с учетом количества
 	product.TotalPrice = product.RetailPrice * product.Quantity
 
 	// Сохраняем изменения
@@ -189,109 +195,9 @@ func HardDeleteProductByID(id uint) error {
 	return nil
 }
 
-// Функция для расчета розничной цены
-func calculateRetailPrice(supplierPrice float64, taxes []models.Taxes, isVAT, isExcise bool) float64 {
-	retailPrice := supplierPrice
-
-	for _, tax := range taxes {
-		if tax.ApplyTo == "final_price" && isVAT && tax.Title == "VAT" {
-			retailPrice += supplierPrice * (tax.Rate / 100)
-		}
-
-		if tax.ApplyTo == "profit" && isExcise && tax.Title == "Excise" {
-			profit := retailPrice - supplierPrice
-			retailPrice += profit * (tax.Rate / 100)
-		}
-	}
-
-	return retailPrice
-}
-
-// // AddProduct добавляет новый продукт и рассчитывает конечную цену с налогами
-// func AddProduct(product models.Product) error {
-// 	// Если штрих-код не указан, генерируем его
-// 	if product.Barcode == "" {
-// 		for {
-// 			barcode, err := utils.GenerateBarcode()
-// 			if err != nil {
-// 				logger.Error.Printf("[service.AddProduct] error generating barcode: %v\n", err)
-// 				return err
-// 			}
-
-// 			exists, err := repository.CheckBarcodeExists(barcode)
-// 			if err != nil {
-// 				logger.Error.Printf("[service.AddProduct] error checking barcode existence: %v\n", err)
-// 				return err
-// 			}
-
-// 			// Если штрих-код уникален, сохраняем его и выходим из цикла
-// 			if !exists {
-// 				product.Barcode = barcode
-// 				logger.Info.Printf("[service.AddProduct] generated unique barcode for product: %s", barcode)
-// 				break
-// 			}
-// 		}
-// 	}
-
-// 	// Проверка на уникальность штрих-кода
-// 	exists, err := repository.CheckBarcodeExists(product.Barcode)
-// 	if err != nil {
-// 		logger.Error.Printf("[service.AddProduct] error checking barcode existence: %v\n", err)
-// 		return err
-// 	}
-// 	if exists {
-// 		logger.Warning.Printf("[service.AddProduct] duplicate barcode for product: %v\n", product.Barcode)
-// 		return errs.ErrProductAlreadyExists
-// 	}
-
-// 	// Проверка поставщика
-// 	supplier, err := repository.GetSupplierByID(product.SupplierID)
-// 	if err != nil {
-// 		if errors.Is(err, errs.ErrRecordNotFound) {
-// 			return errs.ErrSupplierNotFound
-// 		}
-// 		logger.Error.Printf("[service.AddProduct] error fetching supplier by id: %v\n", err)
-// 		return err
-// 	}
-// 	product.Supplier = supplier
-
-// 	// Проверка категории
-// 	category, err := repository.GetCategoryByID(product.CategoryID)
-// 	if err != nil {
-// 		if errors.Is(err, errs.ErrRecordNotFound) {
-// 			return errs.ErrCategoryNotFound
-// 		}
-// 		logger.Error.Printf("[service.AddProduct] error fetching category by id: %v\n", err)
-// 		return err
-// 	}
-// 	product.Category = category
-
-// 	// Получаем все налоги
-// 	taxes, err := repository.GetAllTaxes()
-// 	if err != nil {
-// 		logger.Error.Printf("[service.AddProduct] error fetching taxes: %v\n", err)
-// 		return err
-// 	}
-
-// 	// Расчет розничной цены
-// 	retailPrice := calculateRetailPrice(product.SupplierPrice, taxes, product.IsVATApplicable, product.IsExciseApplicable)
-
-// 	product.RetailPrice = retailPrice
-// 	product.TotalPrice = retailPrice * product.Quantity
-
-// 	// Добавление продукта в базу данных
-// 	if err := repository.CreateProduct(product); err != nil {
-// 		logger.Error.Printf("[service.AddProduct] error creating product: %v\n", err)
-// 		return err
-// 	}
-
-// 	logger.Info.Printf("Product %s successfully added with calculated retail price: %.2f", product.Title, retailPrice)
-// 	return nil
-// }
-
-// AddProduct добавляет новый продукт и рассчитывает конечную цену с налогами
+// AddProduct добавляет новый продукт с расчётом цены и налогов
 func AddProduct(product models.Product) error {
-	// Если штрих-код не указан, генерируем его
+	// Генерация штрих-кода, если не указан
 	if product.Barcode == "" {
 		for {
 			barcode, err := utils.GenerateBarcode()
@@ -299,30 +205,16 @@ func AddProduct(product models.Product) error {
 				logger.Error.Printf("[service.AddProduct] error generating barcode: %v\n", err)
 				return err
 			}
-
 			exists, err := repository.CheckBarcodeExists(barcode)
 			if err != nil {
 				logger.Error.Printf("[service.AddProduct] error checking barcode existence: %v\n", err)
 				return err
 			}
-
 			if !exists {
 				product.Barcode = barcode
-				logger.Info.Printf("[service.AddProduct] generated unique barcode for product: %s", barcode)
 				break
 			}
 		}
-	}
-
-	// Проверка на уникальность штрих-кода
-	exists, err := repository.CheckBarcodeExists(product.Barcode)
-	if err != nil {
-		logger.Error.Printf("[service.AddProduct] error checking barcode existence: %v\n", err)
-		return err
-	}
-	if exists {
-		logger.Warning.Printf("[service.AddProduct] duplicate barcode for product: %v\n", product.Barcode)
-		return errs.ErrProductAlreadyExists
 	}
 
 	// Проверка поставщика
@@ -347,27 +239,57 @@ func AddProduct(product models.Product) error {
 	}
 	product.Category = category
 
-	// Получаем все налоги
+	// Получаем налоги и рассчитываем цену
 	taxes, err := repository.GetAllTaxes()
 	if err != nil {
 		logger.Error.Printf("[service.AddProduct] error fetching taxes: %v\n", err)
 		return err
 	}
 
-	// Расчет розничной цены
-	retailPrice := calculateRetailPrice(product.SupplierPrice, taxes, product.IsVATApplicable, product.IsExciseApplicable)
+	// Расчет розничной цены с учетом наценки и налогов
+	product.RetailPrice = calculateRetailPrice(product.SupplierPrice, product.Markup, taxes, product.IsVATApplicable, product.IsExciseApplicable)
 
-	product.RetailPrice = retailPrice
-	// product.TotalPrice = retailPrice * product.Quantity
+	// Рассчитываем общую цену с учетом количества
 	product.TotalPrice = product.SupplierPrice * product.Quantity
-	product.Stock += product.Quantity // Обновляем поле stock
+	product.Stock += product.Quantity // Обновляем остаток товара
 
-	// Добавление продукта в базу данных
+	// Сохраняем продукт в базе данных
 	if err := repository.CreateProduct(product); err != nil {
 		logger.Error.Printf("[service.AddProduct] error creating product: %v\n", err)
 		return err
 	}
 
-	logger.Info.Printf("Product %s successfully added with calculated retail price: %.2f", product.Title, retailPrice)
+	logger.Info.Printf("Product %s successfully added with retail price: %.2f", product.Title, product.RetailPrice)
 	return nil
+}
+
+// calculateRetailPrice рассчитывает розничную цену с учетом наценки, НДС и акциза
+func calculateRetailPrice(supplierPrice, markup float64, taxes []models.Taxes, isVATApplicable, isExciseApplicable bool) float64 {
+	// Рассчитываем цену с наценкой
+	priceWithMarkup := supplierPrice * (1 + markup/100)
+
+	// Вычисляем прибыль (разницу между ценой после наценки и ценой поставщика)
+	profit := priceWithMarkup - supplierPrice
+
+	// Применяем акциз, если он должен быть
+	if isExciseApplicable {
+		for _, tax := range taxes {
+			if tax.Title == "Excise" {
+				priceWithMarkup += profit * (tax.Rate / 100) // Добавляем акциз 7% от прибыли
+				break
+			}
+		}
+	}
+
+	// Применяем НДС, если он должен быть
+	if isVATApplicable {
+		for _, tax := range taxes {
+			if tax.Title == "VAT" {
+				priceWithMarkup *= (1 + tax.Rate/100) // Умножаем на 1 + 20%
+				break
+			}
+		}
+	}
+
+	return priceWithMarkup
 }

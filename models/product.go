@@ -15,6 +15,7 @@ type Product struct {
 	SupplierPrice      float64    `gorm:"not null" json:"supplier_price"`              // Цена товара у поставщика.
 	TotalPrice         float64    `gorm:"not null" json:"total_price"`                 // Общая цена товара.
 	RetailPrice        float64    `gorm:"not null" json:"retail_price"`                // Розничная цена товара.
+	Markup             float64    `gorm:"default:0" json:"markup"`                     // Процент наценки на товар.
 	IsPaidToSupplier   bool       `gorm:"default:false" json:"is_paid_to_supplier"`    // Оплачен ли товар поставщику.
 	IsVATApplicable    bool       `gorm:"default:true" json:"is_vat_applicable"`       // Применяется ли НДС.
 	IsExciseApplicable bool       `gorm:"default:false" json:"is_excise_applicable"`   // Применяется ли акциз.
