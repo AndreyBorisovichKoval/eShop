@@ -4,7 +4,7 @@
         "description": "API Server for eShop Application",
         "title": "eShop API",
         "contact": {},
-        "version": "0.0002"
+        "version": "1.02"
     },
     "host": "localhost:8585",
     "basePath": "/",

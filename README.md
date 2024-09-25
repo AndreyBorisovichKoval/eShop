@@ -272,9 +272,9 @@ export DB_PASSWORD=your_database_password
 
 **Create** by: **Andrey Koval** (57)
 
-**Date**: 2024-09-24
+**Date**: 2024-09-25
 
-**Version**: 01.01
+**Version**: 01.02
 
 ##### _____________________________________
 

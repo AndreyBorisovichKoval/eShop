@@ -8,7 +8,7 @@ import (
 )
 
 // @title eShop API
-// @version 0.0002
+// @version 1.02
 // @description API Server for eShop Application
 
 // @host localhost:8585
