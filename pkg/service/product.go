@@ -246,10 +246,10 @@ func AddProduct(product models.Product) error {
 		return err
 	}
 
-	// Расчет розничной цены с учетом наценки и налогов
+	// Расчет розничной цены с учетом наценки и налогов...
 	product.RetailPrice = calculateRetailPrice(product.SupplierPrice, product.Markup, taxes, product.IsVATApplicable, product.IsExciseApplicable)
 
-	// Рассчитываем общую цену с учетом количества
+	// Рассчитываем общую цену с учетом количества...
 	product.TotalPrice = product.SupplierPrice * product.Quantity
 	product.Stock += product.Quantity // Обновляем остаток товара
 
@@ -263,7 +263,7 @@ func AddProduct(product models.Product) error {
 	return nil
 }
 
-// calculateRetailPrice рассчитывает розничную цену с учетом наценки, НДС и акциза
+// Рассчитывает розничную цену с учетом наценки, НДС и акциза...
 func calculateRetailPrice(supplierPrice, markup float64, taxes []models.Taxes, isVATApplicable, isExciseApplicable bool) float64 {
 	// Рассчитываем цену с наценкой
 	priceWithMarkup := supplierPrice * (1 + markup/100)

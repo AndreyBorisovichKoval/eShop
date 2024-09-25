@@ -1544,7 +1544,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMzY1MzUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.c9hGgCnvVGTv6lIgJWT-WCg_WukxAA2Fccl5Xr6CaZU",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjczMTg3ODQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.T7mvcGIsSk7EXqzPsMwnuPo0_JTrW3xIDQBo5URVpi8",
 									"type": "string"
 								}
 							]
@@ -1553,7 +1553,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"barcode\": \"723456789106\",\r\n    \"category_id\": 1,\r\n    \"title\": \"Тестовый продукт 0006\",\r\n    \"supplier_id\": 1,\r\n    \"quantity\": 50.0,\r\n    \"supplier_price\": 100.0,\r\n    \"is_paid_to_supplier\": false,\r\n    \"is_vat_applicable\": true,\r\n    \"is_excise_applicable\": true,\r\n    \"expiration_date\": \"2024-12-31T00:00:00Z\",\r\n    \"discount\": 0.0,\r\n    \"discount_details\": \"Новогодняя скидка\",\r\n    \"unit\": \"шт\",\r\n    \"storage_location\": \"Склад 3\"\r\n}\r\n",
+							"raw": "{\r\n    \"barcode\": \"723456789103\",\r\n    \"category_id\": 1,\r\n    \"title\": \"Тестовый продукт 0006\",\r\n    \"supplier_id\": 1,\r\n    \"quantity\": 50.0,\r\n    \"supplier_price\": 100.0,\r\n    \"markup\": 20.0,  // Процент наценки\r\n    \"is_paid_to_supplier\": false,\r\n    \"is_vat_applicable\": true,\r\n    \"is_excise_applicable\": true,\r\n    \"expiration_date\": \"2024-12-31T00:00:00Z\",\r\n    \"discount\": 0.0,\r\n    \"discount_details\": \"Новогодняя скидка\",\r\n    \"unit\": \"шт\",\r\n    \"storage_location\": \"Склад 3\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
