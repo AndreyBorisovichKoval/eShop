@@ -25,19 +25,20 @@ func MigrateDB() error {
 		models.Taxes{},
 		models.User{},
 		models.UserSettings{},
+		models.RequestHistory{},
 	)
 	if err != nil {
 		logger.Error.Printf("Migration failed: %v", err)
 		return err
 	}
 
-	// После миграции добавляем начальные записи в таблицу Taxes
+	// После миграции добавляем начальные записи в таблицу Taxes...
 	if err := addInitialTaxes(dbConn); err != nil {
 		logger.Error.Printf("Failed to add initial taxes: %v", err)
 		return err
 	}
 
-	// Добавляем начального администратора
+	// Добавляем изначального администратора...
 	if err := addInitialAdmin(dbConn); err != nil {
 		logger.Error.Printf("Failed to add initial admin: %v", err)
 		return err

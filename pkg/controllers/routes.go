@@ -26,6 +26,12 @@ func PingPong(c *gin.Context) {
 
 func InitRoutes() *gin.Engine {
 	router := gin.Default()
+
+	// // Middleware для проверки аутентификации перед логированием
+	// router.Use(checkUserAuthentication)
+	// // Middleware to log all requests
+	// router.Use(middleware.RequestLoggerMiddleware())
+
 	gin.SetMode(configs.AppSettings.AppParams.GinMode)
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

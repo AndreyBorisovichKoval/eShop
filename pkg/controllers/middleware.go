@@ -5,6 +5,8 @@ package controllers
 import (
 	"eShop/errs"
 	"eShop/logger"
+
+	// "eShop/pkg/middleware"
 	"eShop/pkg/service"
 	"strings"
 
@@ -50,6 +52,12 @@ func checkUserAuthentication(c *gin.Context) {
 
 	c.Set(userIDCtx, claims.UserID)
 	c.Set(userRoleCtx, claims.Role)
+
+	// Логируем запрос пользователя, вызвав всего одну строку
+	// Логируем запрос пользователя, вызвав всего одну строку
+	// Логируем запрос пользователя, вызвав всего одну строку
+	_ = service.LogUserRequest(claims.UserID, c.Request.URL.Path, c.Request.Method, c.ClientIP())
+
 	c.Next()
 }
 
