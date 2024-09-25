@@ -266,7 +266,7 @@ export DB_PASSWORD=your_database_password
 
 ## Структура таблиц базы данных:
 
-![Database](images/models.jpg)
+![Database](images/models_new.png)
 
 ##### _____________________________________
 

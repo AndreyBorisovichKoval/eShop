@@ -140,11 +140,3 @@ func addInitialAdmin(db *gorm.DB) error {
 
 	return nil
 }
-
-// ALTER TABLE orders DROP COLUMN updated_at;
-// ALTER TABLE orders DROP COLUMN deleted_at;
-// ALTER TABLE orders DROP COLUMN is_deleted;
-
-// ALTER TABLE order_items DROP COLUMN updated_at;
-// ALTER TABLE order_items DROP COLUMN deleted_at;
-// ALTER TABLE order_items DROP COLUMN is_deleted;
