@@ -9,8 +9,11 @@ import (
 // RequestHistory defines the structure for capturing all user requests
 type RequestHistory struct {
 	// //UserID          uint      `gorm:"column:user_id;not null;foreignKey:" json:"user_id"` // User ID (no foreign key constraint)
-	ID              uint      `gorm:"primaryKey" json:"id"`             // Unique ID for each request
-	UserID          uint      `json:"user_id"`                          // User ID making the request
+	ID uint `gorm:"primaryKey" json:"id"` // Unique ID for each request
+
+	// UserID          uint      `json:"user_id"`                          // User ID making the request
+	UserIdentifier uint `json:"user_identifier"` // User ID making the request
+
 	Username        string    `json:"username"`                         // Username of the user
 	FullName        string    `json:"full_name"`                        // Full name of the user
 	Email           string    `json:"email"`                            // Email of the user
