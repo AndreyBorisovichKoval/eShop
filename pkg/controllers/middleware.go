@@ -56,7 +56,8 @@ func checkUserAuthentication(c *gin.Context) {
 	// Логируем запрос пользователя, вызвав всего одну строку
 	// Логируем запрос пользователя, вызвав всего одну строку
 	// Логируем запрос пользователя, вызвав всего одну строку
-	_ = service.LogUserRequest(claims.UserID, c.Request.URL.Path, c.Request.Method, c.ClientIP())
+	// _ = service.LogUserRequest(claims.UserID, c.Request.URL.Path, c.Request.Method, c.ClientIP())
+	_ = service.LogUserRequest(c, claims.UserID)
 
 	c.Next()
 }

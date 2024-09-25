@@ -146,8 +146,8 @@ func InitRoutes() *gin.Engine {
 	}
 
 	// Маршрут для отчетов...
-	// reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked, CheckPasswordResetRequired)
-	reportG := router.Group("/reports")
+	reportG := router.Group("/reports", checkUserAuthentication, checkUserBlocked, CheckPasswordResetRequired)
+	// reportG := router.Group("/reports")
 	{
 		reportG.GET("/:report_type", GetReport) // Универсальный маршрут для всех отчётов
 	}
