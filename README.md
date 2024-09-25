@@ -265,12 +265,12 @@ export DB_PASSWORD=your_database_password
 
 ## Структура таблиц базы данных:
 
-##Goland
-####(correct name: UserID)
+## Goland
+#### (correct name: UserID)
 ![Database](images/models_new.png)
 
-##Goland
-####(rename field to: UserIdentifier)
+## Goland
+#### (rename field to: UserIdentifier)
 ![Database](images/models_new_02.png)
 
 ##### _____________________________________
