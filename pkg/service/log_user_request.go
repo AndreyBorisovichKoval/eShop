@@ -25,16 +25,16 @@ func LogUserRequest(c *gin.Context, userID uint) error {
 
 	// Заполняем структуру RequestHistory для записи в базу данных
 	requestHistory := &models.RequestHistory{
-		UserID:    user.ID,
-		Username:  user.Username,
-		FullName:  user.FullName,
-		Email:     user.Email,
-		Phone:     user.Phone,
-		Role:      user.Role,
-		Path:      fullURL, // Сохраняем полный URL с query-параметрами
-		Method:    c.Request.Method,
-		IP:        c.ClientIP(),
-		CreatedAt: time.Now(),
+		UserID:          user.ID,
+		Username:        user.Username,
+		FullName:        user.FullName,
+		Email:           user.Email,
+		Phone:           user.Phone,
+		Role:            user.Role,
+		Path:            fullURL,
+		Method:          c.Request.Method,
+		ClientIPAddress: c.ClientIP(),
+		CreatedAt:       time.Now(),
 	}
 
 	// Логируем запрос в базу через репозиторий
