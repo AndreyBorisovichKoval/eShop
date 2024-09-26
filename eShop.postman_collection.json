@@ -266,7 +266,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyMiwicm9sZSI6IlNlbGxlciIsInVzZXJuYW1lIjoiVGVzdDgiLCJleHAiOjE3MjYzMzgxODcsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.rbhPU_NRmmzcIMCI_0BvFn2txxb2CGOXYU-SXbYxNnc",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjczNzE4NzcsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.7wbmKjQvxqbKM7dWVuNXMhwaETQ_BzIaVNXyFTUo8to",
 									"type": "string"
 								}
 							]
@@ -474,7 +474,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMDAyMDksImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.qHsH4BOR8ETHdp-c-FN-9LuA_mvziJzj9Zrm32qy_Lk",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjczNzE4NzcsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.7wbmKjQvxqbKM7dWVuNXMhwaETQ_BzIaVNXyFTUo8to",
 									"type": "string"
 								}
 							]
@@ -483,7 +483,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"full_name\": \"Test Test3\",\r\n  \"username\": \"Test3\",\r\n  \"email\": \"test.test3@example.com\",\r\n  \"is_blocked\": false\r\n}\r\n",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1544,7 +1544,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjczMTg3ODQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.T7mvcGIsSk7EXqzPsMwnuPo0_JTrW3xIDQBo5URVpi8",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjczNzE4NzcsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.7wbmKjQvxqbKM7dWVuNXMhwaETQ_BzIaVNXyFTUo8to",
 									"type": "string"
 								}
 							]
@@ -1553,7 +1553,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"barcode\": \"723456789103\",\r\n    \"category_id\": 1,\r\n    \"title\": \"Тестовый продукт 0006\",\r\n    \"supplier_id\": 1,\r\n    \"quantity\": 50.0,\r\n    \"supplier_price\": 100.0,\r\n    \"markup\": 20.0,  // Процент наценки\r\n    \"is_paid_to_supplier\": false,\r\n    \"is_vat_applicable\": true,\r\n    \"is_excise_applicable\": true,\r\n    \"expiration_date\": \"2024-12-31T00:00:00Z\",\r\n    \"discount\": 0.0,\r\n    \"discount_details\": \"Новогодняя скидка\",\r\n    \"unit\": \"шт\",\r\n    \"storage_location\": \"Склад 3\"\r\n}\r\n",
+							"raw": "{\r\n    \"barcode\": \"723456789100\",\r\n    \"category_id\": 1,\r\n    \"title\": \"Тестовый продукт 0006\",\r\n    \"supplier_id\": 1,\r\n    \"quantity\": 50.0,\r\n    \"supplier_price\": 100.0,\r\n    \"markup\": 20.0,  // Процент наценки...\r\n    \"is_paid_to_supplier\": false,\r\n    \"is_vat_applicable\": true,\r\n    \"is_excise_applicable\": true,\r\n    \"expiration_date\": \"2024-12-31T00:00:00Z\",\r\n    \"discount\": 0.0,\r\n    \"discount_details\": \"Новогодняя скидка\",\r\n    \"unit\": \"шт\",\r\n    \"storage_location\": \"Склад 3\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2012,7 +2012,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyMzY1MzUsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.c9hGgCnvVGTv6lIgJWT-WCg_WukxAA2Fccl5Xr6CaZU",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiU2VsbGVyIiwidXNlcm5hbWUiOiJNYXgiLCJleHAiOjE3MjczNzIwNDgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.B6Qapi2dv1Ior4FFqfjgsmU5otc2tMWGCyN-al1fdo8",
 									"type": "string"
 								}
 							]
@@ -2021,7 +2021,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"product_id\": 7,\r\n  \"quantity\": 10.5,\r\n  \"return_reason\": \"Бракованный товар\"\r\n}\r\n",
+							"raw": "{\r\n  \"product_id\": 15,\r\n  \"quantity\": 3.5,\r\n  \"return_reason\": \"Бракованный товар...\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2053,7 +2053,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJ1c2VybmFtZSI6IkZyZWQiLCJleHAiOjE3MjcyNDEwNzQsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.euOCfsu_tCMVZHC_tfQhGueJ8u9wMII7gdPrr0e48bA",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJyb2xlIjoiU2VsbGVyIiwidXNlcm5hbWUiOiJNYXgiLCJleHAiOjE3MjczNzIwNDgsImlzcyI6ImVzaG9wX3NlcnZpY2UifQ.B6Qapi2dv1Ior4FFqfjgsmU5otc2tMWGCyN-al1fdo8",
 									"type": "string"
 								}
 							]

@@ -43,6 +43,8 @@ func RunApp() {
 	}
 	fmt.Println("Logger initialized successfully!")
 
+	// /
+
 	// Подключение к базе данных с отложенным закрытием соединения...
 	if err := db.ConnectToDB(); err != nil {
 		log.Fatalf("Failed to connect to database: %s", err)
@@ -67,10 +69,13 @@ func RunApp() {
 	// Сообщение о прослушивании порта...
 	fmt.Printf("Server is listening on port %v...\n\n", configs.AppSettings.AppParams.PortRun)
 
+	// /
+
 	// Инициализация HTTP сервера...
+	// Создаём HTTP сервер...
 	mainServer := new(server.Server)
 
-	// Использование WaitGroup для синхронизации завершения работы...
+	// Использование WaitGroup для синхронизации завершения работы (для ожидания завершения всех процессов)...
 	var wg sync.WaitGroup
 	wg.Add(1)
 
@@ -100,5 +105,5 @@ func RunApp() {
 
 	// Ожидание завершения всех горутин...
 	wg.Wait()
-	fmt.Println("Goodbye!")
+	fmt.Println("Goodbye!!!")
 }
