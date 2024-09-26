@@ -340,7 +340,7 @@ export DB_PASSWORD=your_database_password
 
 **Create** by: **Andrey Koval** (57)
 
-**Date**: 2024-09-25
+**Date**: 2024-09-26
 
 **Version**: 01.02
 
