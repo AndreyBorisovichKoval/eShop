@@ -49,7 +49,7 @@ func RunApp() {
 	if err := db.ConnectToDB(); err != nil {
 		log.Fatalf("Failed to connect to database: %s", err)
 	}
-	defer func() { //TODO: handled closing DB connection
+	defer func() { //TODO: handled closing DB connection...
 		err := db.CloseDBConn()
 		if err != nil {
 			log.Fatalf("Failed to close database connection: %s", err)
